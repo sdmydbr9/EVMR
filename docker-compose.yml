@@ -1,0 +1,96 @@
+version: '3.8'
+
+services:
+  # EVMR application service
+  evmr-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: evmr-application
+    restart: unless-stopped
+    ports:
+      - "3786:3786" # Map container port to host port
+    depends_on:
+      - evmr-db # Ensure database is started before the application
+    environment:
+      # Application configuration
+      - NODE_ENV=development
+      - PORT=3786
+      # Database connection
+      - DATABASE_URL=postgresql://evmr_user:${DB_PASSWORD}@evmr-db:5432/evmr_database
+      # Authentication
+      - JWT_SECRET=${JWT_SECRET}
+      # Multi-location configuration
+      - MULTI_LOCATION_ENABLED=true
+    env_file:
+      - .env # Load additional environment variables from .env file
+    volumes:
+      # Mount for persistent storage of uploaded files (lab results, x-rays, etc.)
+      - evmr-uploads:/app/backend/uploads
+      # Mount for logs
+      - evmr-logs:/app/backend/logs
+    networks:
+      - evmr-network
+    # Healthcheck for application
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3786/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # PostgreSQL database service
+  evmr-db:
+    image: postgres:14-alpine
+    container_name: evmr-database
+    restart: unless-stopped
+    environment:
+      - POSTGRES_USER=evmr_user
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=evmr_database
+    volumes:
+      # Persistent volume for database data
+      - evmr-db-data:/var/lib/postgresql/data
+      # Mount init scripts for database setup
+      - ./backend/config/database/init:/docker-entrypoint-initdb.d
+    ports:
+      - "5431:5432" # Expose PostgreSQL port (can be removed for production)
+    networks:
+      - evmr-network
+    # Healthcheck for database
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U evmr_user -d evmr_database"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+# Named volumes for persistent data
+volumes:
+  evmr-db-data:
+    # Stores all PostgreSQL data for:
+    # - Patient records
+    # - Medical history
+    # - Appointment data
+    # - Inventory records
+    # - User accounts and access control
+  evmr-uploads:
+    # Stores uploaded files:
+    # - Lab results
+    # - X-rays and imaging
+    # - Documents
+    # - Vaccination certificates
+  evmr-logs:
+    # Stores application logs
+
+# Custom network for EVMR services
+networks:
+  evmr-network:
+    driver: bridge
+
+# This docker-compose configuration:
+# 1. Sets up the EVMR application container with its environment variables
+# 2. Configures the PostgreSQL database with persistent storage
+# 3. Creates a dedicated network for secure communication between services
+# 4. Establishes volumes for data persistence across container restarts
+# 5. Implements healthchecks to ensure services are running correctly 
