@@ -381,7 +381,12 @@ const PatientDashboard = () => {
   };
 
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ 
+      p: 3,
+      width: '100%',
+      maxWidth: '100%',
+      boxSizing: 'border-box'
+    }}>
       <Snackbar
         open={notification.open}
         autoHideDuration={6000}

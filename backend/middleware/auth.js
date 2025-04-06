@@ -5,19 +5,8 @@ const jwt = require('jsonwebtoken');
  * Verifies JWT token and adds user data to request object
  */
 const authenticate = (req, res, next) => {
-  console.log('NODE_ENV:', process.env.NODE_ENV);
-  
-  // For development, allow requests to proceed without authentication
-  // REMOVE THIS IN PRODUCTION!
-  if (process.env.NODE_ENV !== 'production') {
-    console.log('Development mode: Skipping authentication');
-    req.user = { id: 1, role: 'admin' };
-    return next();
-  }
-  
   // Get token from header
   const authHeader = req.headers.authorization;
-  console.log('Auth header:', authHeader ? 'Present' : 'Missing');
   
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({ 
@@ -60,12 +49,6 @@ const authorize = (allowedRoles) => {
         error: true, 
         message: 'Authentication required' 
       });
-    }
-
-    // For development, allow all roles
-    // REMOVE THIS IN PRODUCTION!
-    if (process.env.NODE_ENV !== 'production') {
-      return next();
     }
 
     // Check if user role is in allowed roles

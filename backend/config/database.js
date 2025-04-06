@@ -1,4 +1,6 @@
 const { Pool } = require('pg');
+const bcrypt = require('bcryptjs');
+require('dotenv').config();
 
 // Create a new PostgreSQL connection pool
 const pool = new Pool({
@@ -78,6 +80,8 @@ const initDatabase = async () => {
         password VARCHAR(100) NOT NULL,
         role VARCHAR(20) NOT NULL,
         clinic_id INTEGER REFERENCES clinics(id),
+        status VARCHAR(20) NOT NULL DEFAULT 'active',
+        details JSONB,
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
@@ -151,11 +155,42 @@ const initDatabase = async () => {
     `);
     
     // Insert default clinic if it doesn't exist
-    await client.query(`
+    const clinicResult = await client.query(`
       INSERT INTO clinics (name, address, phone, email)
       VALUES ('Main Clinic', '123 Pet Street', '555-1234', 'clinic@example.com')
       ON CONFLICT DO NOTHING
+      RETURNING id
     `);
+    
+    const clinicId = clinicResult.rows[0]?.id || 1;
+    
+    // Check if admin user from env exists
+    const adminEmail = process.env.ADMIN_EMAIL || 'admin@evmr.com';
+    
+    const userResult = await client.query(
+      'SELECT id FROM users WHERE email = $1',
+      [adminEmail]
+    );
+    
+    // If admin user doesn't exist, create it
+    if (userResult.rowCount === 0) {
+      // Get admin credentials from environment variables or use defaults
+      const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
+      const adminName = process.env.ADMIN_NAME || 'System Admin';
+      
+      // Hash the password
+      const salt = await bcrypt.genSalt(10);
+      const hashedPassword = await bcrypt.hash(adminPassword, salt);
+      
+      // Insert admin user
+      await client.query(
+        `INSERT INTO users (name, email, password, role, clinic_id) 
+         VALUES ($1, $2, $3, $4, $5)`,
+        [adminName, adminEmail, hashedPassword, 'admin', clinicId]
+      );
+      
+      console.log(`Admin user created with email: ${adminEmail}`);
+    }
     
     await client.query('COMMIT');
     

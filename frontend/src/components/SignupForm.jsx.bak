@@ -1,0 +1,1581 @@
+import React, { useState, useCallback, useMemo, flushSync } from 'react';
+import { 
+  Box, 
+  Typography, 
+  TextField, 
+  Button, 
+  Grid, 
+  Paper, 
+  InputAdornment, 
+  IconButton,
+  FormControl,
+  InputLabel,
+  Select,
+  MenuItem,
+  Checkbox,
+  FormControlLabel,
+  Link,
+  Divider,
+  LinearProgress,
+  FormHelperText,
+  Avatar,
+  Fade,
+  Slide,
+  Stepper,
+  Step,
+  StepLabel,
+  StepContent,
+  MobileStepper,
+  useTheme,
+  useMediaQuery
+} from '@mui/material';
+import { 
+  Visibility,
+  VisibilityOff,
+  Check as CheckIcon,
+  Close as CloseIcon,
+  ArrowBack as ArrowBackIcon,
+  ArrowForward as ArrowForwardIcon,
+  Security as SecurityIcon,
+  CloudDone as CloudDoneIcon,
+  MedicalServices as MedicalServicesIcon,
+  PetsRounded as PetsRoundedIcon,
+  CheckCircle as CheckCircleIcon,
+  Person as PersonIcon,
+  Business as BusinessIcon,
+  School as SchoolIcon,
+  KeyboardArrowLeft as KeyboardArrowLeftIcon,
+  KeyboardArrowRight as KeyboardArrowRightIcon
+} from '@mui/icons-material';
+import { keyframes } from '@mui/system';
+import axios from 'axios';
+
+// Animation keyframes
+const fadeIn = keyframes`
+  from { opacity: 0; }
+  to { opacity: 1; }
+`;
+
+const pulse = keyframes`
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
+// Define step labels
+const steps = [
+  'User Type',
+  'Basic Information',
+  'Account Setup',
+  'Additional Details',
+  'Review & Submit'
+];
+
+const SignupForm = ({ onBack }) => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  
+  // Step management
+  const [activeStep, setActiveStep] = useState(0);
+  
+  // Form states
+  const [formData, setFormData] = useState({
+    // User type
+    userType: '',
+    
+    // Basic information
+    fullName: '',
+    email: '',
+    phone: '',
+    
+    // Account setup
+    password: '',
+    confirmPassword: '',
+    
+    // Pet parent specific
+    petTypes: [],
+    preferredClinic: '',
+    
+    // Veterinarian specific
+    specialties: [],
+    yearsOfExperience: '',
+    licenseNumber: '',
+    
+    // Institute admin specific
+    clinicName: '',
+    clinicAddress: '',
+    country: '',
+    clinicPhone: '',
+    clinicEmail: '',
+    teamSize: '',
+    
+    // Agreement fields
+    agreeTerms: false,
+    subscribe: false
+  });
+  
+  // UI states
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState({});
+  const [success, setSuccess] = useState(false);
+  
+  // Handle form input changes with improved focus handling
+  const handleChange = (e) => {
+    const { name, value, checked, type } = e.target;
+    
+    // Use flushSync to ensure state updates complete before browser repaints
+    // This prevents focus loss during typing
+    flushSync(() => {
+      setFormData(prev => ({
+        ...prev,
+        [name]: type === 'checkbox' ? checked : value
+      }));
+      
+      // Clear errors if needed
+      if (errors[name]) {
+        setErrors(prev => ({
+          ...prev,
+          [name]: ''
+        }));
+      }
+    });
+  };
+  
+  // Handle multiple select changes with functional updates
+  const handleMultiSelectChange = (e) => {
+    const { name, value } = e.target;
+    
+    flushSync(() => {
+      setFormData(prev => ({
+        ...prev,
+        [name]: typeof value === 'string' ? value.split(',') : value
+      }));
+    });
+  };
+  
+  // Handle step navigation with useCallback
+  const handleNext = useCallback(() => {
+    // Inline validation to ensure we have access to current state
+    const newErrors = {};
+    
+    // Step 0: User Type
+    if (activeStep === 0) {
+      if (!formData.userType) {
+        newErrors.userType = 'Please select a user type';
+      }
+    }
+    
+    // Step 1: Basic Information
+    else if (activeStep === 1) {
+      if (!formData.fullName) newErrors.fullName = 'Full name is required';
+      
+      if (!formData.email) {
+        newErrors.email = 'Email is required';
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        newErrors.email = 'Please enter a valid email address';
+      }
+      
+      if (!formData.phone) newErrors.phone = 'Phone number is required';
+    }
+    
+    // Step 2: Account Setup
+    else if (activeStep === 2) {
+      if (!formData.password) {
+        newErrors.password = 'Password is required';
+      } else if (formData.password.length < 8) {
+        newErrors.password = 'Password must be at least 8 characters';
+      } else if (!/[A-Z]/.test(formData.password)) {
+        newErrors.password = 'Password must contain at least one uppercase letter';
+      } else if (!/[a-z]/.test(formData.password)) {
+        newErrors.password = 'Password must contain at least one lowercase letter';
+      } else if (!/[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(formData.password)) {
+        newErrors.password = 'Password must contain at least one number or special character';
+      }
+      
+      if (!formData.confirmPassword) {
+        newErrors.confirmPassword = 'Please confirm your password';
+      } else if (formData.password !== formData.confirmPassword) {
+        newErrors.confirmPassword = 'Passwords do not match';
+      }
+    }
+    
+    // Step 3: Additional Details
+    else if (activeStep === 3) {
+      if (formData.userType === 'pet_parent') {
+        if (formData.petTypes.length === 0) {
+          newErrors.petTypes = 'Please select at least one pet type';
+        }
+      } 
+      else if (formData.userType === 'veterinarian') {
+        if (!formData.licenseNumber) {
+          newErrors.licenseNumber = 'License number is required';
+        }
+        if (formData.specialties.length === 0) {
+          newErrors.specialties = 'Please select at least one specialty';
+        }
+        if (!formData.yearsOfExperience) {
+          newErrors.yearsOfExperience = 'Please select years of experience';
+        }
+      } 
+      else if (formData.userType === 'institute_admin') {
+        if (!formData.clinicName) newErrors.clinicName = 'Clinic name is required';
+        if (!formData.clinicAddress) newErrors.clinicAddress = 'Clinic address is required';
+        if (!formData.country) newErrors.country = 'Country is required';
+        if (!formData.clinicPhone) newErrors.clinicPhone = 'Clinic phone is required';
+        if (!formData.teamSize) newErrors.teamSize = 'Team size is required';
+        
+        if (formData.clinicEmail && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.clinicEmail)) {
+          newErrors.clinicEmail = 'Please enter a valid email address';
+        }
+      }
+    }
+    
+    // Step 4: Review & Submit
+    else if (activeStep === 4) {
+      if (!formData.agreeTerms) {
+        newErrors.agreeTerms = 'You must agree to the Terms of Service';
+      }
+    }
+    
+    setErrors(newErrors);
+    
+    // Proceed to next step if no errors
+    if (Object.keys(newErrors).length === 0) {
+      setActiveStep((prevActiveStep) => prevActiveStep + 1);
+    }
+  }, [activeStep, formData]); // Include activeStep and formData in dependencies
+  
+  const handleBack = useCallback(() => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  }, []);
+  
+  const handleReset = useCallback(() => {
+    setActiveStep(0);
+    setFormData({
+      userType: '',
+      fullName: '',
+      email: '',
+      phone: '',
+      password: '',
+      confirmPassword: '',
+      petTypes: [],
+      preferredClinic: '',
+      specialties: [],
+      yearsOfExperience: '',
+      licenseNumber: '',
+      clinicName: '',
+      clinicAddress: '',
+      country: '',
+      clinicPhone: '',
+      clinicEmail: '',
+      teamSize: '',
+      agreeTerms: false,
+      subscribe: false
+    });
+    setErrors({});
+  }, []);
+  
+  // Toggle password visibility with useCallback
+  const handleTogglePassword = useCallback(() => {
+    setShowPassword(prevShow => !prevShow);
+  }, []);
+  
+  // Toggle confirm password visibility with useCallback
+  const handleToggleConfirmPassword = useCallback(() => {
+    setShowConfirmPassword(prevShow => !prevShow);
+  }, []);
+  
+  // Calculate password strength
+  const calculatePasswordStrength = (password) => {
+    if (!password) return 0;
+    
+    let strength = 0;
+    
+    // Length check
+    if (password.length >= 8) strength += 25;
+    
+    // Contains lowercase
+    if (/[a-z]/.test(password)) strength += 25;
+    
+    // Contains uppercase
+    if (/[A-Z]/.test(password)) strength += 25;
+    
+    // Contains number or special char
+    if (/[0-9!@#$%^&*()_+\-=[\]{};':"\\|,.<>/?]/.test(password)) strength += 25;
+    
+    return strength;
+  };
+  
+  const passwordStrength = calculatePasswordStrength(formData.password);
+  
+  // Get password strength text and color
+  const getPasswordStrengthInfo = () => {
+    if (passwordStrength === 0) return { text: '', color: 'error.main' };
+    if (passwordStrength <= 25) return { text: 'Weak', color: 'error.main' };
+    if (passwordStrength <= 50) return { text: 'Fair', color: 'warning.main' };
+    if (passwordStrength <= 75) return { text: 'Good', color: 'info.main' };
+    return { text: 'Strong', color: 'success.main' };
+  };
+  
+  const strengthInfo = getPasswordStrengthInfo();
+
+  // Handle form submission with useCallback
+  const handleSubmit = useCallback(async (e) => {
+    if (e) e.preventDefault();
+    
+    // Inline validation for the final step
+    const newErrors = {};
+    
+    if (!formData.agreeTerms) {
+      newErrors.agreeTerms = 'You must agree to the Terms of Service';
+    }
+    
+    setErrors(newErrors);
+    
+    if (Object.keys(newErrors).length > 0) {
+      return;
+    }
+    
+    setLoading(true);
+    
+    try {
+      // Determine role based on user type
+      let role;
+      switch (formData.userType) {
+        case 'pet_parent':
+          role = 'client';
+          break;
+        case 'veterinarian':
+          role = 'veterinarian';
+          break;
+        case 'institute_admin':
+          role = 'admin';
+          break;
+        default:
+          role = 'user';
+      }
+      
+      // Prepare data object for API
+      const apiData = {
+        fullName: formData.fullName,
+        email: formData.email,
+        phone: formData.phone,
+        role: role,
+        password: formData.password,
+        agreeTerms: formData.agreeTerms,
+        subscribe: formData.subscribe
+      };
+      
+      // Add user type specific details
+      if (formData.userType === 'pet_parent') {
+        apiData.details = {
+          petTypes: formData.petTypes,
+          preferredClinic: formData.preferredClinic
+        };
+      } 
+      else if (formData.userType === 'veterinarian') {
+        apiData.specialties = formData.specialties;
+        apiData.yearsOfExperience = formData.yearsOfExperience;
+        apiData.licenseNumber = formData.licenseNumber;
+      } 
+      else if (formData.userType === 'institute_admin') {
+        apiData.clinicName = formData.clinicName;
+        apiData.clinicAddress = formData.clinicAddress;
+        apiData.country = formData.country;
+        apiData.clinicPhone = formData.clinicPhone;
+        apiData.clinicEmail = formData.clinicEmail;
+        apiData.teamSize = formData.teamSize;
+      }
+      
+      // Send registration request to backend
+      await axios.post('/api/signup/register', apiData);
+      
+      // Set success state to show success screen
+      setSuccess(true);
+    } catch (error) {
+      console.error('Registration error:', error);
+      
+      // Handle specific error cases
+      if (error.response?.status === 409) {
+        setErrors({
+          ...errors,
+          email: 'Email already registered. Please use a different email address.',
+        });
+      } else {
+        // Show general error
+        setErrors({
+          ...errors,
+          general: error.response?.data?.message || 'Registration failed. Please try again later.',
+        });
+      }
+    } finally {
+      setLoading(false);
+    }
+  }, [formData, errors]);
+  
+  // Success screen component
+  const SuccessScreen = () => (
+    <Fade in={true} timeout={800}>
+      <Box sx={{ 
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        minHeight: '100vh',
+        width: '100%',
+        p: 4,
+        textAlign: 'center',
+        backgroundColor: 'background.default'
+      }}>
+        <Avatar
+          sx={{ 
+            width: 80, 
+            height: 80, 
+            bgcolor: 'success.main',
+            mb: 4,
+            animation: `${pulse} 1s ease-out`
+          }}
+        >
+          <CheckCircleIcon sx={{ fontSize: 50, color: 'white' }} />
+        </Avatar>
+
+        <Typography variant="h3" gutterBottom sx={{ fontWeight: 300, mb: 2 }}>
+          Application Submitted
+        </Typography>
+
+        <Typography variant="h6" sx={{ color: 'text.secondary', mb: 2 }}>
+          Thank you for your interest in EVMR System!
+        </Typography>
+        
+        <Box sx={{ 
+          maxWidth: 600, 
+          mb: 6,
+          p: 3, 
+          borderRadius: 2,
+          bgcolor: 'rgba(0, 122, 255, 0.05)',
+          border: '1px solid rgba(0, 122, 255, 0.1)'
+        }}>
+          <Typography variant="body1" sx={{ mb: 2 }}>
+            Our team will review and verify your information. This process typically takes <strong>24-48 hours</strong>.
+          </Typography>
+          <Typography variant="body1">
+            You will receive an email notification once your account has been approved.
+          </Typography>
+        </Box>
+
+        <Button
+          variant="outlined"
+          startIcon={<ArrowBackIcon />}
+          onClick={onBack}
+          sx={{
+            borderRadius: 2,
+            textTransform: 'none',
+            px: 4,
+            py: 1.5
+          }}
+        >
+          Back to Login
+        </Button>
+      </Box>
+    </Fade>
+  );
+  
+  // Render success screen if form was submitted successfully
+  if (success) {
+    return <SuccessScreen />;
+  }
+  
+  // User Type Selection Step
+  const UserTypeStep = React.memo(({ formData, handleChange, errors }) => {
+    const userTypes = [
+      {
+        value: 'pet_parent',
+        title: 'Pet Parent',
+        icon: <PetsRoundedIcon sx={{ fontSize: 40 }} />,
+        description: 'Register as a pet owner to manage your pets\' health records and appointments'
+      },
+      {
+        value: 'veterinarian',
+        title: 'Veterinarian',
+        icon: <MedicalServicesIcon sx={{ fontSize: 40 }} />,
+        description: 'Register as a veterinarian to provide care and access patient records'
+      },
+      {
+        value: 'institute_admin',
+        title: 'Institute Admin',
+        icon: <BusinessIcon sx={{ fontSize: 40 }} />,
+        description: 'Register as an administrator for a veterinary practice or hospital'
+      }
+    ];
+
+    return (
+      <Box>
+        <Typography variant="h6" gutterBottom>
+          Select your user type
+        </Typography>
+        <Typography variant="body1" color="text.secondary" gutterBottom sx={{ mb: 4 }}>
+          Choose the option that best describes your role
+        </Typography>
+        
+        <Grid container spacing={3}>
+          {userTypes.map((type) => (
+            <Grid item xs={12} md={4} key={type.value}>
+              <Paper
+                elevation={formData.userType === type.value ? 6 : 1}
+                sx={{
+                  p: 3,
+                  borderRadius: 2,
+                  cursor: 'pointer',
+                  height: '100%',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  alignItems: 'center',
+                  textAlign: 'center',
+                  border: theme => formData.userType === type.value 
+                    ? `2px solid ${theme.palette.primary.main}` 
+                    : '1px solid rgba(0, 0, 0, 0.12)',
+                  transition: 'all 0.3s ease',
+                  '&:hover': {
+                    transform: 'translateY(-4px)',
+                    boxShadow: 4
+                  }
+                }}
+                onClick={() => handleChange({ target: { name: 'userType', value: type.value } })}
+              >
+                <Avatar
+                  sx={{
+                    width: 70,
+                    height: 70,
+                    mb: 2,
+                    bgcolor: formData.userType === type.value 
+                      ? 'primary.main' 
+                      : 'rgba(0, 0, 0, 0.08)'
+                  }}
+                >
+                  {type.icon}
+                </Avatar>
+                <Typography variant="h6" gutterBottom>
+                  {type.title}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {type.description}
+                </Typography>
+              </Paper>
+            </Grid>
+          ))}
+        </Grid>
+        
+        {errors.userType && (
+          <FormHelperText error sx={{ mt: 2, textAlign: 'center' }}>
+            {errors.userType}
+          </FormHelperText>
+        )}
+      </Box>
+    );
+  });
+
+  // Basic Information Step
+  const BasicInfoStep = React.memo(({ formData, handleChange, errors }) => {
+    return (
+      <Box>
+        <Typography variant="h6" gutterBottom>
+          Basic Information
+        </Typography>
+        <Typography variant="body1" color="text.secondary" gutterBottom sx={{ mb: 4 }}>
+          Please provide your personal information
+        </Typography>
+        
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <TextField 
+              name="fullName"
+              id="fullName"
+              label="Full Name"
+              value={formData.fullName}
+              onChange={handleChange}
+              fullWidth
+              required
+              autoComplete="name"
+              error={!!errors.fullName}
+              helperText={errors.fullName}
+              sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              autoFocus
+            />
+          </Grid>
+          
+          <Grid item xs={12} sm={6}>
+            <TextField 
+              name="email"
+              id="email"
+              label="Email Address"
+              type="email"
+              value={formData.email}
+              onChange={handleChange}
+              fullWidth
+              required
+              autoComplete="email"
+              error={!!errors.email}
+              helperText={errors.email}
+              sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+            />
+          </Grid>
+          
+          <Grid item xs={12} sm={6}>
+            <TextField 
+              name="phone"
+              id="phone"
+              label="Phone Number"
+              value={formData.phone}
+              onChange={handleChange}
+              fullWidth
+              required
+              autoComplete="tel"
+              error={!!errors.phone}
+              helperText={errors.phone}
+              sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+            />
+          </Grid>
+        </Grid>
+      </Box>
+    );
+  });
+
+  // Account Setup Step
+  const AccountSetupStep = React.memo(({ 
+    formData, 
+    handleChange, 
+    errors, 
+    showPassword, 
+    showConfirmPassword,
+    handleTogglePassword,
+    handleToggleConfirmPassword,
+    strengthInfo,
+    passwordStrength
+  }) => {
+    return (
+      <Box>
+        <Typography variant="h6" gutterBottom>
+          Account Setup
+        </Typography>
+        <Typography variant="body1" color="text.secondary" gutterBottom sx={{ mb: 4 }}>
+          Create a secure password for your account
+        </Typography>
+        
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <TextField 
+              name="password"
+              id="password"
+              label="Create Password"
+              type={showPassword ? 'text' : 'password'}
+              value={formData.password}
+              onChange={handleChange}
+              fullWidth
+              required
+              autoComplete="new-password"
+              error={!!errors.password}
+              helperText={errors.password}
+              sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle password visibility"
+                      onClick={handleTogglePassword}
+                      edge="end"
+                      onMouseDown={(e) => e.preventDefault()}
+                    >
+                      {showPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+            {formData.password && (
+              <Box sx={{ mt: 1 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+                  <Typography variant="body2" color={strengthInfo.color}>
+                    {strengthInfo.text}
+                  </Typography>
+                  <Typography variant="body2">
+                    {passwordStrength}%
+                  </Typography>
+                </Box>
+                <LinearProgress 
+                  variant="determinate" 
+                  value={passwordStrength} 
+                  sx={{ 
+                    mt: 0.5, 
+                    borderRadius: 1,
+                    bgcolor: 'rgba(0,0,0,0.08)',
+                    '& .MuiLinearProgress-bar': {
+                      bgcolor: strengthInfo.color
+                    }
+                  }} 
+                />
+              </Box>
+            )}
+          </Grid>
+          
+          <Grid item xs={12}>
+            <TextField 
+              name="confirmPassword"
+              id="confirmPassword"
+              label="Confirm Password"
+              type={showConfirmPassword ? 'text' : 'password'}
+              value={formData.confirmPassword}
+              onChange={handleChange}
+              fullWidth
+              required
+              autoComplete="new-password"
+              error={!!errors.confirmPassword}
+              helperText={errors.confirmPassword}
+              sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              InputProps={{
+                endAdornment: (
+                  <InputAdornment position="end">
+                    <IconButton
+                      aria-label="toggle confirm password visibility"
+                      onClick={handleToggleConfirmPassword}
+                      edge="end"
+                      onMouseDown={(e) => e.preventDefault()}
+                    >
+                      {showConfirmPassword ? <VisibilityOff /> : <Visibility />}
+                    </IconButton>
+                  </InputAdornment>
+                ),
+              }}
+            />
+          </Grid>
+        </Grid>
+      </Box>
+    );
+  });
+
+  // Additional Details Step (changes based on user type)
+  const AdditionalDetailsStep = React.memo(({ formData, handleChange, handleMultiSelectChange, errors }) => {
+    // Render different content based on user type, but keep component structure consistent
+    let content = null;
+    
+    if (formData.userType === 'pet_parent') {
+      content = (
+        <>
+          <Typography variant="h6" gutterBottom>
+            Pet Information
+          </Typography>
+          <Typography variant="body1" color="text.secondary" gutterBottom sx={{ mb: 4 }}>
+            Tell us about your pets so we can provide better service
+          </Typography>
+          
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <FormControl 
+                fullWidth 
+                required
+                error={!!errors.petTypes}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              >
+                <InputLabel>Types of Pets You Have</InputLabel>
+                <Select
+                  multiple
+                  name="petTypes"
+                  id="petTypes"
+                  value={formData.petTypes}
+                  onChange={handleMultiSelectChange}
+                  label="Types of Pets You Have"
+                >
+                  <MenuItem value="dog">Dog</MenuItem>
+                  <MenuItem value="cat">Cat</MenuItem>
+                  <MenuItem value="bird">Bird</MenuItem>
+                  <MenuItem value="small_mammal">Small Mammal (Guinea Pig, Hamster, etc.)</MenuItem>
+                  <MenuItem value="reptile">Reptile</MenuItem>
+                  <MenuItem value="fish">Fish</MenuItem>
+                  <MenuItem value="other">Other</MenuItem>
+                </Select>
+                {errors.petTypes && <FormHelperText>{errors.petTypes}</FormHelperText>}
+              </FormControl>
+            </Grid>
+            
+            <Grid item xs={12}>
+              <TextField 
+                name="preferredClinic"
+                id="preferredClinic"
+                label="Preferred Veterinary Clinic (Optional)"
+                value={formData.preferredClinic}
+                onChange={handleChange}
+                fullWidth
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              />
+            </Grid>
+          </Grid>
+        </>
+      );
+    } else if (formData.userType === 'veterinarian') {
+      content = (
+        <>
+          <Typography variant="h6" gutterBottom>
+            Professional Information
+          </Typography>
+          <Typography variant="body1" color="text.secondary" gutterBottom sx={{ mb: 4 }}>
+            Please provide your professional credentials
+          </Typography>
+          
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField 
+                name="licenseNumber"
+                id="licenseNumber"
+                label="License Number"
+                value={formData.licenseNumber}
+                onChange={handleChange}
+                fullWidth
+                required
+                error={!!errors.licenseNumber}
+                helperText={errors.licenseNumber}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              />
+            </Grid>
+            
+            <Grid item xs={12}>
+              <FormControl 
+                fullWidth 
+                required
+                error={!!errors.specialties}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              >
+                <InputLabel>Specialties</InputLabel>
+                <Select
+                  multiple
+                  name="specialties"
+                  id="specialties"
+                  value={formData.specialties}
+                  onChange={handleMultiSelectChange}
+                  label="Specialties"
+                >
+                  <MenuItem value="general_practice">General Practice</MenuItem>
+                  <MenuItem value="surgery">Surgery</MenuItem>
+                  <MenuItem value="internal_medicine">Internal Medicine</MenuItem>
+                  <MenuItem value="dermatology">Dermatology</MenuItem>
+                  <MenuItem value="cardiology">Cardiology</MenuItem>
+                  <MenuItem value="neurology">Neurology</MenuItem>
+                  <MenuItem value="oncology">Oncology</MenuItem>
+                  <MenuItem value="emergency">Emergency & Critical Care</MenuItem>
+                  <MenuItem value="other">Other</MenuItem>
+                </Select>
+                {errors.specialties && <FormHelperText>{errors.specialties}</FormHelperText>}
+              </FormControl>
+            </Grid>
+            
+            <Grid item xs={12}>
+              <FormControl 
+                fullWidth 
+                required
+                error={!!errors.yearsOfExperience}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              >
+                <InputLabel>Years of Experience</InputLabel>
+                <Select
+                  name="yearsOfExperience"
+                  value={formData.yearsOfExperience}
+                  onChange={handleChange}
+                  label="Years of Experience"
+                >
+                  <MenuItem value="0-2">0-2 years</MenuItem>
+                  <MenuItem value="3-5">3-5 years</MenuItem>
+                  <MenuItem value="6-10">6-10 years</MenuItem>
+                  <MenuItem value="11-20">11-20 years</MenuItem>
+                  <MenuItem value="21-30">21-30 years</MenuItem>
+                  <MenuItem value="31-40">31-40 years</MenuItem>
+                  <MenuItem value="41-50">41-50 years</MenuItem>
+                  <MenuItem value="51-60">51-60 years</MenuItem>
+                  <MenuItem value="61-70">61-70 years</MenuItem>
+                  <MenuItem value="71-80">71-80 years</MenuItem>
+                  <MenuItem value="81-90">81-90 years</MenuItem>
+                  <MenuItem value="91-100">91-100 years</MenuItem>
+                </Select>
+                {errors.yearsOfExperience && <FormHelperText>{errors.yearsOfExperience}</FormHelperText>}
+              </FormControl>
+            </Grid>
+          </Grid>
+        </>
+      );
+    } else if (formData.userType === 'institute_admin') {
+      content = (
+        <>
+          <Typography variant="h6" gutterBottom>
+            Clinic Information
+          </Typography>
+          <Typography variant="body1" color="text.secondary" gutterBottom sx={{ mb: 4 }}>
+            Please provide your clinic's information
+          </Typography>
+          
+          <Grid container spacing={3}>
+            <Grid item xs={12}>
+              <TextField 
+                name="clinicName"
+                id="clinicName"
+                label="Clinic/Hospital Name"
+                value={formData.clinicName}
+                onChange={handleChange}
+                fullWidth
+                required
+                error={!!errors.clinicName}
+                helperText={errors.clinicName}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              />
+            </Grid>
+            
+            <Grid item xs={12}>
+              <TextField 
+                name="clinicAddress"
+                id="clinicAddress"
+                label="Clinic Address"
+                value={formData.clinicAddress}
+                onChange={handleChange}
+                fullWidth
+                required
+                error={!!errors.clinicAddress}
+                helperText={errors.clinicAddress}
+                multiline
+                rows={3}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              />
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+              <FormControl 
+                fullWidth 
+                required
+                error={!!errors.country}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              >
+                <InputLabel>Country/Region</InputLabel>
+                <Select
+                  name="country"
+                  id="country"
+                  value={formData.country}
+                  onChange={handleChange}
+                  label="Country/Region"
+                >
+                  <MenuItem value="us">United States</MenuItem>
+                  <MenuItem value="ca">Canada</MenuItem>
+                  <MenuItem value="uk">United Kingdom</MenuItem>
+                  <MenuItem value="au">Australia</MenuItem>
+                  <MenuItem value="in">India</MenuItem>
+                  <MenuItem value="other">Other</MenuItem>
+                </Select>
+                {errors.country && <FormHelperText>{errors.country}</FormHelperText>}
+              </FormControl>
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+              <TextField 
+                name="clinicPhone"
+                id="clinicPhone"
+                label="Clinic Phone Number"
+                value={formData.clinicPhone}
+                onChange={handleChange}
+                fullWidth
+                required
+                error={!!errors.clinicPhone}
+                helperText={errors.clinicPhone}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              />
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+              <TextField 
+                name="clinicEmail"
+                id="clinicEmail"
+                label="Clinic Email"
+                type="email"
+                value={formData.clinicEmail}
+                onChange={handleChange}
+                fullWidth
+                error={!!errors.clinicEmail}
+                helperText={errors.clinicEmail}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              />
+            </Grid>
+            
+            <Grid item xs={12} sm={6}>
+              <FormControl 
+                fullWidth 
+                required
+                error={!!errors.teamSize}
+                sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
+              >
+                <InputLabel>Number of Team Members</InputLabel>
+                <Select
+                  name="teamSize"
+                  id="teamSize"
+                  value={formData.teamSize}
+                  onChange={handleChange}
+                  label="Number of Team Members"
+                >
+                  <MenuItem value="1-5">1-5</MenuItem>
+                  <MenuItem value="6-10">6-10</MenuItem>
+                  <MenuItem value="11-20">11-20</MenuItem>
+                  <MenuItem value="21-50">21-50</MenuItem>
+                  <MenuItem value="50+">50+</MenuItem>
+                </Select>
+                {errors.teamSize && <FormHelperText>{errors.teamSize}</FormHelperText>}
+              </FormControl>
+            </Grid>
+          </Grid>
+        </>
+      );
+    } else {
+      // Default content if no user type is selected
+      content = (
+        <Typography variant="body1" color="text.secondary">
+          Please select a user type in the first step to continue.
+        </Typography>
+      );
+    }
+    
+    // Return the wrapped content in a consistent Box component
+    return (
+      <Box>
+        {content}
+      </Box>
+    );
+  });
+
+  // Review Step
+  const ReviewStep = React.memo(({ formData, handleChange, errors }) => {
+    // Helper function to get user type label
+    const getUserTypeLabel = (type) => {
+      switch(type) {
+        case 'pet_parent': return 'Pet Parent';
+        case 'veterinarian': return 'Veterinarian';
+        case 'institute_admin': return 'Institute Admin';
+        default: return 'User';
+      }
+    };
+    
+    return (
+      <Box>
+        <Typography variant="h6" gutterBottom>
+          Review Your Information
+        </Typography>
+        <Typography variant="body1" color="text.secondary" gutterBottom sx={{ mb: 4 }}>
+          Please review your information before submitting your application
+        </Typography>
+        
+        <Paper sx={{ p: 3, mb: 4, borderRadius: 2 }}>
+          <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
+            Account Type
+          </Typography>
+          <Typography variant="body1" gutterBottom>
+            {getUserTypeLabel(formData.userType)}
+          </Typography>
+        </Paper>
+        
+        <Paper sx={{ p: 3, mb: 4, borderRadius: 2 }}>
+          <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
+            Personal Information
+          </Typography>
+          
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="body2" color="text.secondary">Full Name</Typography>
+              <Typography variant="body1">{formData.fullName}</Typography>
+            </Grid>
+            
+            <Grid item xs={12} sm={4}>
+              <Typography variant="body2" color="text.secondary">Email Address</Typography>
+              <Typography variant="body1">{formData.email}</Typography>
+            </Grid>
+            
+            <Grid item xs={12} sm={4}>
+              <Typography variant="body2" color="text.secondary">Phone Number</Typography>
+              <Typography variant="body1">{formData.phone}</Typography>
+            </Grid>
+          </Grid>
+        </Paper>
+        
+        {formData.userType === 'pet_parent' && (
+          <Paper sx={{ p: 3, mb: 4, borderRadius: 2 }}>
+            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
+              Pet Information
+            </Typography>
+            
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body2" color="text.secondary">Pet Types</Typography>
+                <Typography variant="body1">
+                  {formData.petTypes.map(pet => {
+                    // Format pet types to be more readable
+                    const petName = pet.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    return petName;
+                  }).join(', ')}
+                </Typography>
+              </Grid>
+              
+              {formData.preferredClinic && (
+                <Grid item xs={12} sm={6}>
+                  <Typography variant="body2" color="text.secondary">Preferred Clinic</Typography>
+                  <Typography variant="body1">{formData.preferredClinic}</Typography>
+                </Grid>
+              )}
+            </Grid>
+          </Paper>
+        )}
+        
+        {formData.userType === 'veterinarian' && (
+          <Paper sx={{ p: 3, mb: 4, borderRadius: 2 }}>
+            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
+              Professional Information
+            </Typography>
+            
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={4}>
+                <Typography variant="body2" color="text.secondary">License Number</Typography>
+                <Typography variant="body1">{formData.licenseNumber}</Typography>
+              </Grid>
+              
+              <Grid item xs={12} sm={4}>
+                <Typography variant="body2" color="text.secondary">Years of Experience</Typography>
+                <Typography variant="body1">{formData.yearsOfExperience}</Typography>
+              </Grid>
+              
+              <Grid item xs={12}>
+                <Typography variant="body2" color="text.secondary">Specialties</Typography>
+                <Typography variant="body1">
+                  {formData.specialties.map(specialty => {
+                    // Format specialties to be more readable
+                    const specialtyName = specialty.replace(/_/g, ' ').replace(/\b\w/g, c => c.toUpperCase());
+                    return specialtyName;
+                  }).join(', ')}
+                </Typography>
+              </Grid>
+            </Grid>
+          </Paper>
+        )}
+        
+        {formData.userType === 'institute_admin' && (
+          <Paper sx={{ p: 3, mb: 4, borderRadius: 2 }}>
+            <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
+              Clinic Information
+            </Typography>
+            
+            <Grid container spacing={2}>
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body2" color="text.secondary">Clinic Name</Typography>
+                <Typography variant="body1">{formData.clinicName}</Typography>
+              </Grid>
+              
+              <Grid item xs={12} sm={6}>
+                <Typography variant="body2" color="text.secondary">Country/Region</Typography>
+                <Typography variant="body1">
+                  {formData.country === 'us' ? 'United States' :
+                   formData.country === 'ca' ? 'Canada' :
+                   formData.country === 'uk' ? 'United Kingdom' :
+                   formData.country === 'au' ? 'Australia' :
+                   formData.country === 'in' ? 'India' : 'Other'}
+                </Typography>
+              </Grid>
+              
+              <Grid item xs={12}>
+                <Typography variant="body2" color="text.secondary">Clinic Address</Typography>
+                <Typography variant="body1">{formData.clinicAddress}</Typography>
+              </Grid>
+              
+              <Grid item xs={12} sm={4}>
+                <Typography variant="body2" color="text.secondary">Clinic Phone</Typography>
+                <Typography variant="body1">{formData.clinicPhone}</Typography>
+              </Grid>
+              
+              {formData.clinicEmail && (
+                <Grid item xs={12} sm={4}>
+                  <Typography variant="body2" color="text.secondary">Clinic Email</Typography>
+                  <Typography variant="body1">{formData.clinicEmail}</Typography>
+                </Grid>
+              )}
+              
+              <Grid item xs={12} sm={4}>
+                <Typography variant="body2" color="text.secondary">Team Size</Typography>
+                <Typography variant="body1">{formData.teamSize}</Typography>
+              </Grid>
+            </Grid>
+          </Paper>
+        )}
+        
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={formData.agreeTerms}
+              onChange={handleChange}
+              name="agreeTerms"
+              color="primary"
+            />
+          }
+          label={
+            <Typography variant="body2">
+              I agree to the <Link href="#" underline="hover">Terms of Service</Link> and <Link href="#" underline="hover">Privacy Policy</Link>
+            </Typography>
+          }
+          sx={{ mb: 2 }}
+        />
+        {errors.agreeTerms && (
+          <FormHelperText error sx={{ mb: 2 }}>
+            {errors.agreeTerms}
+          </FormHelperText>
+        )}
+        
+        <FormControlLabel
+          control={
+            <Checkbox
+              checked={formData.subscribe}
+              onChange={handleChange}
+              name="subscribe"
+              color="primary"
+            />
+          }
+          label="Subscribe to our newsletter for updates and tips"
+        />
+      </Box>
+    );
+  });
+
+  // Render the appropriate content for each step
+  const getStepContent = (step) => {
+    switch (step) {
+      case 0:
+        return (
+          <UserTypeStep 
+            formData={formData} 
+            handleChange={handleChange} 
+            errors={errors}
+          />
+        );
+      case 1:
+        return (
+          <BasicInfoStep 
+            formData={formData} 
+            handleChange={handleChange} 
+            errors={errors}
+          />
+        );
+      case 2:
+        return (
+          <AccountSetupStep 
+            formData={formData} 
+            handleChange={handleChange} 
+            errors={errors}
+            showPassword={showPassword}
+            showConfirmPassword={showConfirmPassword}
+            handleTogglePassword={handleTogglePassword}
+            handleToggleConfirmPassword={handleToggleConfirmPassword}
+            strengthInfo={strengthInfo}
+            passwordStrength={passwordStrength}
+          />
+        );
+      case 3:
+        return (
+          <AdditionalDetailsStep 
+            formData={formData} 
+            handleChange={handleChange} 
+            handleMultiSelectChange={handleMultiSelectChange}
+            errors={errors}
+          />
+        );
+      case 4:
+        return (
+          <ReviewStep 
+            formData={formData} 
+            handleChange={handleChange} 
+            errors={errors}
+          />
+        );
+      default:
+        return 'Unknown step';
+    }
+  };
+
+  return (
+    <Fade in={true} timeout={500}>
+      <Box sx={{ 
+        display: 'flex',
+        minHeight: '100vh',
+        width: '100%',
+        backgroundColor: 'background.default'
+      }}>
+        <Grid container>
+          {/* Form Section */}
+          <Grid 
+            item 
+            xs={12} 
+            md={8} 
+            sx={{ 
+              p: { xs: 2, sm: 4, md: 6 },
+              display: 'flex',
+              flexDirection: 'column'
+            }}
+          >
+            <Box sx={{ mb: 4, display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <IconButton 
+                  onClick={onBack}
+                  sx={{ mr: 2 }}
+                  aria-label="Back to login"
+                >
+                  <ArrowBackIcon />
+                </IconButton>
+                <Typography variant="h4" component="h1" sx={{ fontWeight: 500 }}>
+                  Create your account
+                </Typography>
+              </Box>
+              
+              {activeStep > 0 && (
+                <Button
+                  variant="text"
+                  onClick={handleReset}
+                  sx={{ textTransform: 'none' }}
+                >
+                  Start over
+                </Button>
+              )}
+            </Box>
+            
+            {/* Display error message if any */}
+            {errors.general && (
+              <Box sx={{ 
+                mb: 3, 
+                p: 2, 
+                borderRadius: 2, 
+                bgcolor: 'error.light', 
+                color: 'error.dark'
+              }}>
+                <Typography variant="body1">{errors.general}</Typography>
+              </Box>
+            )}
+            
+            {/* Steps display on desktop */}
+            {!isMobile && (
+              <Stepper 
+                activeStep={activeStep} 
+                sx={{ 
+                  mb: 4, 
+                  display: { xs: 'none', sm: 'flex' }
+                }}
+              >
+                {steps.map((label) => (
+                  <Step key={label}>
+                    <StepLabel>{label}</StepLabel>
+                  </Step>
+                ))}
+              </Stepper>
+            )}
+            
+            {/* Steps display on mobile */}
+            {isMobile && (
+              <MobileStepper
+                variant="dots"
+                steps={steps.length}
+                position="static"
+                activeStep={activeStep}
+                sx={{ mb: 4, bgcolor: 'transparent', display: { sm: 'none' } }}
+                nextButton={<div />} // Empty placeholder for layout
+                backButton={<div />} // Empty placeholder for layout
+              />
+            )}
+            
+            <Box component="form" noValidate sx={{ mb: 4, flexGrow: 1 }}>
+              {getStepContent(activeStep)}
+            </Box>
+            
+            {/* Navigation buttons */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+              <Button
+                variant="outlined"
+                onClick={handleBack}
+                disabled={activeStep === 0}
+                startIcon={<ArrowBackIcon />}
+                sx={{
+                  borderRadius: 2,
+                  textTransform: 'none',
+                  px: 3,
+                  py: 1.5,
+                  visibility: activeStep === 0 ? 'hidden' : 'visible'
+                }}
+              >
+                Back
+              </Button>
+              
+              {activeStep === steps.length - 1 ? (
+                <Button
+                  variant="contained"
+                  onClick={handleSubmit}
+                  disabled={loading}
+                  sx={{
+                    py: 1.5,
+                    px: 4,
+                    borderRadius: 2,
+                    textTransform: 'none',
+                    fontSize: '1rem',
+                    fontWeight: 500,
+                    transition: 'all 0.2s ease-in-out',
+                    '&:hover': {
+                      transform: 'translateY(-2px)',
+                      boxShadow: '0 4px 10px rgba(0, 122, 255, 0.4)',
+                    },
+                  }}
+                >
+                  {loading ? (
+                    <LinearProgress 
+                      color="inherit" 
+                      sx={{ width: '100%', borderRadius: 5 }} 
+                    />
+                  ) : 'Submit Application'}
+                </Button>
+              ) : (
+                <Button
+                  variant="contained"
+                  onClick={handleNext}
+                  endIcon={<ArrowForwardIcon />}
+                  sx={{
+                    py: 1.5,
+                    px: 3,
+                    borderRadius: 2,
+                    textTransform: 'none',
+                    fontSize: '1rem',
+                    fontWeight: 500,
+                  }}
+                >
+                  Next
+                </Button>
+              )}
+            </Box>
+            
+            <Box sx={{ mt: 4, textAlign: 'center' }}>
+              <Typography variant="body2" color="text.secondary">
+                Already have an account? <Link href="#" onClick={onBack} underline="hover">Log in here</Link>
+              </Typography>
+            </Box>
+          </Grid>
+          
+          {/* Side Panel */}
+          <Grid 
+            item 
+            md={4} 
+            sx={{ 
+              display: { xs: 'none', md: 'flex' },
+              flexDirection: 'column',
+              justifyContent: 'center',
+              alignItems: 'center',
+              p: 6,
+              bgcolor: 'primary.main',
+              color: 'white',
+              position: 'relative',
+              overflow: 'hidden'
+            }}
+          >
+            <Box sx={{ 
+              position: 'absolute',
+              width: '300px',
+              height: '300px',
+              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '50%',
+              top: '-50px',
+              right: '-100px',
+              zIndex: 0
+            }} />
+            
+            <Box sx={{ 
+              position: 'absolute',
+              width: '200px',
+              height: '200px',
+              bgcolor: 'rgba(255, 255, 255, 0.1)',
+              borderRadius: '50%',
+              bottom: '50px',
+              left: '-50px',
+              zIndex: 0
+            }} />
+            
+            <Box sx={{ 
+              position: 'relative',
+              zIndex: 1,
+              animation: `${fadeIn} 1s ease-out`,
+              width: '100%'
+            }}>
+              <Box sx={{ textAlign: 'center', mb: 8 }}>
+                <Avatar 
+                  sx={{ 
+                    width: 80, 
+                    height: 80, 
+                    bgcolor: 'rgba(255, 255, 255, 0.2)',
+                    m: '0 auto 16px auto'
+                  }}
+                >
+                  <PetsRoundedIcon sx={{ fontSize: 40 }} />
+                </Avatar>
+                <Typography variant="h4" gutterBottom sx={{ fontWeight: 300 }}>
+                  EVMR System
+                </Typography>
+                <Typography variant="subtitle1">
+                  Smart veterinary management for modern practices
+                </Typography>
+              </Box>
+              
+              <Box sx={{ mb: 4 }}>
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                  <Avatar sx={{ bgcolor: 'rgba(255, 255, 255, 0.2)', mr: 2 }}>
+                    <SecurityIcon />
+                  </Avatar>
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                      Secure
+                    </Typography>
+                    <Typography variant="body2">
+                      All data is encrypted and securely stored
+                    </Typography>
+                  </Box>
+                </Box>
+                
+                <Box sx={{ display: 'flex', alignItems: 'center', mb: 3 }}>
+                  <Avatar sx={{ bgcolor: 'rgba(255, 255, 255, 0.2)', mr: 2 }}>
+                    <CloudDoneIcon />
+                  </Avatar>
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                      Cloud-Based
+                    </Typography>
+                    <Typography variant="body2">
+                      Access your data from anywhere, anytime
+                    </Typography>
+                  </Box>
+                </Box>
+                
+                <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                  <Avatar sx={{ bgcolor: 'rgba(255, 255, 255, 0.2)', mr: 2 }}>
+                    <MedicalServicesIcon />
+                  </Avatar>
+                  <Box>
+                    <Typography variant="h6" sx={{ fontWeight: 500 }}>
+                      Designed for Vets
+                    </Typography>
+                    <Typography variant="body2">
+                      Intuitive workflows for veterinary practices
+                    </Typography>
+                  </Box>
+                </Box>
+              </Box>
+            </Box>
+          </Grid>
+        </Grid>
+      </Box>
+    </Fade>
+  );
+};
+
+export default SignupForm; 

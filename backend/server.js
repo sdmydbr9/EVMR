@@ -5,8 +5,11 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const { Pool } = require('pg');
 const { initDatabase } = require('./config/database');
+require('dotenv').config();
 
 // Import routes
+const authRoutes = require('./routes/auth');
+const signupRoutes = require('./routes/signup');
 const patientRoutes = require('./routes/patients');
 const emrRoutes = require('./routes/emr');
 const appointmentRoutes = require('./routes/appointments');
@@ -66,12 +69,14 @@ app.get('/health', (req, res) => {
 });
 
 // API endpoints
+app.use('/api/auth', authRoutes); // Auth routes do not require authentication
+app.use('/api/signup', signupRoutes); // Signup routes do not require authentication
 app.use('/api/patients', authenticate, patientRoutes);
 app.use('/api/emr', authenticate, emrRoutes);
 app.use('/api/appointments', authenticate, appointmentRoutes);
 app.use('/api/inventory', authenticate, inventoryRoutes);
 app.use('/api/reports', authenticate, reportRoutes);
-app.use('/api/users', userRoutes); // Authentication handled within user routes
+app.use('/api/users', authenticate, userRoutes); // Now all user routes require authentication
 
 // Serve React app for any other route
 app.get('*', (req, res) => {

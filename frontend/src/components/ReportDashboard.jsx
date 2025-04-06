@@ -218,7 +218,12 @@ const ReportDashboard = () => {
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884d8', '#82ca9d'];
   
   return (
-    <Box sx={{ p: 3 }}>
+    <Box sx={{ 
+      p: 3,
+      width: '100%',
+      maxWidth: '100%',
+      boxSizing: 'border-box'
+    }}>
       <Snackbar
         open={notification.open}
         autoHideDuration={6000}

@@ -17,11 +17,19 @@ services:
       - NODE_ENV=development
       - PORT=3786
       # Database connection
-      - DATABASE_URL=postgresql://evmr_user:${DB_PASSWORD}@evmr-db:5432/evmr_database
+      - DATABASE_URL=postgresql://evmr_user:postgres@evmr-db:5432/evmr_database
       # Authentication
       - JWT_SECRET=${JWT_SECRET}
       # Multi-location configuration
       - MULTI_LOCATION_ENABLED=true
+      # Set timezone to Indian Standard Time
+      - TZ=Asia/Kolkata
+      # Database specific environment variables
+      - DB_HOST=evmr-db
+      - DB_PORT=5432
+      - DB_NAME=evmr_database
+      - DB_USER=evmr_user
+      - DB_PASSWORD=postgres
     env_file:
       - .env # Load additional environment variables from .env file
     volumes:
@@ -39,6 +47,48 @@ services:
       retries: 3
       start_period: 30s
 
+  # Admin service for user registration approvals
+  evmr-admin:
+    build:
+      context: ./admin-service
+      dockerfile: Dockerfile
+    container_name: evmr-admin-service
+    restart: unless-stopped
+    ports:
+      - "3789:3789" # Map container port to host port
+    depends_on:
+      - evmr-db # Ensure database is started before the admin service
+    environment:
+      # Application configuration
+      - NODE_ENV=development
+      - PORT=3789
+      # Database connection (same as main app)
+      - DATABASE_URL=postgresql://evmr_user:postgres@evmr-db:5432/evmr_database
+      # Authentication
+      - JWT_SECRET=${JWT_SECRET}
+      # Set timezone to Indian Standard Time
+      - TZ=Asia/Kolkata
+      # Database specific environment variables
+      - DB_HOST=evmr-db
+      - DB_PORT=5432
+      - DB_NAME=evmr_database
+      - DB_USER=evmr_user
+      - DB_PASSWORD=postgres
+    env_file:
+      - .env # Load additional environment variables from .env file
+    volumes:
+      # Mount for logs
+      - evmr-admin-logs:/app/admin-service/logs
+    networks:
+      - evmr-network
+    # Healthcheck for admin service
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3789/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
   # PostgreSQL database service
   evmr-db:
     image: postgres:14-alpine
@@ -46,8 +96,10 @@ services:
     restart: unless-stopped
     environment:
       - POSTGRES_USER=evmr_user
-      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_PASSWORD=postgres
       - POSTGRES_DB=evmr_database
+      # Set timezone to Indian Standard Time
+      - TZ=Asia/Kolkata
     volumes:
       # Persistent volume for database data
       - evmr-db-data:/var/lib/postgresql/data
@@ -82,6 +134,8 @@ volumes:
     # - Vaccination certificates
   evmr-logs:
     # Stores application logs
+  evmr-admin-logs:
+    # Stores admin service logs
 
 # Custom network for EVMR services
 networks:
@@ -90,7 +144,8 @@ networks:
 
 # This docker-compose configuration:
 # 1. Sets up the EVMR application container with its environment variables
-# 2. Configures the PostgreSQL database with persistent storage
-# 3. Creates a dedicated network for secure communication between services
-# 4. Establishes volumes for data persistence across container restarts
-# 5. Implements healthchecks to ensure services are running correctly 
+# 2. Sets up the EVMR admin service for user approval management
+# 3. Configures the PostgreSQL database with persistent storage
+# 4. Creates a dedicated network for secure communication between services
+# 5. Establishes volumes for data persistence across container restarts
+# 6. Implements healthchecks to ensure services are running correctly 
