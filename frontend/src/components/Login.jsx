@@ -21,7 +21,8 @@ import {
   Select,
   MenuItem,
   FormControl,
-  InputLabel
+  InputLabel,
+  CircularProgress
 } from '@mui/material';
 import { 
   Visibility, 
@@ -40,6 +41,7 @@ import {
 import { keyframes } from '@mui/system';
 import { authService } from '../services/api';
 import SignupForm from './SignupForm';
+import axios from 'axios';
 
 // Animation keyframes
 const fadeIn = keyframes`
@@ -84,6 +86,10 @@ const Login = ({ onLogin }) => {
   const [rememberMe, setRememberMe] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
   const [showSignup, setShowSignup] = useState(false);
+  
+  // Field-specific validation errors
+  const [emailError, setEmailError] = useState('');
+  const [checkingEmail, setCheckingEmail] = useState(false);
   
   // New states for user type selection
   const [userType, setUserType] = useState('');
@@ -137,51 +143,70 @@ const Login = ({ onLogin }) => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
-    setLoading(true);
-
-    // Basic validation
-    let formValid = true;
+  // Check if email is already registered
+  const checkEmailExists = async (email) => {
+    if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return;
     
-    // Email/ID validation based on user type
-    if (userType === 'pet_parent') {
-      if (!email) {
-        setError('Email address is required');
-        formValid = false;
+    setCheckingEmail(true);
+    try {
+      // Make API call to check if email exists
+      const response = await axios.get(`/api/users/check-email?email=${encodeURIComponent(email)}`);
+      
+      if (response.data && response.data.exists) {
+        setEmailError('This email is already registered');
+      } else {
+        setEmailError('');
       }
-    } else if (userType === 'veterinarian') {
-      if (!id) {
-        setError('ID is required');
-        formValid = false;
-      }
-      if (!email) {
-        setError('Email address is required');
-        formValid = false;
-      }
-    } else if (userType === 'institute_admin') {
-      if (!organisationId) {
-        setError('Organisation ID is required');
-        formValid = false;
-      }
-      if (!email) {
-        setError('Email address is required');
-        formValid = false;
-      }
+    } catch (err) {
+      console.error('Error checking email:', err);
+      // Don't show error to user in this case - we're just validating
+    } finally {
+      setCheckingEmail(false);
     }
-    
-    // Password validation
-    if (!password) {
-      setError('Password is required');
-      formValid = false;
-    }
+  };
 
-    if (!formValid) {
-      setLoading(false);
+  // Handle email field blur
+  const handleEmailBlur = async () => {
+    if (!email || !email.trim()) return;
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      setEmailError('Please enter a valid email address');
       return;
     }
+    
+    setEmailError('');
+  };
 
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    if (e) e.preventDefault();
+    
+    // Clear previous errors
+    setError('');
+    
+    // Validate required fields before proceeding
+    if (!email) {
+      setError('Email is required');
+      return;
+    }
+    
+    if (!password) {
+      setError('Password is required');
+      return;
+    }
+    
+    // Validate user type specific fields
+    if (userType === 'veterinarian' && !id) {
+      setError('ID is required for veterinarians');
+      return;
+    }
+    
+    if (userType === 'institute_admin' && !organisationId) {
+      setError('Organisation ID is required for institute admins');
+      return;
+    }
+    
+    setLoading(true);
+    
     try {
       // Send authentication request to API with user type
       const loginData = {
@@ -377,7 +402,7 @@ const Login = ({ onLogin }) => {
             required
             fullWidth
             id="id"
-            label="ID"
+            label="Vet ID"
             name="id"
             value={id}
             onChange={(e) => setId(e.target.value)}
@@ -423,8 +448,21 @@ const Login = ({ onLogin }) => {
           autoComplete="email"
           autoFocus={userType === 'pet_parent'}
           value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          onChange={(e) => {
+            setEmail(e.target.value);
+            setEmailError('');
+          }}
+          onBlur={handleEmailBlur}
           variant="outlined"
+          error={!!emailError}
+          helperText={emailError}
+          InputProps={{
+            endAdornment: checkingEmail ? (
+              <InputAdornment position="end">
+                <CircularProgress size={20} />
+              </InputAdornment>
+            ) : null
+          }}
           sx={{
             mb: 2,
             '& .MuiOutlinedInput-root': {
@@ -439,45 +477,46 @@ const Login = ({ onLogin }) => {
           fullWidth
           name="password"
           label="Password"
-          type={showPassword ? 'text' : 'password'}
           id="password"
+          type={showPassword ? 'text' : 'password'}
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
           variant="outlined"
-          sx={{
-            mb: 3,
-            '& .MuiOutlinedInput-root': {
-              borderRadius: 2,
-            },
-          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
                 <IconButton
                   aria-label="toggle password visibility"
-                  onClick={handleClickShowPassword}
+                  onClick={() => setShowPassword(!showPassword)}
                   edge="end"
                 >
                   {showPassword ? <VisibilityOff /> : <Visibility />}
                 </IconButton>
               </InputAdornment>
-            ),
+            )
+          }}
+          sx={{
+            mb: 2,
+            '& .MuiOutlinedInput-root': {
+              borderRadius: 2,
+            },
           }}
         />
         
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
-          <FormControlLabel 
+        <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', mb: 3 }}>
+          <FormControlLabel
             control={
               <Checkbox 
-                checked={rememberMe} 
-                onChange={(e) => setRememberMe(e.target.checked)} 
-                color="primary"
+                value="remember" 
+                color="primary" 
+                checked={rememberMe}
+                onChange={(e) => setRememberMe(e.target.checked)}
               />
-            } 
-            label="Remember me" 
+            }
+            label="Remember me"
           />
-          <Link href="#" underline="hover" sx={{ color: theme.palette.primary.main }}>
+          <Link href="#" variant="body2" onClick={(e) => { e.preventDefault(); }}>
             Forgot password?
           </Link>
         </Box>
@@ -488,25 +527,28 @@ const Login = ({ onLogin }) => {
           variant="contained"
           disabled={loading}
           sx={{
-            py: 1.5,
+            p: 1.5,
             borderRadius: 2,
             textTransform: 'none',
             fontSize: '1rem',
             fontWeight: 500,
-            boxShadow: 'none',
-            transition: 'all 0.2s ease-in-out',
-            '&:hover': {
-              transform: 'translateY(-2px)',
-              boxShadow: `0 4px 10px ${theme.palette.primary.main}40`,
-            },
+            boxShadow: 2,
+            '&:hover': { boxShadow: 4 },
+            position: 'relative',
+            overflow: 'hidden'
           }}
+          onClick={handleSubmit}
         >
-          {loading ? 'Signing in...' : 'Sign In'}
+          {loading ? (
+            <CircularProgress size={24} color="inherit" />
+          ) : (
+            'Sign In'
+          )}
         </Button>
         
-        <Box sx={{ mt: 4, textAlign: 'center', color: 'text.secondary' }}>
-          <Typography variant="body2">
-            Need an account? <Link href="#" underline="hover" onClick={handleShowSignup} sx={{ fontWeight: 500, color: theme.palette.primary.main }}>Contact administrator</Link>
+        <Box sx={{ mt: 3, textAlign: 'center' }}>
+          <Typography variant="body2" color="text.secondary">
+            Don't have an account? <Link href="#" onClick={handleShowSignup} underline="hover" sx={{ fontWeight: 500 }}>Sign up</Link>
           </Typography>
         </Box>
       </Box>

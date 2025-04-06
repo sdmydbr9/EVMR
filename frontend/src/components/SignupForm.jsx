@@ -170,7 +170,7 @@ const UserTypeStep = React.memo(({ formData, handleChange, errors }) => {
 });
 
 // Basic Information Step
-const BasicInfoStep = React.memo(({ formData, handleChange, errors }) => {
+const BasicInfoStep = React.memo(({ formData, handleChange, errors, handleBlur }) => {
   return (
     <Box>
       <Typography variant="h6" gutterBottom>
@@ -194,7 +194,7 @@ const BasicInfoStep = React.memo(({ formData, handleChange, errors }) => {
             error={!!errors.fullName}
             helperText={errors.fullName}
             sx={{ "& .MuiOutlinedInput-root": { borderRadius: 2 } }}
-            autoFocus // Retain autoFocus for when the step first loads
+            autoFocus
             key="fullName-field"
           />
         </Grid>
@@ -207,6 +207,7 @@ const BasicInfoStep = React.memo(({ formData, handleChange, errors }) => {
             type="email"
             value={formData.email}
             onChange={handleChange}
+            onBlur={handleBlur}
             fullWidth
             required
             autoComplete="email"
@@ -224,6 +225,7 @@ const BasicInfoStep = React.memo(({ formData, handleChange, errors }) => {
             label="Phone Number"
             value={formData.phone}
             onChange={handleChange}
+            onBlur={handleBlur}
             fullWidth
             required
             autoComplete="tel"
@@ -1114,6 +1116,48 @@ const SignupForm = ({ onBack }) => {
       return { text: 'Strong', color: 'success.main' };
   }, [passwordStrength, formData.password]);
 
+  // Check if email or phone already exists
+  const checkExistingCredentials = useCallback(async (field, value) => {
+    if (!value.trim()) return; // Don't check empty values
+    
+    // Basic validation before making API call
+    if (field === 'email' && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) return;
+    if (field === 'phone' && value.length < 5) return; // Simple minimum length check
+    
+    try {
+      const response = await axios.post('/api/signup/check-existing', { field, value });
+      // If we get here, the field is available (not registered)
+      // Clear any existing error for this field
+      if (errors[field]) {
+        setErrors(prev => {
+          const newErrors = { ...prev };
+          delete newErrors[field];
+          return newErrors;
+        });
+      }
+    } catch (error) {
+      // If we get an error, the field is already registered
+      if (axios.isAxiosError(error) && error.response && error.response.status === 409) {
+        // 409 Conflict status indicates the value exists
+        setErrors(prev => ({
+          ...prev,
+          [field]: field === 'email' 
+            ? 'This email is already registered' 
+            : 'This phone number is already registered'
+        }));
+      }
+    }
+  }, [errors]);
+
+  // Handle blur event for email and phone fields
+  const handleBlur = useCallback((e) => {
+    const { name, value } = e.target;
+    
+    // Only check email and phone fields
+    if (name === 'email' || name === 'phone') {
+      checkExistingCredentials(name, value);
+    }
+  }, [checkExistingCredentials]);
 
   // Handle form submission with useCallback
   const handleSubmit = useCallback(async (e) => {
@@ -1387,6 +1431,7 @@ const SignupForm = ({ onBack }) => {
                   formData={formData}
                   handleChange={handleChange}
                   errors={errors}
+                  handleBlur={handleBlur}
                 />
               )}
               {activeStep === 2 && (

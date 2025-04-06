@@ -2,6 +2,20 @@ const { pool } = require('../config/database');
 const bcrypt = require('bcryptjs');
 const { sendSignupVerificationEmail, sendAdminNotificationEmail } = require('../config/emailService');
 const axios = require('axios');
+const crypto = require('crypto');
+
+/**
+ * Generate a random alphanumeric string of specified length
+ * @param {number} length - Length of the string to generate
+ * @returns {string} - Random alphanumeric string
+ */
+const generateRandomString = (length = 8) => {
+  return crypto
+    .randomBytes(Math.ceil(length / 2))
+    .toString('hex')
+    .slice(0, length)
+    .toUpperCase();
+};
 
 /**
  * Handle user registration request
@@ -94,10 +108,15 @@ const registerUser = async (req, res) => {
           licenseNumber: licenseNumber || ''
         };
       } else if (role === 'admin') {
+        // Generate temporary organisation ID for institute admins
+        // This will be replaced with a permanent one upon approval
+        const tempOrganisationId = 'ORG-TEMP-' + generateRandomString(8);
+        
         userDetails = {
           ...userDetails,
           country,
           teamSize,
+          organisation_id: tempOrganisationId, // Add the organisation_id field
           clinicDetails: {
             name: clinicName,
             address: clinicAddress,
@@ -105,6 +124,8 @@ const registerUser = async (req, res) => {
             email: clinicEmail
           }
         };
+        
+        console.log(`Created temporary organisation ID for ${email}: ${tempOrganisationId}`);
       } else if (role === 'client') { // Pet parent role
         userDetails = {
           ...userDetails,
@@ -145,6 +166,11 @@ const registerUser = async (req, res) => {
                  role === 'veterinarian' ? 'Veterinarian' : 
                  role === 'admin' ? 'Institute Administrator' : 'User'
       };
+
+      // Add organisation ID to userData if it's an institute admin
+      if (role === 'admin') {
+        userData.organisationId = userDetails.organisation_id;
+      }
 
       try {
         // Send email to user
@@ -195,6 +221,64 @@ const registerUser = async (req, res) => {
   }
 };
 
+/**
+ * Check if email or phone number already exists
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+const checkExistingCredential = async (req, res) => {
+  const { field, value } = req.body;
+
+  if (!field || !value) {
+    return res.status(400).json({
+      success: false,
+      message: 'Missing required parameters'
+    });
+  }
+
+  try {
+    let query;
+    let params;
+
+    // Check based on field type
+    if (field === 'email') {
+      query = 'SELECT id FROM users WHERE email = $1';
+      params = [value];
+    } else if (field === 'phone') {
+      // Phone numbers are stored in the details JSON field
+      query = "SELECT id FROM users WHERE details->>'phone' = $1";
+      params = [value];
+    } else {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid field parameter'
+      });
+    }
+
+    const result = await pool.query(query, params);
+
+    if (result.rowCount > 0) {
+      return res.status(409).json({
+        success: false,
+        message: `This ${field} is already registered`
+      });
+    }
+
+    // If we get here, the credential is available
+    return res.status(200).json({
+      success: true,
+      message: `${field} is available`
+    });
+  } catch (err) {
+    console.error(`Error checking existing ${field}:`, err);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error. Please try again later.'
+    });
+  }
+};
+
 module.exports = {
-  registerUser
+  registerUser,
+  checkExistingCredential
 }; 

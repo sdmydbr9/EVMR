@@ -11,13 +11,14 @@ const login = async (req, res) => {
   const { email, password, userType, id, organisationId } = req.body;
   
   try {
+    console.log(`Login attempt - Type: ${userType}, Email: ${email}`);
     let user;
     
     // Handle different login methods based on user type
     if (userType === 'veterinarian' && id) {
       // For veterinarians, find by email and check ID in details
       const userResult = await pool.query(
-        `SELECT id, name, email, password, role, details 
+        `SELECT id, name, email, password, role, details, status
          FROM users 
          WHERE email = $1 AND role = 'veterinarian'`,
         [email]
@@ -25,11 +26,23 @@ const login = async (req, res) => {
       
       if (userResult.rows.length > 0) {
         const userData = userResult.rows[0];
-        // Check if the provided ID matches the unique_id stored in details
-        const storedId = userData.details?.unique_id;
+        console.log('Veterinarian login - details structure:', JSON.stringify(userData.details));
+        
+        // Check status first - if pending, return a specific message
+        if (userData.status === 'pending') {
+          return res.status(401).json({
+            success: false,
+            message: 'Your account is pending approval. You will receive your Vet ID via email when approved.'
+          });
+        }
+        
+        // Check if the provided ID matches the vet_id/unique_id stored in details
+        const storedId = userData.details?.unique_id || userData.details?.vet_id;
         
         if (storedId && storedId === id) {
           user = userData;
+        } else {
+          console.log(`Veterinarian ID mismatch - Provided: ${id}, Stored: ${storedId}`);
         }
       }
     } 
@@ -44,12 +57,20 @@ const login = async (req, res) => {
       
       if (userResult.rows.length > 0) {
         const userData = userResult.rows[0];
-        // Check if the provided organisation ID matches the one stored in details
+        console.log('Institute admin login - details structure:', JSON.stringify(userData.details));
+        
+        // Only check against organisation_id field
         const storedOrgId = userData.details?.organisation_id;
+        
+        console.log(`Institute admin org ID comparison - Provided: ${organisationId}, Found org ID: ${storedOrgId}`);
         
         if (storedOrgId && storedOrgId === organisationId) {
           user = userData;
+        } else {
+          console.log(`Institute admin org ID mismatch - Provided: ${organisationId}, Stored: ${storedOrgId}`);
         }
+      } else {
+        console.log(`No institute admin found with email: ${email}`);
       }
     }
     else {
@@ -61,6 +82,8 @@ const login = async (req, res) => {
       
       if (userResult.rows.length > 0) {
         user = userResult.rows[0];
+      } else {
+        console.log(`No user found with email: ${email}`);
       }
     }
     
@@ -76,6 +99,7 @@ const login = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
     
     if (!isMatch) {
+      console.log('Password mismatch for user:', email);
       return res.status(401).json({
         success: false,
         message: 'Invalid credentials'
@@ -96,6 +120,8 @@ const login = async (req, res) => {
       process.env.JWT_SECRET || 'dev-secret-key',
       { expiresIn: process.env.JWT_EXPIRATION || '1d' }
     );
+    
+    console.log(`Successful login for: ${email}, role: ${user.role}`);
     
     // Return success with token and user info
     res.json({
