@@ -1,4 +1,4 @@
-version: '3.8'
+# EVMR System Docker Compose Configuration
 
 services:
   # EVMR application service
@@ -14,22 +14,37 @@ services:
       - evmr-db # Ensure database is started before the application
     environment:
       # Application configuration
-      - NODE_ENV=development
-      - PORT=3786
+      - NODE_ENV=${NODE_ENV}
+      - PORT=${PORT}
+      - APP_NAME=${APP_NAME}
       # Database connection
-      - DATABASE_URL=postgresql://evmr_user:postgres@evmr-db:5432/evmr_database
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${DB_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
       # Authentication
       - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION=${JWT_EXPIRATION}
+      - REFRESH_TOKEN_EXPIRATION=${REFRESH_TOKEN_EXPIRATION}
       # Multi-location configuration
-      - MULTI_LOCATION_ENABLED=true
+      - MULTI_LOCATION_ENABLED=${MULTI_LOCATION_ENABLED}
       # Set timezone to Indian Standard Time
       - TZ=Asia/Kolkata
       # Database specific environment variables
-      - DB_HOST=evmr-db
-      - DB_PORT=5432
-      - DB_NAME=evmr_database
-      - DB_USER=evmr_user
-      - DB_PASSWORD=postgres
+      - DB_HOST=${POSTGRES_HOST}
+      - DB_PORT=${POSTGRES_PORT}
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      # Email settings
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - EMAIL_FROM=${EMAIL_FROM}
+      # Logging
+      - LOG_LEVEL=${LOG_LEVEL}
+      - LOG_FORMAT=${LOG_FORMAT}
+      # File upload settings
+      - MAX_FILE_SIZE=${MAX_FILE_SIZE}
+      - ALLOWED_FILE_TYPES=${ALLOWED_FILE_TYPES}
     env_file:
       - .env # Load additional environment variables from .env file
     volumes:
@@ -60,20 +75,25 @@ services:
       - evmr-db # Ensure database is started before the admin service
     environment:
       # Application configuration
-      - NODE_ENV=development
+      - NODE_ENV=${NODE_ENV}
       - PORT=3789
       # Database connection (same as main app)
-      - DATABASE_URL=postgresql://evmr_user:postgres@evmr-db:5432/evmr_database
+      - DATABASE_URL=postgresql://${POSTGRES_USER}:${DB_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
       # Authentication
       - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRATION=${JWT_EXPIRATION}
+      - REFRESH_TOKEN_EXPIRATION=${REFRESH_TOKEN_EXPIRATION}
       # Set timezone to Indian Standard Time
       - TZ=Asia/Kolkata
       # Database specific environment variables
-      - DB_HOST=evmr-db
-      - DB_PORT=5432
-      - DB_NAME=evmr_database
-      - DB_USER=evmr_user
-      - DB_PASSWORD=postgres
+      - DB_HOST=${POSTGRES_HOST}
+      - DB_PORT=${POSTGRES_PORT}
+      - DB_NAME=${POSTGRES_DB}
+      - DB_USER=${POSTGRES_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      # Admin user
+      - ADMIN_EMAIL=${ADMIN_EMAIL}
+      - ADMIN_PASSWORD=${ADMIN_PASSWORD}
     env_file:
       - .env # Load additional environment variables from .env file
     volumes:
@@ -95,9 +115,9 @@ services:
     container_name: evmr-database
     restart: unless-stopped
     environment:
-      - POSTGRES_USER=evmr_user
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_DB=evmr_database
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${POSTGRES_DB}
       # Set timezone to Indian Standard Time
       - TZ=Asia/Kolkata
     volumes:
@@ -111,7 +131,7 @@ services:
       - evmr-network
     # Healthcheck for database
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U evmr_user -d evmr_database"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
       interval: 10s
       timeout: 5s
       retries: 5

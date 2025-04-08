@@ -5,6 +5,7 @@ import { authService } from './services/api';
 
 // Import components
 import PatientDashboard from './components/PatientDashboard';
+import PetParentDashboard from './components/PetParentDashboard';
 import AppointmentDashboard from './components/AppointmentDashboard';
 import MedicalRecordsDashboard from './components/MedicalRecordsDashboard';
 import InventoryDashboard from './components/InventoryDashboard';
@@ -167,8 +168,15 @@ const App = () => {
   const handleLogout = () => {
     localStorage.removeItem('token');
     localStorage.removeItem('userEmail');
+    localStorage.removeItem('userType');
     setIsAuthenticated(false);
     setUser(null);
+  };
+
+  // Check if user is a pet parent
+  const isPetParent = () => {
+    const userType = localStorage.getItem('userType');
+    return userType === 'pet_parent';
   };
 
   // Show loading indicator while checking authentication
@@ -191,7 +199,7 @@ const App = () => {
               path="/login" 
               element={
                 isAuthenticated ? 
-                <Navigate to="/patients" replace /> : 
+                <Navigate to="/" replace /> : 
                 <Login onLogin={handleLogin} />
               } 
             />
@@ -205,13 +213,28 @@ const App = () => {
                 <Navigate to="/login" replace />
               }
             >
-              <Route index element={<Navigate to="/patients" replace />} />
+              {/* Conditionally render dashboard based on user type */}
+              <Route index element={
+                isPetParent() ? 
+                <PetParentDashboard /> : 
+                <Navigate to="/patients" replace />
+              } />
+              
+              {/* Staff Routes */}
               <Route path="patients" element={<PatientDashboard />} />
               <Route path="appointments" element={<AppointmentDashboard />} />
               <Route path="emr" element={<MedicalRecordsDashboard />} />
               <Route path="inventory" element={<InventoryDashboard />} />
               <Route path="reports" element={<ReportDashboard />} />
-              <Route path="*" element={<Navigate to="/patients" replace />} />
+              
+              {/* Pet Parent Routes */}
+              <Route path="pets" element={<PetParentDashboard />} />
+              <Route path="vaccinations" element={<PetParentDashboard />} />
+              <Route path="medications" element={<PetParentDashboard />} />
+              <Route path="health" element={<PetParentDashboard />} />
+              <Route path="documents" element={<PetParentDashboard />} />
+              
+              <Route path="*" element={<Navigate to="/" replace />} />
             </Route>
           </Routes>
         </Box>

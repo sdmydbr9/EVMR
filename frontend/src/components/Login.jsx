@@ -226,13 +226,14 @@ const Login = ({ onLogin }) => {
       const response = await authService.login(loginData);
       
       if (response && response.token) {
-        // Store user info securely
+        // Always store userType regardless of rememberMe setting
+        localStorage.setItem('userType', userType);
+        
+        // Store email only if rememberMe is checked
         if (rememberMe) {
           localStorage.setItem('userEmail', email);
-          localStorage.setItem('userType', userType);
         } else {
           localStorage.removeItem('userEmail');
-          localStorage.removeItem('userType');
         }
         
         // Inform parent component about successful login

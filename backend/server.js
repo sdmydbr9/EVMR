@@ -6,6 +6,7 @@ const helmet = require('helmet');
 const { Pool } = require('pg');
 const { initDatabase } = require('./config/database');
 require('dotenv').config();
+const fs = require('fs');
 
 // Import routes
 const authRoutes = require('./routes/auth');
@@ -16,6 +17,7 @@ const appointmentRoutes = require('./routes/appointments');
 const inventoryRoutes = require('./routes/inventory');
 const reportRoutes = require('./routes/reports');
 const userRoutes = require('./routes/users');
+const petRoutes = require('./routes/pets');
 
 // Import middleware
 const { authenticate } = require('./middleware/auth');
@@ -60,6 +62,21 @@ app.use(morgan(process.env.LOG_FORMAT || 'combined'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Create uploads directory if it doesn't exist
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
+// Create uploads/pets directory if it doesn't exist
+const petUploadsDir = path.join(__dirname, 'uploads', 'pets');
+if (!fs.existsSync(petUploadsDir)) {
+  fs.mkdirSync(petUploadsDir, { recursive: true });
+}
+
+// Serve uploaded files from the uploads directory
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -77,6 +94,7 @@ app.use('/api/appointments', authenticate, appointmentRoutes);
 app.use('/api/inventory', authenticate, inventoryRoutes);
 app.use('/api/reports', authenticate, reportRoutes);
 app.use('/api/users', authenticate, userRoutes); // Now all user routes require authentication
+app.use('/api/pets', authenticate, petRoutes); // Added pets route with authentication
 
 // Serve React app for any other route
 app.get('*', (req, res) => {

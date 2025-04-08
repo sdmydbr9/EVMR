@@ -25,11 +25,17 @@ import {
   Assessment as AssessmentIcon,
   People as PeopleIcon,
   ExitToApp as LogoutIcon,
-  AccountCircle as AccountIcon
+  AccountCircle as AccountIcon,
+  Dashboard as DashboardIcon,
+  Vaccines as VaccinesIcon,
+  Medication as MedicationIcon,
+  HealthAndSafety as HealthIcon,
+  Flight as TravelIcon,
+  InsertDriveFile as DocumentsIcon
 } from '@mui/icons-material';
 
-// iCloud-inspired app menu items
-const appItems = [
+// iCloud-inspired app menu items for staff
+const staffAppItems = [
   { 
     name: 'Patients', 
     icon: <PetsIcon sx={{ fontSize: 40, color: '#007AFF' }} />, 
@@ -68,6 +74,46 @@ const appItems = [
   }
 ];
 
+// Pet parent app menu items
+const petParentAppItems = [
+  { 
+    name: 'Dashboard', 
+    icon: <DashboardIcon sx={{ fontSize: 40, color: '#007AFF' }} />, 
+    path: '/',
+    description: 'View your pet dashboard'
+  },
+  { 
+    name: 'My Pets', 
+    icon: <PetsIcon sx={{ fontSize: 40, color: '#FF9500' }} />, 
+    path: '/pets',
+    description: 'Manage your pets'
+  },
+  { 
+    name: 'Vaccinations', 
+    icon: <VaccinesIcon sx={{ fontSize: 40, color: '#FF2D55' }} />, 
+    path: '/vaccinations',
+    description: 'View vaccination records'
+  },
+  { 
+    name: 'Medications', 
+    icon: <MedicationIcon sx={{ fontSize: 40, color: '#34C759' }} />, 
+    path: '/medications',
+    description: 'Track medications'
+  },
+  { 
+    name: 'Health Records', 
+    icon: <HealthIcon sx={{ fontSize: 40, color: '#5856D6' }} />, 
+    path: '/health',
+    description: 'View health history'
+  },
+  { 
+    name: 'Documents', 
+    icon: <DocumentsIcon sx={{ fontSize: 40, color: '#007AFF' }} />, 
+    path: '/documents',
+    description: 'Access pet documents'
+  }
+];
+
 const AppLayout = ({ onLogout, user }) => {
   const theme = useTheme();
   const navigate = useNavigate();
@@ -87,6 +133,15 @@ const AppLayout = ({ onLogout, user }) => {
     onLogout();
   };
 
+  // Check if user is a pet parent
+  const isPetParent = () => {
+    const userType = localStorage.getItem('userType');
+    return userType === 'pet_parent';
+  };
+
+  // Get the appropriate app items based on user type
+  const appItems = isPetParent() ? petParentAppItems : staffAppItems;
+  
   // Check if we're on the app selection screen or inside an app
   const isAppSelectionScreen = location.pathname === '/' || location.pathname === '';
   
@@ -127,7 +182,7 @@ const AppLayout = ({ onLogout, user }) => {
               color: 'text.primary'
             }}
           >
-            {isAppSelectionScreen ? 'EVMR System' : currentApp}
+            {isAppSelectionScreen ? (isPetParent() ? 'Pet Dashboard' : 'EVMR System') : currentApp}
           </Typography>
           
           <Tooltip title="Account">
@@ -197,8 +252,8 @@ const AppLayout = ({ onLogout, user }) => {
           maxWidth: '100%'
         }}
       >
-        {isAppSelectionScreen ? (
-          // iCloud-inspired app grid
+        {isAppSelectionScreen && !isPetParent() ? (
+          // iCloud-inspired app grid for staff users
           <Container maxWidth="lg" sx={{ mt: 4 }}>
             <Chip
               label={user?.name || "User"}
@@ -248,22 +303,11 @@ const AppLayout = ({ onLogout, user }) => {
                       bgcolor: 'background.paper',
                     }}
                   >
-                    <Box sx={{ 
-                      display: 'flex', 
-                      alignItems: 'center', 
-                      justifyContent: 'center',
-                      mb: 2,
-                      width: 70,
-                      height: 70,
-                      borderRadius: '15px',
-                      background: 'rgba(0,0,0,0.03)',
-                    }}>
-                      {item.icon}
-                    </Box>
-                    <Typography variant="h6" component="h2" align="center" gutterBottom>
+                    {item.icon}
+                    <Typography variant="h6" sx={{ mt: 2, fontWeight: 500 }}>
                       {item.name}
                     </Typography>
-                    <Typography variant="body2" color="text.secondary" align="center">
+                    <Typography variant="body2" color="text.secondary" align="center" sx={{ mt: 1 }}>
                       {item.description}
                     </Typography>
                   </Paper>
@@ -272,10 +316,8 @@ const AppLayout = ({ onLogout, user }) => {
             </Grid>
           </Container>
         ) : (
-          // Content of the selected app - ensure it takes full width
-          <Box sx={{ width: '100%', maxWidth: '100%', height: 'calc(100vh - 64px)' }}>
-            <Outlet />
-          </Box>
+          // Render the actual app content via Outlet
+          <Outlet />
         )}
       </Box>
     </Box>

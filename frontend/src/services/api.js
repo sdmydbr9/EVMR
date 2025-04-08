@@ -1,15 +1,18 @@
 import axios from 'axios';
 
-// Create axios instance with custom config
+// Get the base URL from environment or default to localhost
+const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3786/api';
+
+// Configure axios instance
 const api = axios.create({
-  baseURL: '/api',
-  timeout: 10000,
+  baseURL,
+  timeout: 15000,
   headers: {
     'Content-Type': 'application/json',
   }
 });
 
-// Add request interceptor for adding auth token
+// Add request interceptor for authentication
 api.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
@@ -23,21 +26,26 @@ api.interceptors.request.use(
   }
 );
 
-// Add response interceptor for handling common errors
+// Add response interceptor to handle errors globally
 api.interceptors.response.use(
   (response) => {
     return response;
   },
   (error) => {
-    // Handle 401 Unauthorized - redirect to login page
+    // Handle 401 Unauthorized errors (e.g., expired token)
     if (error.response && error.response.status === 401) {
-      console.log('Unauthorized access, redirecting to login');
+      // Clear stored tokens and reload the page
       localStorage.removeItem('token');
-      window.location.href = '/login';
+      window.location.href = '/login?session=expired';
     }
     return Promise.reject(error);
   }
 );
+
+// Get the backend base URL for accessing uploaded images
+export const getBackendUrl = () => {
+  return process.env.REACT_APP_BACKEND_URL || 'http://localhost:3786';
+};
 
 // Auth service
 export const authService = {

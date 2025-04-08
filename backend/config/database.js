@@ -40,6 +40,7 @@ const initDatabase = async () => {
       DROP TABLE IF EXISTS medical_records CASCADE;
       DROP TABLE IF EXISTS inventory_items CASCADE;
       DROP TABLE IF EXISTS patients CASCADE;
+      DROP TABLE IF EXISTS pets CASCADE;
       DROP TABLE IF EXISTS users CASCADE;
       DROP TABLE IF EXISTS owners CASCADE;
       DROP TABLE IF EXISTS clinics CASCADE;
@@ -100,6 +101,25 @@ const initDatabase = async () => {
         weight NUMERIC(5,2),
         microchip_id VARCHAR(50),
         owner_id INTEGER NOT NULL REFERENCES owners(id),
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    
+    // Create pets table for pet parents
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS pets (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(100) NOT NULL,
+        species VARCHAR(50) NOT NULL,
+        breed VARCHAR(100) NOT NULL,
+        color VARCHAR(50),
+        date_of_birth DATE NOT NULL,
+        gender VARCHAR(10) NOT NULL,
+        is_neutered BOOLEAN DEFAULT FALSE,
+        microchip_id VARCHAR(50),
+        image_url VARCHAR(255) DEFAULT NULL,
+        owner_id INTEGER NOT NULL REFERENCES users(id),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
