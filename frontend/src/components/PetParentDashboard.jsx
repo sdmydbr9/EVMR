@@ -65,11 +65,9 @@ import { format, addDays, subDays } from 'date-fns';
 import axios from 'axios';
 import { getBackendUrl } from '../services/api';
 import HealthRecords from './HealthRecords';
-import { useNavigate } from 'react-router-dom';
+// import { useNavigate } from 'react-router-dom'; // Not needed anymore
 
-// Empty arrays for weight and quality of life data - to be populated from API
-const weightData = [];
-const qualityOfLifeData = [];
+// Weight and quality of life data will be managed as state
 
 // Days of week for calendar
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
@@ -200,7 +198,7 @@ const getPetImageUrl = (imageUrl) => {
 
 const PetParentDashboard = () => {
   const theme = useTheme();
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); // Not needed anymore
   const [selectedDate, setSelectedDate] = useState(new Date()); // Default to today's date
   const [calendarDays, setCalendarDays] = useState([]);
   const [myPets, setMyPets] = useState([]);
@@ -226,16 +224,20 @@ const PetParentDashboard = () => {
     message: '',
     severity: 'info'
   });
+  const [weightData, setWeightData] = useState([]);
+  const [qualityOfLifeData, setQualityOfLifeData] = useState([]);
 
   // Fetch pets on component mount
   useEffect(() => {
     fetchPets();
   }, []);
 
-  // Fetch appointments when selected pet changes
+  // Fetch appointments, weight data, and quality of life data when selected pet changes
   useEffect(() => {
     if (myPets.length > 0 && selectedPetIndex >= 0) {
       fetchAppointments();
+      fetchWeightData();
+      fetchQualityOfLifeData();
     }
   }, [selectedPetIndex, myPets]);
 
@@ -287,6 +289,68 @@ const PetParentDashboard = () => {
     } catch (error) {
       console.error('Error fetching appointments:', error);
       showNotification('Failed to fetch appointments', 'error');
+    }
+  };
+
+  const fetchWeightData = async () => {
+    if (!myPets[selectedPetIndex]) return;
+
+    try {
+      const selectedPet = myPets[selectedPetIndex];
+
+      // Fetch weight records for the selected pet
+      const response = await axios.get(`/api/pets/${selectedPet.id}/weight`);
+      const weightRecords = response.data.weight || [];
+
+      // Format data for the chart
+      if (weightRecords.length > 0) {
+        const formattedData = weightRecords.map(record => ({
+          date: format(new Date(record.date), 'MMM dd'),
+          weight: parseFloat(record.weight)
+        }));
+        // Sort by date (oldest first)
+        formattedData.sort((a, b) => new Date(a.date) - new Date(b.date));
+        setWeightData(formattedData);
+      } else {
+        setWeightData([]);
+      }
+    } catch (error) {
+      console.error('Error fetching weight data:', error);
+      setWeightData([]);
+    }
+  };
+
+  const fetchQualityOfLifeData = async () => {
+    if (!myPets[selectedPetIndex]) return;
+
+    try {
+      const selectedPet = myPets[selectedPetIndex];
+
+      // Fetch quality of life assessments for the selected pet
+      const response = await axios.get(`/api/pets/${selectedPet.id}/quality-of-life`);
+      const assessments = response.data.qualityOfLife || [];
+
+      // Format data for the radar chart
+      if (assessments.length > 0) {
+        // Use the most recent assessment
+        const latestAssessment = assessments.sort((a, b) =>
+          new Date(b.date) - new Date(a.date))[0];
+
+        const formattedData = [
+          { aspect: 'Mobility', value: latestAssessment.mobility },
+          { aspect: 'Comfort', value: latestAssessment.comfort },
+          { aspect: 'Happiness', value: latestAssessment.happiness },
+          { aspect: 'Appetite', value: latestAssessment.appetite },
+          { aspect: 'Hygiene', value: latestAssessment.hygiene }
+        ];
+
+        setQualityOfLifeData(formattedData);
+      } else {
+        setQualityOfLifeData([]);
+      }
+    } catch (error) {
+      console.error('Error fetching quality of life data:', error);
+      setQualityOfLifeData([]);
     }
   };
 
@@ -507,31 +571,17 @@ const PetParentDashboard = () => {
             {/* Health Records Section */}
             {selectedPet && (
               <Box sx={{ mb: 4 }}>
-                <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                  <Typography variant="h6" fontWeight="medium">
-                    Health Records
-                  </Typography>
-                  <Button
-                    variant="outlined"
-                    startIcon={<AddIcon />}
-                    onClick={() => navigate(`/pets/${selectedPet.id}/health/add`)}
-                  >
-                    Add Record
-                  </Button>
-                </Box>
-                <HealthRecords petId={selectedPet.id} allowEdit={true} />
+                <HealthRecords id="health-records-component" petId={selectedPet.id} allowEdit={true} />
               </Box>
             )}
 
             {/* Weight Tracker */}
             <Box sx={{ mb: 4 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <Typography variant="h6">
                   Weight Tracker
                 </Typography>
-                <Button variant="text" size="small" color="primary">
-                  View all
-                </Button>
+
               </Box>
               <Paper sx={{ p: 3 }}>
                 {weightData.length > 0 ? (
@@ -539,7 +589,7 @@ const PetParentDashboard = () => {
                     <ResponsiveContainer width="100%" height="100%">
                       <LineChart data={weightData}>
                         <CartesianGrid strokeDasharray="3 3" vertical={false} />
-                        <XAxis dataKey="month" />
+                        <XAxis dataKey="date" />
                         <YAxis
                           domain={[0, 70]}
                           ticks={[0, 20, 40, 60]}
@@ -564,7 +614,16 @@ const PetParentDashboard = () => {
                     <Button
                       variant="outlined"
                       startIcon={<AddIcon />}
-                      onClick={() => navigate(`/pets/${selectedPet.id}/weight/add`)}
+                      onClick={() => {
+                        // Find the weight section in the HealthRecords component and click its add button
+                        const weightSection = document.querySelector('[data-section-id="weight"]');
+                        if (weightSection) {
+                          const addButton = weightSection.querySelector('button');
+                          if (addButton) {
+                            addButton.click();
+                          }
+                        }
+                      }}
                       sx={{ mt: 1 }}
                     >
                       Add weight record
@@ -576,13 +635,11 @@ const PetParentDashboard = () => {
 
             {/* Quality of Life Assessment */}
             <Box>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+              <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                 <Typography variant="h6">
                   Quality of Life Assessment
                 </Typography>
-                <Button variant="text" size="small" color="primary">
-                  View all
-                </Button>
+
               </Box>
               <Paper sx={{ p: 3 }}>
                 {qualityOfLifeData.length > 0 ? (
@@ -610,7 +667,16 @@ const PetParentDashboard = () => {
                     <Button
                       variant="outlined"
                       startIcon={<AddIcon />}
-                      onClick={() => navigate(`/pets/${selectedPet.id}/quality-of-life/add`)}
+                      onClick={() => {
+                        // Find the quality-of-life section in the HealthRecords component and click its add button
+                        const qolSection = document.querySelector('[data-section-id="quality-of-life"]');
+                        if (qolSection) {
+                          const addButton = qolSection.querySelector('button');
+                          if (addButton) {
+                            addButton.click();
+                          }
+                        }
+                      }}
                       sx={{ mt: 1 }}
                     >
                       Add assessment

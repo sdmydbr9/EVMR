@@ -9,7 +9,7 @@ const { pool } = require('../config/database');
 const ensureUploadsDirectory = () => {
   const uploadDir = path.join(__dirname, '../uploads/pets');
   console.log('Checking uploads directory:', uploadDir);
-  
+
   if (!fs.existsSync(uploadDir)) {
     console.log('Creating uploads directory:', uploadDir);
     fs.mkdirSync(uploadDir, { recursive: true });
@@ -23,7 +23,7 @@ const ensureUploadsDirectory = () => {
       console.error('Uploads directory is not writable:', err);
     }
   }
-  
+
   return uploadDir;
 };
 
@@ -42,7 +42,7 @@ const storage = multer.diskStorage({
   }
 });
 
-const upload = multer({ 
+const upload = multer({
   storage: storage,
   limits: { fileSize: 5 * 1024 * 1024 }, // 5MB max size
   fileFilter: function (req, file, cb) {
@@ -63,18 +63,18 @@ router.get('/', async (req, res) => {
   try {
     // Get user ID from the authenticated user
     const userId = req.user.id;
-    
+
     // Query for pets belonging to this user only
     const result = await pool.query(
       `SELECT * FROM pets WHERE owner_id = $1 ORDER BY name ASC`,
       [userId]
     );
-    
+
     const pets = result.rows.map(pet => {
       console.log('Pet data from database:', pet);
       return pet;
     });
-    
+
     res.json({ success: true, pets });
   } catch (err) {
     console.error('Error fetching pets:', err);
@@ -87,16 +87,16 @@ router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
-    
+
     const result = await pool.query(
       `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
       [id, userId]
     );
-    
+
     if (result.rows.length === 0) {
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
-    
+
     res.json({ success: true, pet: result.rows[0] });
   } catch (err) {
     console.error('Error fetching pet:', err);
@@ -117,27 +117,27 @@ router.post('/', async (req, res) => {
       isNeutered,
       microchipId
     } = req.body;
-    
+
     // Get user ID from the authenticated user
     const userId = req.user.id;
-    
+
     // Validate required fields
     if (!name || !species || !breed || !dateOfBirth || !gender) {
-      return res.status(400).json({ 
-        success: false, 
-        message: 'Name, species, breed, date of birth, and gender are required' 
+      return res.status(400).json({
+        success: false,
+        message: 'Name, species, breed, date of birth, and gender are required'
       });
     }
-    
+
     // Insert pet into database without image_url
     const result = await pool.query(
       `INSERT INTO pets (
-        name, species, breed, color, date_of_birth, gender, 
+        name, species, breed, color, date_of_birth, gender,
         is_neutered, microchip_id, owner_id, image_url
       ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NULL) RETURNING *`,
       [name, species, breed, color, dateOfBirth, gender, isNeutered, microchipId, userId]
     );
-    
+
     res.status(201).json({ success: true, pet: result.rows[0] });
   } catch (err) {
     console.error('Error creating pet:', err);
@@ -150,41 +150,41 @@ router.post('/:id/image', upload.single('image'), async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
-    
+
     console.log('Image upload request received:', {
       petId: id,
       userId: userId,
       file: req.file,
       headers: req.headers
     });
-    
+
     // Verify pet exists and belongs to user
     const checkResult = await pool.query(
       `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
       [id, userId]
     );
-    
+
     if (checkResult.rows.length === 0) {
       console.log('Pet not found or does not belong to user:', { petId: id, userId: userId });
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
-    
+
     // If no file was uploaded
     if (!req.file) {
       console.log('No file was uploaded in the request');
       return res.status(400).json({ success: false, message: 'No image file uploaded' });
     }
-    
+
     // Generate the URL for the uploaded file
     const imageUrl = `/uploads/pets/${req.file.filename}`;
     console.log('Generated image URL:', imageUrl);
-    
+
     // Update pet record with new image URL
     const updateResult = await pool.query(
       `UPDATE pets SET image_url = $1 WHERE id = $2 AND owner_id = $3 RETURNING *`,
       [imageUrl, id, userId]
     );
-    
+
     console.log('Pet record updated with new image URL:', updateResult.rows[0]);
     res.json({ success: true, pet: updateResult.rows[0] });
   } catch (err) {
@@ -208,32 +208,32 @@ router.put('/:id', async (req, res) => {
       isNeutered,
       microchipId
     } = req.body;
-    
+
     // Verify pet exists and belongs to user
     const checkResult = await pool.query(
       `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
       [id, userId]
     );
-    
+
     if (checkResult.rows.length === 0) {
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
-    
+
     // Update pet in database
     const result = await pool.query(
-      `UPDATE pets SET 
-        name = $1, 
-        species = $2, 
-        breed = $3, 
-        color = $4, 
-        date_of_birth = $5, 
-        gender = $6, 
-        is_neutered = $7, 
+      `UPDATE pets SET
+        name = $1,
+        species = $2,
+        breed = $3,
+        color = $4,
+        date_of_birth = $5,
+        gender = $6,
+        is_neutered = $7,
         microchip_id = $8
       WHERE id = $9 AND owner_id = $10 RETURNING *`,
       [name, species, breed, color, dateOfBirth, gender, isNeutered, microchipId, id, userId]
     );
-    
+
     res.json({ success: true, pet: result.rows[0] });
   } catch (err) {
     console.error('Error updating pet:', err);
@@ -246,23 +246,23 @@ router.delete('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
-    
+
     // Verify pet exists and belongs to user
     const checkResult = await pool.query(
       `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
       [id, userId]
     );
-    
+
     if (checkResult.rows.length === 0) {
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
-    
+
     // Delete pet from database
     await pool.query(
       `DELETE FROM pets WHERE id = $1 AND owner_id = $2`,
       [id, userId]
     );
-    
+
     res.json({ success: true, message: 'Pet deleted successfully' });
   } catch (err) {
     console.error('Error deleting pet:', err);
@@ -275,17 +275,17 @@ router.get('/:id/vaccinations', async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
-    
+
     // Verify pet exists and belongs to user
     const checkResult = await pool.query(
       `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
       [id, userId]
     );
-    
+
     if (checkResult.rows.length === 0) {
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
-    
+
     const result = await pool.query(
       'SELECT * FROM vaccinations WHERE pet_id = $1 ORDER BY date_administered DESC',
       [id]
@@ -303,24 +303,24 @@ router.post('/:id/vaccinations', async (req, res) => {
     const { id } = req.params;
     const userId = req.user.id;
     const { vaccineName, dateAdministered, nextDueDate, notes } = req.body;
-    
+
     // Verify pet exists and belongs to user
     const checkResult = await pool.query(
       `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
       [id, userId]
     );
-    
+
     if (checkResult.rows.length === 0) {
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
-    
+
     const result = await pool.query(
       `INSERT INTO vaccinations (pet_id, vaccine_name, date_administered, next_due_date, notes)
        VALUES ($1, $2, $3, $4, $5)
        RETURNING *`,
       [id, vaccineName, dateAdministered, nextDueDate, notes]
     );
-    
+
     res.json({ success: true, vaccination: result.rows[0] });
   } catch (error) {
     console.error('Error adding vaccination:', error);
@@ -333,17 +333,17 @@ router.get('/:id/deworming', async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
-    
+
     // Verify pet exists and belongs to user
     const checkResult = await pool.query(
       `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
       [id, userId]
     );
-    
+
     if (checkResult.rows.length === 0) {
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
-    
+
     const result = await pool.query(
       'SELECT * FROM deworming WHERE pet_id = $1 ORDER BY date_given DESC',
       [id]
@@ -361,24 +361,24 @@ router.post('/:id/deworming', async (req, res) => {
     const { id } = req.params;
     const userId = req.user.id;
     const { medicineName, dateGiven, notes } = req.body;
-    
+
     // Verify pet exists and belongs to user
     const checkResult = await pool.query(
       `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
       [id, userId]
     );
-    
+
     if (checkResult.rows.length === 0) {
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
-    
+
     const result = await pool.query(
       `INSERT INTO deworming (pet_id, medicine_name, date_given, notes)
        VALUES ($1, $2, $3, $4)
        RETURNING *`,
       [id, medicineName, dateGiven, notes]
     );
-    
+
     res.json({ success: true, deworming: result.rows[0] });
   } catch (error) {
     console.error('Error adding deworming record:', error);
@@ -391,17 +391,17 @@ router.get('/:id/grooming', async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.id;
-    
+
     // Verify pet exists and belongs to user
     const checkResult = await pool.query(
       `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
       [id, userId]
     );
-    
+
     if (checkResult.rows.length === 0) {
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
-    
+
     const result = await pool.query(
       'SELECT * FROM grooming WHERE pet_id = $1 ORDER BY date DESC',
       [id]
@@ -419,24 +419,24 @@ router.post('/:id/grooming', async (req, res) => {
     const { id } = req.params;
     const userId = req.user.id;
     const { serviceType, date, notes } = req.body;
-    
+
     // Verify pet exists and belongs to user
     const checkResult = await pool.query(
       `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
       [id, userId]
     );
-    
+
     if (checkResult.rows.length === 0) {
       return res.status(404).json({ success: false, message: 'Pet not found' });
     }
-    
+
     const result = await pool.query(
       `INSERT INTO grooming (pet_id, service_type, date, notes)
        VALUES ($1, $2, $3, $4)
        RETURNING *`,
       [id, serviceType, date, notes]
     );
-    
+
     res.json({ success: true, grooming: result.rows[0] });
   } catch (error) {
     console.error('Error adding grooming record:', error);
@@ -444,4 +444,256 @@ router.post('/:id/grooming', async (req, res) => {
   }
 });
 
-module.exports = router; 
+// Get pet's weight records
+router.get('/:id/weight', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+
+    const result = await pool.query(
+      'SELECT * FROM weight_records WHERE pet_id = $1 ORDER BY date DESC',
+      [id]
+    );
+    res.json({ success: true, weight: result.rows });
+  } catch (error) {
+    console.error('Error fetching weight records:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch weight records' });
+  }
+});
+
+// Add weight record
+router.post('/:id/weight', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    const { weight, date, notes } = req.body;
+
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO weight_records (pet_id, weight, date, notes)
+       VALUES ($1, $2, $3, $4)
+       RETURNING *`,
+      [id, weight, date, notes]
+    );
+
+    res.json({ success: true, weight: result.rows[0] });
+  } catch (error) {
+    console.error('Error adding weight record:', error);
+    res.status(500).json({ success: false, message: 'Failed to add weight record' });
+  }
+});
+
+// Update weight record
+router.put('/:id/weight/:recordId', async (req, res) => {
+  try {
+    const { id, recordId } = req.params;
+    const userId = req.user.id;
+    const { weight, date, notes } = req.body;
+
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+
+    const result = await pool.query(
+      `UPDATE weight_records
+       SET weight = $1, date = $2, notes = $3, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $4 AND pet_id = $5
+       RETURNING *`,
+      [weight, date, notes, recordId, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Weight record not found' });
+    }
+
+    res.json({ success: true, weight: result.rows[0] });
+  } catch (error) {
+    console.error('Error updating weight record:', error);
+    res.status(500).json({ success: false, message: 'Failed to update weight record' });
+  }
+});
+
+// Delete weight record
+router.delete('/:id/weight/:recordId', async (req, res) => {
+  try {
+    const { id, recordId } = req.params;
+    const userId = req.user.id;
+
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+
+    const result = await pool.query(
+      `DELETE FROM weight_records WHERE id = $1 AND pet_id = $2 RETURNING id`,
+      [recordId, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Weight record not found' });
+    }
+
+    res.json({ success: true, message: 'Weight record deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting weight record:', error);
+    res.status(500).json({ success: false, message: 'Failed to delete weight record' });
+  }
+});
+
+// Get pet's quality of life assessments
+router.get('/:id/quality-of-life', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+
+    const result = await pool.query(
+      'SELECT * FROM quality_of_life WHERE pet_id = $1 ORDER BY date DESC',
+      [id]
+    );
+    res.json({ success: true, qualityOfLife: result.rows });
+  } catch (error) {
+    console.error('Error fetching quality of life assessments:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch quality of life assessments' });
+  }
+});
+
+// Add quality of life assessment
+router.post('/:id/quality-of-life', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    const { date, mobility, comfort, happiness, appetite, hygiene, notes } = req.body;
+
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+
+    const result = await pool.query(
+      `INSERT INTO quality_of_life (pet_id, date, mobility, comfort, happiness, appetite, hygiene, notes)
+       VALUES ($1, $2, $3, $4, $5, $6, $7, $8)
+       RETURNING *`,
+      [id, date, mobility, comfort, happiness, appetite, hygiene, notes]
+    );
+
+    res.json({ success: true, qualityOfLife: result.rows[0] });
+  } catch (error) {
+    console.error('Error adding quality of life assessment:', error);
+    res.status(500).json({ success: false, message: 'Failed to add quality of life assessment' });
+  }
+});
+
+// Update quality of life assessment
+router.put('/:id/quality-of-life/:recordId', async (req, res) => {
+  try {
+    const { id, recordId } = req.params;
+    const userId = req.user.id;
+    const { date, mobility, comfort, happiness, appetite, hygiene, notes } = req.body;
+
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+
+    const result = await pool.query(
+      `UPDATE quality_of_life
+       SET date = $1, mobility = $2, comfort = $3, happiness = $4, appetite = $5, hygiene = $6, notes = $7, updated_at = CURRENT_TIMESTAMP
+       WHERE id = $8 AND pet_id = $9
+       RETURNING *`,
+      [date, mobility, comfort, happiness, appetite, hygiene, notes, recordId, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Quality of life assessment not found' });
+    }
+
+    res.json({ success: true, qualityOfLife: result.rows[0] });
+  } catch (error) {
+    console.error('Error updating quality of life assessment:', error);
+    res.status(500).json({ success: false, message: 'Failed to update quality of life assessment' });
+  }
+});
+
+// Delete quality of life assessment
+router.delete('/:id/quality-of-life/:recordId', async (req, res) => {
+  try {
+    const { id, recordId } = req.params;
+    const userId = req.user.id;
+
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+
+    const result = await pool.query(
+      `DELETE FROM quality_of_life WHERE id = $1 AND pet_id = $2 RETURNING id`,
+      [recordId, id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Quality of life assessment not found' });
+    }
+
+    res.json({ success: true, message: 'Quality of life assessment deleted successfully' });
+  } catch (error) {
+    console.error('Error deleting quality of life assessment:', error);
+    res.status(500).json({ success: false, message: 'Failed to delete quality of life assessment' });
+  }
+});
+
+module.exports = router;

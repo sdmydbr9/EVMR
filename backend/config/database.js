@@ -30,10 +30,10 @@ const getClient = async () => {
 // Initialize database tables if they don't exist
 const initDatabase = async () => {
   const client = await pool.connect();
-  
+
   try {
     await client.query('BEGIN');
-    
+
     // Drop tables in reverse order of dependencies
     await client.query(`
       DROP TABLE IF EXISTS vaccinations CASCADE;
@@ -48,7 +48,7 @@ const initDatabase = async () => {
       DROP TABLE IF EXISTS owners CASCADE;
       DROP TABLE IF EXISTS clinics CASCADE;
     `);
-    
+
     // Create clinics table
     await client.query(`
       CREATE TABLE IF NOT EXISTS clinics (
@@ -61,7 +61,7 @@ const initDatabase = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Create owners table
     await client.query(`
       CREATE TABLE IF NOT EXISTS owners (
@@ -74,7 +74,7 @@ const initDatabase = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Create users table
     await client.query(`
       CREATE TABLE IF NOT EXISTS users (
@@ -90,7 +90,7 @@ const initDatabase = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Create patients table with VARCHAR id
     await client.query(`
       CREATE TABLE IF NOT EXISTS patients (
@@ -108,7 +108,7 @@ const initDatabase = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Create pets table for pet parents
     await client.query(`
       CREATE TABLE IF NOT EXISTS pets (
@@ -127,7 +127,7 @@ const initDatabase = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Create vaccinations table
     await client.query(`
       CREATE TABLE IF NOT EXISTS vaccinations (
@@ -141,7 +141,7 @@ const initDatabase = async () => {
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Create deworming table
     await client.query(`
       CREATE TABLE IF NOT EXISTS deworming (
@@ -154,7 +154,7 @@ const initDatabase = async () => {
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Create grooming table
     await client.query(`
       CREATE TABLE IF NOT EXISTS grooming (
@@ -167,7 +167,37 @@ const initDatabase = async () => {
         updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
+    // Create weight tracking table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS weight_records (
+        id SERIAL PRIMARY KEY,
+        pet_id INTEGER NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+        weight NUMERIC(5,2) NOT NULL,
+        date DATE NOT NULL,
+        notes TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
+    // Create quality of life assessment table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS quality_of_life (
+        id SERIAL PRIMARY KEY,
+        pet_id INTEGER NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+        date DATE NOT NULL,
+        mobility INTEGER NOT NULL CHECK (mobility BETWEEN 1 AND 5),
+        comfort INTEGER NOT NULL CHECK (comfort BETWEEN 1 AND 5),
+        happiness INTEGER NOT NULL CHECK (happiness BETWEEN 1 AND 5),
+        appetite INTEGER NOT NULL CHECK (appetite BETWEEN 1 AND 5),
+        hygiene INTEGER NOT NULL CHECK (hygiene BETWEEN 1 AND 5),
+        notes TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+
     // Create medical records table
     await client.query(`
       CREATE TABLE IF NOT EXISTS medical_records (
@@ -183,7 +213,7 @@ const initDatabase = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Create appointments table
     await client.query(`
       CREATE TABLE IF NOT EXISTS appointments (
@@ -199,7 +229,7 @@ const initDatabase = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Create inventory items table
     await client.query(`
       CREATE TABLE IF NOT EXISTS inventory_items (
@@ -216,7 +246,7 @@ const initDatabase = async () => {
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
       )
     `);
-    
+
     // Insert default clinic if it doesn't exist
     const clinicResult = await client.query(`
       INSERT INTO clinics (name, address, phone, email)
@@ -224,39 +254,39 @@ const initDatabase = async () => {
       ON CONFLICT DO NOTHING
       RETURNING id
     `);
-    
+
     const clinicId = clinicResult.rows[0]?.id || 1;
-    
+
     // Check if admin user from env exists
     const adminEmail = process.env.ADMIN_EMAIL || 'admin@evmr.com';
-    
+
     const userResult = await client.query(
       'SELECT id FROM users WHERE email = $1',
       [adminEmail]
     );
-    
+
     // If admin user doesn't exist, create it
     if (userResult.rowCount === 0) {
       // Get admin credentials from environment variables or use defaults
       const adminPassword = process.env.ADMIN_PASSWORD || 'admin123';
       const adminName = process.env.ADMIN_NAME || 'System Admin';
-      
+
       // Hash the password
       const salt = await bcrypt.genSalt(10);
       const hashedPassword = await bcrypt.hash(adminPassword, salt);
-      
+
       // Insert admin user
       await client.query(
-        `INSERT INTO users (name, email, password, role, clinic_id) 
+        `INSERT INTO users (name, email, password, role, clinic_id)
          VALUES ($1, $2, $3, $4, $5)`,
         [adminName, adminEmail, hashedPassword, 'admin', clinicId]
       );
-      
+
       console.log(`Admin user created with email: ${adminEmail}`);
     }
-    
+
     await client.query('COMMIT');
-    
+
     console.log('Database tables initialized successfully');
   } catch (err) {
     await client.query('ROLLBACK');
@@ -272,4 +302,4 @@ module.exports = {
   getClient,
   initDatabase,
   pool
-}; 
+};

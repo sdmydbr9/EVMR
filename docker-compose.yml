@@ -94,6 +94,12 @@ services:
       # Admin user
       - ADMIN_EMAIL=${ADMIN_EMAIL}
       - ADMIN_PASSWORD=${ADMIN_PASSWORD}
+      # Email settings
+      - SMTP_HOST=${SMTP_HOST}
+      - SMTP_PORT=${SMTP_PORT}
+      - SMTP_USER=${SMTP_USER}
+      - SMTP_PASS=${SMTP_PASS}
+      - EMAIL_FROM=${EMAIL_FROM}
     env_file:
       - .env # Load additional environment variables from .env file
     volumes:
@@ -168,4 +174,4 @@ networks:
 # 3. Configures the PostgreSQL database with persistent storage
 # 4. Creates a dedicated network for secure communication between services
 # 5. Establishes volumes for data persistence across container restarts
-# 6. Implements healthchecks to ensure services are running correctly 
+# 6. Implements healthchecks to ensure services are running correctly

@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import {
   Box,
   Typography,
-  Paper,
   Accordion,
   AccordionSummary,
   AccordionDetails,
@@ -11,6 +10,7 @@ import {
   ListItem,
   ListItemText,
   ListItemSecondaryAction,
+  ListItemIcon,
   Divider,
   IconButton,
   Stack,
@@ -26,7 +26,8 @@ import {
   InputLabel,
   Select,
   Snackbar,
-  Alert
+  Alert,
+  Menu
 } from '@mui/material';
 import {
   ExpandMore as ExpandMoreIcon,
@@ -36,14 +37,14 @@ import {
   ContentCut as GroomingIcon,
   Edit as EditIcon,
   Delete as DeleteIcon,
-  Close as CloseIcon
+  Close as CloseIcon,
+  MonitorWeight as WeightIcon,
+  Psychology as QualityOfLifeIcon
 } from '@mui/icons-material';
 import { format } from 'date-fns';
-import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const HealthRecords = ({ petId, allowEdit = false }) => {
-  const navigate = useNavigate();
   const [expanded, setExpanded] = useState(false); // No section expanded by default
   const [loading, setLoading] = useState(false);
   const [editDialogOpen, setEditDialogOpen] = useState(false);
@@ -56,6 +57,8 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
     message: '',
     severity: 'info'
   });
+  // State for the Add Record dropdown menu
+  const [addMenuAnchorEl, setAddMenuAnchorEl] = useState(null);
   const [sections, setSections] = useState([
     {
       id: 'vaccination',
@@ -79,6 +82,22 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
       icon: <GroomingIcon />,
       color: '#34c759',
       addButtonText: 'Add grooming details',
+      records: [] // This will be populated from API
+    },
+    {
+      id: 'weight',
+      title: 'Weight Tracker',
+      icon: <WeightIcon />,
+      color: '#5856d6',
+      addButtonText: 'Add weight record',
+      records: [] // This will be populated from API
+    },
+    {
+      id: 'quality-of-life',
+      title: 'Quality of Life Assessment',
+      icon: <QualityOfLifeIcon />,
+      color: '#ff2d55',
+      addButtonText: 'Add assessment',
       records: [] // This will be populated from API
     }
   ]);
@@ -105,6 +124,14 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
       const groomingResponse = await axios.get(`/api/pets/${petId}/grooming`);
       const grooming = groomingResponse.data.grooming || [];
 
+      // Fetch weight records
+      const weightResponse = await axios.get(`/api/pets/${petId}/weight`);
+      const weight = weightResponse.data.weight || [];
+
+      // Fetch quality of life assessments
+      const qualityOfLifeResponse = await axios.get(`/api/pets/${petId}/quality-of-life`);
+      const qualityOfLife = qualityOfLifeResponse.data.qualityOfLife || [];
+
       // Update sections with fetched data
       setSections(prevSections => prevSections.map(section => {
         if (section.id === 'vaccination') {
@@ -113,6 +140,10 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
           return { ...section, records: deworming };
         } else if (section.id === 'grooming') {
           return { ...section, records: grooming };
+        } else if (section.id === 'weight') {
+          return { ...section, records: weight };
+        } else if (section.id === 'quality-of-life') {
+          return { ...section, records: qualityOfLife };
         }
         return section;
       }));
@@ -123,19 +154,38 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
     }
   };
 
-  const handleChange = (panel) => (event, isExpanded) => {
+  const handleChange = (panel) => (_, isExpanded) => {
     setExpanded(isExpanded ? panel : false);
   };
 
   const handleAddDetails = (type) => {
     setCurrentSection(type);
-    setFormData({
+
+    let initialFormData = {
       date: format(new Date(), 'yyyy-MM-dd'),
-      notes: '',
-      ...(type === 'vaccination' ? { vaccine_name: '', next_due_date: '' } :
-         type === 'deworming' ? { medicine_name: '' } :
-         { service_type: '' })
-    });
+      notes: ''
+    };
+
+    if (type === 'vaccination') {
+      initialFormData = { ...initialFormData, vaccine_name: '', next_due_date: '' };
+    } else if (type === 'deworming') {
+      initialFormData = { ...initialFormData, medicine_name: '' };
+    } else if (type === 'grooming') {
+      initialFormData = { ...initialFormData, service_type: '' };
+    } else if (type === 'weight') {
+      initialFormData = { ...initialFormData, weight: '' };
+    } else if (type === 'quality-of-life') {
+      initialFormData = {
+        ...initialFormData,
+        mobility: 3,
+        comfort: 3,
+        happiness: 3,
+        appetite: 3,
+        hygiene: 3
+      };
+    }
+
+    setFormData(initialFormData);
     setEditDialogOpen(true);
   };
 
@@ -161,6 +211,16 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
     } else if (sectionId === 'grooming') {
       baseFormData.date = format(new Date(record.date), 'yyyy-MM-dd');
       baseFormData.service_type = record.service_type;
+    } else if (sectionId === 'weight') {
+      baseFormData.date = format(new Date(record.date), 'yyyy-MM-dd');
+      baseFormData.weight = record.weight;
+    } else if (sectionId === 'quality-of-life') {
+      baseFormData.date = format(new Date(record.date), 'yyyy-MM-dd');
+      baseFormData.mobility = record.mobility;
+      baseFormData.comfort = record.comfort;
+      baseFormData.happiness = record.happiness;
+      baseFormData.appetite = record.appetite;
+      baseFormData.hygiene = record.hygiene;
     }
 
     setFormData(baseFormData);
@@ -203,6 +263,10 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
         endpoint = `/api/pets/${petId}/deworming`;
       } else if (currentSection === 'grooming') {
         endpoint = `/api/pets/${petId}/grooming`;
+      } else if (currentSection === 'weight') {
+        endpoint = `/api/pets/${petId}/weight`;
+      } else if (currentSection === 'quality-of-life') {
+        endpoint = `/api/pets/${petId}/quality-of-life`;
       }
 
       let method = 'post';
@@ -226,6 +290,22 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
         data = {
           serviceType: formData.service_type,
           date: formData.date,
+          notes: formData.notes || ''
+        };
+      } else if (currentSection === 'weight') {
+        data = {
+          weight: parseFloat(formData.weight),
+          date: formData.date,
+          notes: formData.notes || ''
+        };
+      } else if (currentSection === 'quality-of-life') {
+        data = {
+          date: formData.date,
+          mobility: parseInt(formData.mobility),
+          comfort: parseInt(formData.comfort),
+          happiness: parseInt(formData.happiness),
+          appetite: parseInt(formData.appetite),
+          hygiene: parseInt(formData.hygiene),
           notes: formData.notes || ''
         };
       }
@@ -262,6 +342,10 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
         endpoint = `/api/pets/${petId}/deworming/${currentRecord.id}`;
       } else if (currentSection === 'grooming') {
         endpoint = `/api/pets/${petId}/grooming/${currentRecord.id}`;
+      } else if (currentSection === 'weight') {
+        endpoint = `/api/pets/${petId}/weight/${currentRecord.id}`;
+      } else if (currentSection === 'quality-of-life') {
+        endpoint = `/api/pets/${petId}/quality-of-life/${currentRecord.id}`;
       }
 
       await axios.delete(endpoint);
@@ -293,8 +377,86 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
     });
   };
 
+  // Handle opening the Add Record dropdown menu
+  const handleAddRecordClick = (event) => {
+    setAddMenuAnchorEl(event.currentTarget);
+  };
+
+  // Handle closing the Add Record dropdown menu
+  const handleAddMenuClose = () => {
+    setAddMenuAnchorEl(null);
+  };
+
+  // Handle selecting an option from the dropdown menu
+  const handleAddMenuItemClick = (type) => {
+    handleAddMenuClose();
+    handleAddDetails(type);
+  };
+
+
+
   return (
     <Box>
+      {/* Header with Add Record button */}
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+        <Typography variant="h6">Health Records</Typography>
+        {allowEdit && (
+          <>
+            <Button
+              variant="outlined"
+              startIcon={<AddIcon />}
+              onClick={handleAddRecordClick}
+            >
+              Add Record
+            </Button>
+            <Menu
+              anchorEl={addMenuAnchorEl}
+              open={Boolean(addMenuAnchorEl)}
+              onClose={handleAddMenuClose}
+              anchorOrigin={{
+                vertical: 'bottom',
+                horizontal: 'right',
+              }}
+              transformOrigin={{
+                vertical: 'top',
+                horizontal: 'right',
+              }}
+            >
+              <MenuItem onClick={() => handleAddMenuItemClick('vaccination')}>
+                <ListItemIcon>
+                  <VaccinesIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography variant="body2">Vaccination</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => handleAddMenuItemClick('deworming')}>
+                <ListItemIcon>
+                  <DewormingIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography variant="body2">Deworming</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => handleAddMenuItemClick('grooming')}>
+                <ListItemIcon>
+                  <GroomingIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography variant="body2">Grooming</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => handleAddMenuItemClick('weight')}>
+                <ListItemIcon>
+                  <WeightIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography variant="body2">Weight Record</Typography>
+              </MenuItem>
+              <MenuItem onClick={() => handleAddMenuItemClick('quality-of-life')}>
+                <ListItemIcon>
+                  <QualityOfLifeIcon fontSize="small" />
+                </ListItemIcon>
+                <Typography variant="body2">Quality of Life Assessment</Typography>
+              </MenuItem>
+            </Menu>
+          </>
+        )}
+      </Box>
+
       {loading ? (
         <Box sx={{ display: 'flex', justifyContent: 'center', p: 3 }}>
           <CircularProgress />
@@ -305,6 +467,7 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
             key={section.id}
             expanded={expanded === section.id}
             onChange={handleChange(section.id)}
+            data-section-id={section.id}
             sx={{
               mb: 1,
               '&:before': {
@@ -337,7 +500,13 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
                     <React.Fragment key={record.id}>
                       <ListItem>
                         <ListItemText
-                          primary={record.vaccine_name || record.medicine_name || record.service_type}
+                          primary={
+                            section.id === 'weight' ?
+                              `${record.weight} kg` :
+                            section.id === 'quality-of-life' ?
+                              `Assessment Score: ${(record.mobility + record.comfort + record.happiness + record.appetite + record.hygiene) / 5}/5` :
+                              record.vaccine_name || record.medicine_name || record.service_type
+                          }
                           secondary={
                             <Stack direction="row" spacing={2}>
                               <Typography variant="body2" color="text.secondary">
@@ -346,6 +515,11 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
                               {record.next_due_date && (
                                 <Typography variant="body2" color="text.secondary">
                                   Next due: {format(new Date(record.next_due_date), 'MMM dd, yyyy')}
+                                </Typography>
+                              )}
+                              {section.id === 'quality-of-life' && (
+                                <Typography variant="body2" color="text.secondary">
+                                  Mobility: {record.mobility}/5, Comfort: {record.comfort}/5, Happiness: {record.happiness}/5
                                 </Typography>
                               )}
                             </Stack>
@@ -461,6 +635,112 @@ const HealthRecords = ({ petId, allowEdit = false }) => {
                 onChange={handleFormChange}
                 InputLabelProps={{ shrink: true }}
               />
+            )}
+
+            {currentSection === 'weight' && (
+              <TextField
+                margin="normal"
+                required
+                fullWidth
+                label="Weight (kg)"
+                name="weight"
+                type="number"
+                inputProps={{ step: 0.1, min: 0 }}
+                value={formData.weight || ''}
+                onChange={handleFormChange}
+              />
+            )}
+
+            {currentSection === 'quality-of-life' && (
+              <>
+                <Typography variant="subtitle2" sx={{ mt: 2, mb: 1 }}>
+                  Rate each category from 1 (poor) to 5 (excellent)
+                </Typography>
+                <FormControl fullWidth margin="normal">
+                  <InputLabel id="mobility-label">Mobility</InputLabel>
+                  <Select
+                    labelId="mobility-label"
+                    name="mobility"
+                    value={formData.mobility || 3}
+                    onChange={handleFormChange}
+                    label="Mobility"
+                  >
+                    <MenuItem value={1}>1 - Very Poor</MenuItem>
+                    <MenuItem value={2}>2 - Poor</MenuItem>
+                    <MenuItem value={3}>3 - Average</MenuItem>
+                    <MenuItem value={4}>4 - Good</MenuItem>
+                    <MenuItem value={5}>5 - Excellent</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth margin="normal">
+                  <InputLabel id="comfort-label">Comfort</InputLabel>
+                  <Select
+                    labelId="comfort-label"
+                    name="comfort"
+                    value={formData.comfort || 3}
+                    onChange={handleFormChange}
+                    label="Comfort"
+                  >
+                    <MenuItem value={1}>1 - Very Poor</MenuItem>
+                    <MenuItem value={2}>2 - Poor</MenuItem>
+                    <MenuItem value={3}>3 - Average</MenuItem>
+                    <MenuItem value={4}>4 - Good</MenuItem>
+                    <MenuItem value={5}>5 - Excellent</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth margin="normal">
+                  <InputLabel id="happiness-label">Happiness</InputLabel>
+                  <Select
+                    labelId="happiness-label"
+                    name="happiness"
+                    value={formData.happiness || 3}
+                    onChange={handleFormChange}
+                    label="Happiness"
+                  >
+                    <MenuItem value={1}>1 - Very Poor</MenuItem>
+                    <MenuItem value={2}>2 - Poor</MenuItem>
+                    <MenuItem value={3}>3 - Average</MenuItem>
+                    <MenuItem value={4}>4 - Good</MenuItem>
+                    <MenuItem value={5}>5 - Excellent</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth margin="normal">
+                  <InputLabel id="appetite-label">Appetite</InputLabel>
+                  <Select
+                    labelId="appetite-label"
+                    name="appetite"
+                    value={formData.appetite || 3}
+                    onChange={handleFormChange}
+                    label="Appetite"
+                  >
+                    <MenuItem value={1}>1 - Very Poor</MenuItem>
+                    <MenuItem value={2}>2 - Poor</MenuItem>
+                    <MenuItem value={3}>3 - Average</MenuItem>
+                    <MenuItem value={4}>4 - Good</MenuItem>
+                    <MenuItem value={5}>5 - Excellent</MenuItem>
+                  </Select>
+                </FormControl>
+
+                <FormControl fullWidth margin="normal">
+                  <InputLabel id="hygiene-label">Hygiene</InputLabel>
+                  <Select
+                    labelId="hygiene-label"
+                    name="hygiene"
+                    value={formData.hygiene || 3}
+                    onChange={handleFormChange}
+                    label="Hygiene"
+                  >
+                    <MenuItem value={1}>1 - Very Poor</MenuItem>
+                    <MenuItem value={2}>2 - Poor</MenuItem>
+                    <MenuItem value={3}>3 - Average</MenuItem>
+                    <MenuItem value={4}>4 - Good</MenuItem>
+                    <MenuItem value={5}>5 - Excellent</MenuItem>
+                  </Select>
+                </FormControl>
+              </>
             )}
 
             <TextField
