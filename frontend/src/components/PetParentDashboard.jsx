@@ -288,7 +288,9 @@ const PetParentDashboard = () => {
       setAppointments(sortedAppointments);
     } catch (error) {
       console.error('Error fetching appointments:', error);
-      showNotification('Failed to fetch appointments', 'error');
+      // Don't show error notification to the user
+      // Just set empty appointments array
+      setAppointments([]);
     }
   };
 
@@ -891,6 +893,24 @@ Please select a pet
                     </Paper>
                   ))}
                 </Stack>
+
+                {/* Book an Appointment Button */}
+                <Box sx={{ mt: 3, textAlign: 'center' }}>
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    startIcon={<AddIcon />}
+                    fullWidth
+                    sx={{ py: 1.5 }}
+                    onClick={() => {
+                      // Navigate to appointments page or open appointment dialog
+                      console.log('Book appointment clicked');
+                      // You can add navigation or dialog opening logic here
+                    }}
+                  >
+                    Book an Appointment
+                  </Button>
+                </Box>
               </Box>
             </Paper>
           </Grid>
