@@ -12,6 +12,9 @@ import InventoryDashboard from './components/InventoryDashboard';
 import ReportDashboard from './components/ReportDashboard';
 import Login from './components/Login';
 import AppLayout from './components/AppLayout';
+import VaccinationForm from './components/forms/VaccinationForm';
+import DewormingForm from './components/forms/DewormingForm';
+import GroomingForm from './components/forms/GroomingForm';
 
 // Create iCloud-inspired theme
 const theme = createTheme({
@@ -233,6 +236,9 @@ const App = () => {
               <Route path="medications" element={<PetParentDashboard />} />
               <Route path="health" element={<PetParentDashboard />} />
               <Route path="documents" element={<PetParentDashboard />} />
+              <Route path="pets/:petId/vaccination/add" element={<VaccinationForm />} />
+              <Route path="pets/:petId/deworming/add" element={<DewormingForm />} />
+              <Route path="pets/:petId/grooming/add" element={<GroomingForm />} />
               
               <Route path="*" element={<Navigate to="/" replace />} />
             </Route>

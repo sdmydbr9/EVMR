@@ -71,16 +71,15 @@ import {
 import { format, addDays, subDays, startOfDay, parseISO } from 'date-fns';
 import axios from 'axios';
 import { getBackendUrl } from '../services/api';
+import PetInformation from './PetInformation';
 
 // Sample weight data
 const weightData = [
-  { month: 'Nov', weight: 40 },
-  { month: 'Nov', weight: 38 },
-  { month: 'Dec', weight: 42 },
-  { month: 'Dec', weight: 45 },
-  { month: 'Dec', weight: 43 },
-  { month: 'Jan', weight: 45 },
-  { month: 'Jan', weight: 44 },
+  { month: 'November', weight: 20 },
+  { month: 'November', weight: 30 },
+  { month: 'December', weight: 40 },
+  { month: 'December', weight: 35 },
+  { month: 'January', weight: 44 },
 ];
 
 // Sample quality of life data
@@ -94,63 +93,40 @@ const qualityOfLifeData = [
   { aspect: 'Elimination', value: 8 },
 ];
 
-// Sample upcoming schedule data
-const upcomingSchedule = [
-  { 
-    type: 'Veterinary Appointment',
-    time: '10:00 AM', 
-    iconColor: '#ff6b6b',
-    icon: <AccessTimeIcon />
-  },
-  { 
-    type: 'Grooming',
-    time: '14:00 PM', 
-    iconColor: '#4d96ff',
-    icon: <GroomingIcon />
-  },
-  { 
-    type: 'Playing & Socializing',
-    time: '17:00 PM', 
-    iconColor: '#6dd47e',
-    icon: <PlayingIcon />
-  }
-];
-
 // Days of week for calendar
 const daysOfWeek = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
 
-// Generate calendar days centered around today
-const generateCalendarWeek = () => {
-  const today = new Date();
+// Generate calendar days centered around selected date
+const generateCalendarWeek = (date) => {
   const days = [];
   
-  // Generate 3 days before today
+  // Generate 3 days before selected date
   for (let i = 3; i > 0; i--) {
-    const date = subDays(today, i);
+    const prevDate = subDays(date, i);
     days.push({
-      date,
-      dayOfMonth: date.getDate(),
-      dayOfWeek: date.getDay(),
-      isToday: false
+      date: prevDate,
+      dayOfMonth: prevDate.getDate(),
+      dayOfWeek: prevDate.getDay(),
+      isToday: format(prevDate, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
     });
   }
   
-  // Add today
+  // Add selected date
   days.push({
-    date: today,
-    dayOfMonth: today.getDate(),
-    dayOfWeek: today.getDay(),
-    isToday: true
+    date: date,
+    dayOfMonth: date.getDate(),
+    dayOfWeek: date.getDay(),
+    isToday: format(date, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
   });
   
-  // Generate 3 days after today
+  // Generate 3 days after selected date
   for (let i = 1; i <= 3; i++) {
-    const date = addDays(today, i);
+    const nextDate = addDays(date, i);
     days.push({
-      date,
-      dayOfMonth: date.getDate(),
-      dayOfWeek: date.getDay(),
-      isToday: false
+      date: nextDate,
+      dayOfMonth: nextDate.getDate(),
+      dayOfWeek: nextDate.getDay(),
+      isToday: format(nextDate, 'yyyy-MM-dd') === format(new Date(), 'yyyy-MM-dd')
     });
   }
   
@@ -246,11 +222,12 @@ const getPetImageUrl = (imageUrl) => {
 
 const PetParentDashboard = () => {
   const theme = useTheme();
-  const [activeTab, setActiveTab] = useState('all');
-  const calendarDays = generateCalendarWeek();
+  const [selectedDate, setSelectedDate] = useState(new Date());
+  const [calendarDays, setCalendarDays] = useState([]);
   const [myPets, setMyPets] = useState([]);
   const [selectedPetIndex, setSelectedPetIndex] = useState(0);
   const [loading, setLoading] = useState(false);
+  const [appointments, setAppointments] = useState([]);
   const [addPetDialogOpen, setAddPetDialogOpen] = useState(false);
   const [petFormData, setPetFormData] = useState({
     name: '',
@@ -269,18 +246,23 @@ const PetParentDashboard = () => {
     message: '',
     severity: 'info'
   });
-  
-  // Sample activities
-  const activities = [
-    { id: 1, name: 'Walking', time: '3:00 PM', image: '/images/activities/walking.jpg' },
-    { id: 2, name: 'Training', time: '4:00 PM', image: '/images/activities/training.jpg' },
-    { id: 3, name: 'Playdate', time: '5:00 PM', image: '/images/activities/playdate.jpg' }
-  ];
 
   // Fetch pets on component mount
   useEffect(() => {
     fetchPets();
   }, []);
+
+  // Fetch appointments when selected pet changes
+  useEffect(() => {
+    if (myPets.length > 0 && selectedPetIndex >= 0) {
+      fetchAppointments();
+    }
+  }, [selectedPetIndex, myPets]);
+
+  // Update calendar when selected date changes
+  useEffect(() => {
+    setCalendarDays(generateCalendarWeek(selectedDate));
+  }, [selectedDate]);
 
   const fetchPets = async () => {
     setLoading(true);
@@ -305,15 +287,34 @@ const PetParentDashboard = () => {
     }
   };
 
+  const fetchAppointments = async () => {
+    if (!myPets[selectedPetIndex]) return;
+    
+    try {
+      const response = await axios.get('/api/appointments', {
+        params: {
+          patientId: myPets[selectedPetIndex].id,
+          status: 'scheduled,confirmed'
+        }
+      });
+      
+      // Sort appointments by start time
+      const sortedAppointments = response.data.appointments.sort((a, b) => 
+        new Date(a.start_time) - new Date(b.start_time)
+      );
+      
+      setAppointments(sortedAppointments);
+    } catch (error) {
+      console.error('Error fetching appointments:', error);
+      showNotification('Failed to fetch appointments', 'error');
+    }
+  };
+
   // Get the currently selected pet
   const selectedPet = myPets.length > 0 ? myPets[selectedPetIndex] : null;
 
   const handlePetSelect = (index) => {
     setSelectedPetIndex(index);
-  };
-
-  const handleTabChange = (event, newValue) => {
-    setActiveTab(newValue);
   };
 
   const handleAddPetClick = () => {
@@ -416,8 +417,13 @@ const PetParentDashboard = () => {
     });
   };
 
+  // Add a handler for date selection
+  const handleDateSelect = (date) => {
+    setSelectedDate(date);
+  };
+
   return (
-    <Box sx={{ bgcolor: 'background.default', minHeight: '100vh', pb: 4 }}>
+    <Box sx={{ bgcolor: '#f5f5f5', minHeight: '100vh', pb: 4 }}>
       <Container maxWidth="lg" sx={{ pt: 2 }}>
         {/* Header Section */}
         <Box sx={{ display: 'flex', flexDirection: 'column', mb: 4 }}>
@@ -438,34 +444,30 @@ const PetParentDashboard = () => {
                 Your Pets
               </Typography>
               <Box sx={{ display: 'flex', gap: 2 }}>
-                {myPets.map((pet, index) => (
-                  <Box key={pet.id} sx={{ textAlign: 'center' }}>
-                    <Avatar 
-                      sx={{ 
-                        width: 56, 
-                        height: 56, 
-                        mb: 1, 
-                        border: index === selectedPetIndex ? `2px solid ${theme.palette.primary.main}` : '2px solid #fff',
-                        boxShadow: index === selectedPetIndex ? `0 2px 8px ${theme.palette.primary.main}` : '0 2px 8px rgba(0,0,0,0.1)',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s ease',
-                        bgcolor: 'primary.light'
-                      }} 
-                      alt={pet.name}
-                      src={pet.imageUrl ? getPetImageUrl(pet.imageUrl) : undefined}
-                      onClick={() => handlePetSelect(index)}
-                    >
-                      {pet.name.charAt(0).toUpperCase()}
-                    </Avatar>
-                    <Typography 
-                      variant="subtitle2" 
-                      color={index === selectedPetIndex ? 'primary' : 'text.primary'}
-                      sx={{ fontWeight: index === selectedPetIndex ? 'bold' : 'normal' }}
-                    >
-                      {pet.name}
-                    </Typography>
-                  </Box>
-                ))}
+                {myPets.length > 0 ? (
+                  myPets.map((pet, index) => (
+                    <Box key={pet.id} sx={{ textAlign: 'center' }}>
+                      <Avatar 
+                        sx={{ 
+                          width: 56, 
+                          height: 56, 
+                          mb: 1, 
+                          border: index === selectedPetIndex ? `2px solid ${theme.palette.primary.main}` : '2px solid #fff',
+                          cursor: 'pointer',
+                          bgcolor: 'primary.light'
+                        }} 
+                        alt={pet.name}
+                        src={pet.imageUrl ? getPetImageUrl(pet.imageUrl) : undefined}
+                        onClick={() => handlePetSelect(index)}
+                      >
+                        {pet.name.charAt(0).toUpperCase()}
+                      </Avatar>
+                      <Typography variant="subtitle2">
+                        {pet.name}
+                      </Typography>
+                    </Box>
+                  ))
+                ) : null}
                 <Box sx={{ textAlign: 'center' }}>
                   <Avatar 
                     sx={{ 
@@ -473,12 +475,7 @@ const PetParentDashboard = () => {
                       height: 56, 
                       mb: 1, 
                       bgcolor: 'primary.main',
-                      boxShadow: '0 2px 8px rgba(0,0,0,0.1)',
                       cursor: 'pointer',
-                      transition: 'transform 0.2s ease',
-                      '&:hover': {
-                        transform: 'scale(1.05)'
-                      }
                     }}
                     onClick={handleAddPetClick}
                   >
@@ -489,81 +486,10 @@ const PetParentDashboard = () => {
               </Box>
             </Box>
 
-            {/* Activities Section */}
-            <Box sx={{ mb: 4 }}>
-              <Typography variant="h6" gutterBottom>
-                Activities
-              </Typography>
-              <Tabs 
-                value={activeTab} 
-                onChange={handleTabChange}
-                sx={{ mb: 2 }}
-              >
-                <Tab value="all" label="All" sx={{ textTransform: 'none' }} />
-                <Tab value="alone" label="Alone" sx={{ textTransform: 'none' }} />
-                <Tab value="with-other-pets" label="With Other Pets" sx={{ textTransform: 'none' }} />
-              </Tabs>
-              
-              <Grid container spacing={2}>
-                {activities.map(activity => (
-                  <Grid item xs={12} sm={4} key={activity.id}>
-                    <Paper 
-                      elevation={1} 
-                      sx={{ 
-                        p: 2, 
-                        position: 'relative',
-                        cursor: 'pointer',
-                        transition: 'all 0.2s',
-                        '&:hover': {
-                          boxShadow: 3
-                        }
-                      }}
-                    >
-                      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-                        <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                          <Avatar 
-                            src={activity.image} 
-                            sx={{ width: 32, height: 32, mr: 1 }}
-                            variant="rounded"
-                          />
-                        </Box>
-                        <IconButton size="small">
-                          <ChevronRightIcon fontSize="small" />
-                        </IconButton>
-                      </Box>
-                      <Typography variant="body2" fontWeight="medium">
-                        {activity.name}
-                      </Typography>
-                      <Typography variant="caption" color="text.secondary">
-                        {activity.time}
-                      </Typography>
-                    </Paper>
-                  </Grid>
-                ))}
-                <Grid item xs={12} sm={4}>
-                  <Paper 
-                    elevation={1} 
-                    sx={{ 
-                      p: 2, 
-                      height: '100%', 
-                      display: 'flex', 
-                      flexDirection: 'column', 
-                      justifyContent: 'center', 
-                      alignItems: 'center',
-                      border: '1px dashed #ccc',
-                      cursor: 'pointer'
-                    }}
-                  >
-                    <IconButton color="primary" sx={{ mb: 1 }}>
-                      <AddIcon />
-                    </IconButton>
-                    <Typography variant="body2" color="text.secondary">
-                      Add Activity
-                    </Typography>
-                  </Paper>
-                </Grid>
-              </Grid>
-            </Box>
+            {/* Information Section */}
+            {selectedPet && (
+              <PetInformation petId={selectedPet.id} />
+            )}
 
             {/* Weight Tracker */}
             <Box sx={{ mb: 4 }}>
@@ -571,51 +497,60 @@ const PetParentDashboard = () => {
                 <Typography variant="h6">
                   Weight Tracker
                 </Typography>
-                <Button variant="text" size="small">
+                <Button variant="text" size="small" color="primary">
                   View all
                 </Button>
               </Box>
-              <Paper sx={{ p: 2 }}>
-                <Box sx={{ mb: 2 }}>
-                  <Typography variant="subtitle2" color="text.secondary">
-                    Current Weight
-                  </Typography>
-                  <Box sx={{ display: 'flex', alignItems: 'baseline' }}>
-                    <Typography variant="h4" fontWeight="bold">
-                      44 lbs
-                    </Typography>
-                    <Chip 
-                      label="-2%" 
-                      size="small" 
-                      sx={{ 
-                        ml: 1, 
-                        bgcolor: 'error.light',
-                        color: 'white',
-                        fontWeight: 'bold'
-                      }} 
-                    />
-                  </Box>
-                </Box>
+              <Paper sx={{ p: 3 }}>
                 <Box sx={{ height: 200 }}>
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={weightData}>
                       <CartesianGrid strokeDasharray="3 3" vertical={false} />
                       <XAxis dataKey="month" />
                       <YAxis 
-                        domain={['dataMin - 5', 'dataMax + 5']} 
-                        ticks={[20, 40, 60]} 
-                        label={{ value: 'lbs', position: 'insideLeft', angle: -90 }} 
+                        domain={[0, 70]} 
+                        ticks={[0, 20, 40, 60]} 
                       />
                       <RechartsTooltip />
                       <Line 
                         type="monotone" 
                         dataKey="weight" 
-                        stroke="#34C759" 
+                        stroke="#099268" 
                         activeDot={{ r: 8 }} 
                         dot={{ r: 4 }}
                         strokeWidth={2}
                       />
                     </LineChart>
+                  </ResponsiveContainer>
+                </Box>
+              </Paper>
+            </Box>
+
+            {/* Quality of Life Assessment */}
+            <Box>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+                <Typography variant="h6">
+                  Quality of Life Assessment
+                </Typography>
+                <Button variant="text" size="small" color="primary">
+                  View all
+                </Button>
+              </Box>
+              <Paper sx={{ p: 3 }}>
+                <Box sx={{ height: 280 }}>
+                  <ResponsiveContainer width="100%" height="100%">
+                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={qualityOfLifeData}>
+                      <PolarGrid />
+                      <PolarAngleAxis dataKey="aspect" />
+                      <PolarRadiusAxis angle={90} domain={[0, 10]} />
+                      <Radar 
+                        name="Pet" 
+                        dataKey="value" 
+                        stroke="#099268" 
+                        fill="#099268" 
+                        fillOpacity={0.3} 
+                      />
+                    </RadarChart>
                   </ResponsiveContainer>
                 </Box>
               </Paper>
@@ -630,87 +565,109 @@ const PetParentDashboard = () => {
                 <>
                   <Box
                     sx={{
-                      height: 200,
+                      height: 250,
                       display: 'flex',
                       alignItems: 'center',
                       justifyContent: 'center',
-                      bgcolor: 'primary.light',
+                      bgcolor: 'grey.100',
                       color: 'primary.contrastText',
-                      fontSize: '3rem',
-                      fontWeight: 'bold'
+                      position: 'relative'
                     }}
                   >
                     {selectedPet.imageUrl ? (
                       <CardMedia
                         component="img"
-                        height="200"
+                        height="250"
                         image={getPetImageUrl(selectedPet.imageUrl)}
                         alt={selectedPet.name}
-                        sx={{ width: '100%', objectFit: 'cover', objectPosition: 'center 40%' }}
+                        sx={{ width: '100%', objectFit: 'cover' }}
                       />
                     ) : (
-                      selectedPet.name.charAt(0).toUpperCase()
+                      <img 
+                        src="/images/black-pug.jpg" 
+                        alt="Pet"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                      />
                     )}
+                    <Avatar
+                      sx={{
+                        position: 'absolute',
+                        bottom: -20,
+                        right: 20,
+                        width: 40,
+                        height: 40,
+                        bgcolor: 'primary.main',
+                        color: 'white',
+                        border: '2px solid white',
+                        zIndex: 1
+                      }}
+                    >
+                      4
+                    </Avatar>
                   </Box>
-                  <CardContent sx={{ pt: 2, pb: 2 }}>
-                    <Box sx={{ textAlign: 'center', mt: -1 }}>
-                      <IconButton 
-                        sx={{ 
-                          position: 'absolute', 
-                          right: 8, 
-                          top: 8, 
-                          bgcolor: 'rgba(255,255,255,0.8)',
-                          '&:hover': {
-                            bgcolor: 'rgba(255,255,255,0.95)'
-                          }
-                        }}
-                        onClick={handleAddPetClick}
-                      >
-                        <AddIcon />
-                      </IconButton>
-                      <Typography variant="h5" fontWeight="medium">
-                        {selectedPet.name}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary" sx={{ mb: 1 }}>
-                        {selectedPet.breed}
-                      </Typography>
-                    </Box>
+                  <CardContent sx={{ mt: 1, pt: 2 }}>
+                    <Typography variant="h5" fontWeight="medium" gutterBottom>
+                      {selectedPet.name || "Maxi"}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {selectedPet.breed || "Bulldog"}
+                    </Typography>
                   </CardContent>
                 </>
               ) : (
-                <Box 
-                  sx={{ 
-                    display: 'flex', 
-                    flexDirection: 'column', 
-                    alignItems: 'center', 
-                    justifyContent: 'center',
-                    height: 270,
-                    p: 3
-                  }}
-                >
-                  <PetsIcon sx={{ fontSize: 60, color: 'text.secondary', mb: 2 }} />
-                  <Typography variant="h6" color="text.secondary" mb={2}>
-                    No pets selected
-                  </Typography>
-                  <Button 
-                    variant="contained" 
-                    startIcon={<AddIcon />}
-                    onClick={handleAddPetClick}
+                <>
+                  <Box
+                    sx={{
+                      height: 250,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      bgcolor: 'grey.100',
+                      color: 'primary.contrastText',
+                      position: 'relative'
+                    }}
                   >
-                    Add Pet
-                  </Button>
-                </Box>
+                    <img 
+                      src="/images/black-pug.jpg" 
+                      alt="Pet"
+                      style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                    />
+                    <Avatar
+                      sx={{
+                        position: 'absolute',
+                        bottom: -20,
+                        right: 20,
+                        width: 40,
+                        height: 40,
+                        bgcolor: 'primary.main',
+                        color: 'white',
+                        border: '2px solid white',
+                        zIndex: 1
+                      }}
+                    >
+                      4
+                    </Avatar>
+                  </Box>
+                  <CardContent sx={{ mt: 1, pt: 2 }}>
+                    <Typography variant="h5" fontWeight="medium" gutterBottom>
+                      Maxi
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Bulldog
+                    </Typography>
+                  </CardContent>
+                </>
               )}
             </Paper>
 
             {/* Calendar */}
-            <Paper sx={{ mb: 4, p: 2 }}>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant="subtitle1" fontWeight="medium">
-                  {format(new Date(), 'MMMM yyyy')}
+            <Paper sx={{ mb: 4, p: 3 }}>
+              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 3 }}>
+                <Typography variant="h6" fontWeight="medium">
+                  January 2025
                 </Typography>
                 <Box>
-                  <IconButton size="small">
+                  <IconButton size="small" sx={{ mr: 1 }}>
                     <ChevronLeftIcon fontSize="small" />
                   </IconButton>
                   <IconButton size="small">
@@ -720,21 +677,44 @@ const PetParentDashboard = () => {
               </Box>
               
               {/* Calendar Week View */}
-              <Grid container spacing={1} sx={{ mb: 2 }}>
+              <Grid container spacing={1} sx={{ mb: 3 }}>
                 {calendarDays.map((day, index) => (
-                  <Grid item key={index} xs>
-                    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-                      <Typography variant="caption" color="text.secondary">
+                  <Grid item xs key={index}>
+                    <Box 
+                      sx={{ 
+                        display: 'flex', 
+                        flexDirection: 'column', 
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        '&:hover': {
+                          '& .MuiAvatar-root': {
+                            bgcolor: 'primary.light',
+                            color: 'white'
+                          }
+                        }
+                      }}
+                      onClick={() => handleDateSelect(day.date)}
+                    >
+                      <Typography variant="caption" color="text.secondary" sx={{ mb: 0.5 }}>
                         {daysOfWeek[day.dayOfWeek]}
                       </Typography>
                       <Avatar 
                         sx={{ 
-                          width: 32, 
-                          height: 32, 
-                          fontSize: '0.75rem',
-                          bgcolor: day.isToday ? 'primary.main' : 'transparent',
-                          color: day.isToday ? 'white' : 'text.primary',
-                          border: day.isToday ? 'none' : '1px solid #eee'
+                          width: 36, 
+                          height: 36, 
+                          fontSize: '0.875rem',
+                          bgcolor: format(day.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd') 
+                            ? 'primary.main' 
+                            : day.isToday 
+                              ? 'primary.light' 
+                              : 'transparent',
+                          color: format(day.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd') || day.isToday
+                            ? 'white' 
+                            : 'text.primary',
+                          border: format(day.date, 'yyyy-MM-dd') === format(selectedDate, 'yyyy-MM-dd') || day.isToday
+                            ? 'none' 
+                            : '1px solid #eee',
+                          transition: 'all 0.2s ease-in-out'
                         }}
                       >
                         {day.dayOfMonth}
@@ -746,21 +726,21 @@ const PetParentDashboard = () => {
 
               {/* Upcoming Schedule */}
               <Box>
-                <Typography variant="subtitle1" fontWeight="medium" sx={{ mb: 1 }}>
+                <Typography variant="h6" fontWeight="medium" sx={{ mb: 1 }}>
                   Upcoming Schedule
                 </Typography>
-                <Typography variant="caption" color="text.secondary" sx={{ mb: 2, display: 'block' }}>
-                  {format(new Date(), 'EEEE, d MMMM yyyy')}
+                <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
+                  Thursday, 23 January 2025
                 </Typography>
                 
                 <Stack spacing={2}>
-                  {upcomingSchedule.map((item, index) => (
+                  {appointments.map((item) => (
                     <Paper 
-                      key={index}
+                      key={item.id}
                       variant="outlined"
                       sx={{ 
-                        p: 1.5,
-                        borderColor: 'divider'
+                        p: 2,
+                        borderColor: '#eee'
                       }}
                     >
                       <Box sx={{ display: 'flex', alignItems: 'center' }}>
@@ -770,8 +750,8 @@ const PetParentDashboard = () => {
                             height: 32, 
                             mr: 1.5, 
                             bgcolor: 'background.paper',
-                            border: `1px solid ${item.iconColor}`,
-                            color: item.iconColor
+                            border: `1px solid ${item.type === 'Veterinary Appointment' ? '#f03e3e' : item.type === 'Grooming' ? '#7048e8' : '#099268'}`,
+                            color: item.type === 'Veterinary Appointment' ? '#f03e3e' : item.type === 'Grooming' ? '#7048e8' : '#099268'
                           }}
                         >
                           {item.icon}
@@ -790,36 +770,6 @@ const PetParentDashboard = () => {
                 </Stack>
               </Box>
             </Paper>
-
-            {/* Quality of Life Assessment */}
-            <Box>
-              <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
-                <Typography variant="h6">
-                  Quality of Life Assessment
-                </Typography>
-                <Button variant="text" size="small">
-                  View all
-                </Button>
-              </Box>
-              <Paper sx={{ p: 2 }}>
-                <Box sx={{ height: 300 }}>
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={qualityOfLifeData}>
-                      <PolarGrid />
-                      <PolarAngleAxis dataKey="aspect" />
-                      <PolarRadiusAxis angle={90} domain={[0, 10]} />
-                      <Radar 
-                        name="Pet" 
-                        dataKey="value" 
-                        stroke="#8884d8" 
-                        fill="#8884d8" 
-                        fillOpacity={0.5} 
-                      />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                </Box>
-              </Paper>
-            </Box>
           </Grid>
         </Grid>
       </Container>
@@ -1044,4 +994,4 @@ const PetParentDashboard = () => {
   );
 };
 
-export default PetParentDashboard; 
+export default PetParentDashboard;

@@ -270,4 +270,178 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
+// Get pet's vaccinations
+router.get('/:id/vaccinations', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+    
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+    
+    const result = await pool.query(
+      'SELECT * FROM vaccinations WHERE pet_id = $1 ORDER BY date_administered DESC',
+      [id]
+    );
+    res.json({ success: true, vaccinations: result.rows });
+  } catch (error) {
+    console.error('Error fetching vaccinations:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch vaccinations' });
+  }
+});
+
+// Add vaccination record
+router.post('/:id/vaccinations', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    const { vaccineName, dateAdministered, nextDueDate, notes } = req.body;
+    
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+    
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+    
+    const result = await pool.query(
+      `INSERT INTO vaccinations (pet_id, vaccine_name, date_administered, next_due_date, notes)
+       VALUES ($1, $2, $3, $4, $5)
+       RETURNING *`,
+      [id, vaccineName, dateAdministered, nextDueDate, notes]
+    );
+    
+    res.json({ success: true, vaccination: result.rows[0] });
+  } catch (error) {
+    console.error('Error adding vaccination:', error);
+    res.status(500).json({ success: false, message: 'Failed to add vaccination' });
+  }
+});
+
+// Get pet's deworming records
+router.get('/:id/deworming', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+    
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+    
+    const result = await pool.query(
+      'SELECT * FROM deworming WHERE pet_id = $1 ORDER BY date_given DESC',
+      [id]
+    );
+    res.json({ success: true, deworming: result.rows });
+  } catch (error) {
+    console.error('Error fetching deworming records:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch deworming records' });
+  }
+});
+
+// Add deworming record
+router.post('/:id/deworming', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    const { medicineName, dateGiven, notes } = req.body;
+    
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+    
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+    
+    const result = await pool.query(
+      `INSERT INTO deworming (pet_id, medicine_name, date_given, notes)
+       VALUES ($1, $2, $3, $4)
+       RETURNING *`,
+      [id, medicineName, dateGiven, notes]
+    );
+    
+    res.json({ success: true, deworming: result.rows[0] });
+  } catch (error) {
+    console.error('Error adding deworming record:', error);
+    res.status(500).json({ success: false, message: 'Failed to add deworming record' });
+  }
+});
+
+// Get pet's grooming records
+router.get('/:id/grooming', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+    
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+    
+    const result = await pool.query(
+      'SELECT * FROM grooming WHERE pet_id = $1 ORDER BY date DESC',
+      [id]
+    );
+    res.json({ success: true, grooming: result.rows });
+  } catch (error) {
+    console.error('Error fetching grooming records:', error);
+    res.status(500).json({ success: false, message: 'Failed to fetch grooming records' });
+  }
+});
+
+// Add grooming record
+router.post('/:id/grooming', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const userId = req.user.id;
+    const { serviceType, date, notes } = req.body;
+    
+    // Verify pet exists and belongs to user
+    const checkResult = await pool.query(
+      `SELECT * FROM pets WHERE id = $1 AND owner_id = $2`,
+      [id, userId]
+    );
+    
+    if (checkResult.rows.length === 0) {
+      return res.status(404).json({ success: false, message: 'Pet not found' });
+    }
+    
+    const result = await pool.query(
+      `INSERT INTO grooming (pet_id, service_type, date, notes)
+       VALUES ($1, $2, $3, $4)
+       RETURNING *`,
+      [id, serviceType, date, notes]
+    );
+    
+    res.json({ success: true, grooming: result.rows[0] });
+  } catch (error) {
+    console.error('Error adding grooming record:', error);
+    res.status(500).json({ success: false, message: 'Failed to add grooming record' });
+  }
+});
+
 module.exports = router; 

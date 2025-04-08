@@ -36,6 +36,9 @@ const initDatabase = async () => {
     
     // Drop tables in reverse order of dependencies
     await client.query(`
+      DROP TABLE IF EXISTS vaccinations CASCADE;
+      DROP TABLE IF EXISTS deworming CASCADE;
+      DROP TABLE IF EXISTS grooming CASCADE;
       DROP TABLE IF EXISTS appointments CASCADE;
       DROP TABLE IF EXISTS medical_records CASCADE;
       DROP TABLE IF EXISTS inventory_items CASCADE;
@@ -122,6 +125,46 @@ const initDatabase = async () => {
         owner_id INTEGER NOT NULL REFERENCES users(id),
         created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
         updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    
+    // Create vaccinations table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS vaccinations (
+        id SERIAL PRIMARY KEY,
+        pet_id INTEGER NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+        vaccine_name VARCHAR(255) NOT NULL,
+        date_administered DATE NOT NULL,
+        next_due_date DATE,
+        notes TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    
+    // Create deworming table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS deworming (
+        id SERIAL PRIMARY KEY,
+        pet_id INTEGER NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+        medicine_name VARCHAR(255) NOT NULL,
+        date_given DATE NOT NULL,
+        notes TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
+      )
+    `);
+    
+    // Create grooming table
+    await client.query(`
+      CREATE TABLE IF NOT EXISTS grooming (
+        id SERIAL PRIMARY KEY,
+        pet_id INTEGER NOT NULL REFERENCES pets(id) ON DELETE CASCADE,
+        service_type VARCHAR(255) NOT NULL,
+        date DATE NOT NULL,
+        notes TEXT,
+        created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
+        updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )
     `);
     
