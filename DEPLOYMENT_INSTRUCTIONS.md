@@ -55,8 +55,8 @@ The script will:
 
 After successful deployment, you can access:
 
-- **EVMR Application**: http://localhost:3786
-- **Admin Service**: http://localhost:3789
+- **EVMR Application**: http://0.0.0.0:3786
+- **Admin Service**: http://0.0.0.0:3789
 - **Database**: Available on port 5431 (only accessible to the containers by default)
 
 ## Docker Compose Commands
@@ -106,4 +106,4 @@ If the application fails to start:
 If the admin service is not functioning:
 - Check admin service logs: `docker compose logs evmr-admin`
 - Verify that it can connect to the database
-- Ensure the JWT_SECRET is consistent across all services 
+- Ensure the JWT_SECRET is consistent across all services

@@ -69,13 +69,17 @@ The system uses the following database tables:
    ```
    # Database configuration
    DB_PASSWORD=your_secure_password
-   
+
    # Authentication
    JWT_SECRET=your_secure_jwt_secret
-   
+
    # Application settings
    PORT=3786
    NODE_ENV=production
+
+   # Frontend configuration
+   REACT_APP_API_URL=http://0.0.0.0:3786/api
+   REACT_APP_BACKEND_URL=http://0.0.0.0:3786
    ```
 
 3. Build and start the application:
@@ -83,7 +87,7 @@ The system uses the following database tables:
    docker-compose up --build
    ```
 
-4. Access the application at `http://localhost:3786`
+4. Access the application at `http://0.0.0.0:3786`
 
 ### Container Structure
 
@@ -228,7 +232,7 @@ cat backup.sql | docker exec -i evmr-database psql -U evmr_user -d evmr_database
 
 - **Database Connection Issues**: Verify PostgreSQL credentials and connection string
 - **Container Startup Failures**: Check logs with `docker-compose logs`
-- **API Errors**: Verify backend is running with `curl http://localhost:3786/health`
+- **API Errors**: Verify backend is running with `curl http://0.0.0.0:3786/health`
 
 ## License
 
@@ -236,4 +240,4 @@ This project is licensed under the [MIT License](LICENSE).
 
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request. 
+Contributions are welcome! Please feel free to submit a Pull Request.

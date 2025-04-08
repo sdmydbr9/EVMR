@@ -35,13 +35,13 @@ This guide explains how to deploy the Electronic Veterinary Medical Records (EVM
    ```bash
    # Check if containers are running
    docker-compose ps
-   
+
    # Check application logs
    docker-compose logs -f evmr-app
    ```
 
 5. **Access the application**:
-   Open your browser and navigate to `http://localhost:3786`
+   Open your browser and navigate to `http://0.0.0.0:3786`
 
 ## Project Structure
 
@@ -53,7 +53,7 @@ evmr/
 │   ├── package.json                # Backend dependencies and scripts
 │   ├── server.js                   # Main server entry point
 │   ├── routes/                     # API route definitions
-│   ├── controllers/                # Business logic handlers 
+│   ├── controllers/                # Business logic handlers
 │   ├── models/                     # Database models
 │   ├── middleware/                 # Custom middleware functions
 │   └── config/                     # Backend configuration files
@@ -118,4 +118,4 @@ docker compose up -d --build
 - Change default credentials in the `.env` file
 - Secure the PostgreSQL port (5432) if exposed in production
 - Consider using a reverse proxy like Nginx for SSL termination in production
-- Set up proper firewall rules to only allow access to port 3786 from trusted sources 
+- Set up proper firewall rules to only allow access to port 3786 from trusted sources
