@@ -11,7 +11,8 @@ services:
     ports:
       - "3786:3786" # Map container port to host port
     depends_on:
-      - evmr-db # Ensure database is started before the application
+      evmr-db: # Ensure database is started before the application
+        condition: service_healthy
     environment:
       # Application configuration
       - NODE_ENV=${NODE_ENV}
@@ -45,6 +46,9 @@ services:
       # File upload settings
       - MAX_FILE_SIZE=${MAX_FILE_SIZE}
       - ALLOWED_FILE_TYPES=${ALLOWED_FILE_TYPES}
+      # Demo user IDs (fixed values for consistency)
+      - VET_DEMO_ID=VET12345
+      - ORG_DEMO_ID=ORG12345
     env_file:
       - .env # Load additional environment variables from .env file
     volumes:
@@ -72,7 +76,8 @@ services:
     ports:
       - "3789:3789" # Map container port to host port
     depends_on:
-      - evmr-db # Ensure database is started before the admin service
+      evmr-db: # Ensure database is started before the admin service
+        condition: service_healthy
     environment:
       # Application configuration
       - NODE_ENV=${NODE_ENV}
@@ -129,7 +134,7 @@ services:
     volumes:
       # Persistent volume for database data
       - evmr-db-data:/var/lib/postgresql/data
-      # Mount init scripts for database setup
+      # Mount init scripts for database setup and demo data
       - ./backend/config/database/init:/docker-entrypoint-initdb.d
     ports:
       - "5431:5432" # Expose PostgreSQL port (can be removed for production)

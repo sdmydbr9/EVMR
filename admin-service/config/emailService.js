@@ -84,7 +84,7 @@ const sendApprovalEmail = async (user) => {
       Please keep this ID secure. You will need it to log in to the system along with your email and password.`
     : ''}
 
-    You can now log in to the system at http://0.0.0.0:3786 with your credentials.
+    You can now log in to the system at ${process.env.BASE_URL} with your credentials.
 
     If you have any questions, please don't hesitate to contact our support team.
 
@@ -109,7 +109,7 @@ const sendApprovalEmail = async (user) => {
         ` : ''}
 
         <div style="background-color: #f5f5f5; border-left: 4px solid #4CAF50; padding: 15px; margin: 20px 0;">
-          <p style="margin: 0;">You can now log in to the system at <a href="http://0.0.0.0:3786">http://0.0.0.0:3786</a> with your credentials.</p>
+          <p style="margin: 0;">You can now log in to the system at <a href="${process.env.BASE_URL}">${process.env.BASE_URL}</a> with your credentials.</p>
         </div>
 
         <p>If you have any questions, please don't hesitate to contact our support team.</p>

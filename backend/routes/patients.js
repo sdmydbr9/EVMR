@@ -14,7 +14,7 @@ const ADMIN_VET = ['admin', 'vet'];
  * @desc    Get all patients with pagination and filtering
  * @access  All staff
  */
-router.get('/', 
+router.get('/',
   authorize(ALL_STAFF),
   patientController.getAllPatients
 );
@@ -138,4 +138,4 @@ router.get('/:id/history',
   patientController.getPatientHistory
 );
 
-module.exports = router; 
+module.exports = router;

@@ -18,6 +18,8 @@ const inventoryRoutes = require('./routes/inventory');
 const reportRoutes = require('./routes/reports');
 const userRoutes = require('./routes/users');
 const petRoutes = require('./routes/pets');
+const doctorRoutes = require('./routes/doctors');
+const scheduleRoutes = require('./routes/schedules');
 
 // Import middleware
 const { authenticate } = require('./middleware/auth');
@@ -95,6 +97,8 @@ app.use('/api/inventory', authenticate, inventoryRoutes);
 app.use('/api/reports', authenticate, reportRoutes);
 app.use('/api/users', authenticate, userRoutes); // Now all user routes require authentication
 app.use('/api/pets', authenticate, petRoutes); // Added pets route with authentication
+app.use('/api/doctors', authenticate, doctorRoutes);
+app.use('/api/schedules', authenticate, scheduleRoutes); // Added schedules route with authentication
 
 // Serve React app for any other route
 app.get('*', (req, res) => {

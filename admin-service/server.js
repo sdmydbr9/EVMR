@@ -4,6 +4,7 @@ const morgan = require('morgan');
 const helmet = require('helmet');
 const path = require('path');
 const jwt = require('jsonwebtoken');
+const compression = require('compression');
 
 // Import routes
 const approvalRoutes = require('./routes/approval');
@@ -28,6 +29,7 @@ app.use(helmet({
 app.use(morgan(process.env.LOG_FORMAT || 'combined'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(compression());
 
 // Serve static files from public directory
 app.use(express.static(path.join(__dirname, 'public')));

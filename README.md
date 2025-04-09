@@ -2,6 +2,33 @@
 
 A comprehensive full-stack application for managing electronic veterinary medical records, appointments, inventory, and clinic operations.
 
+## Demo Users
+
+The system includes built-in demo users for testing purposes:
+
+- **Pet Parent**: petparent_demo@evmr.com / demodemo
+- **Veterinarian**: vet_demo@evmr.com / demodemo (VET ID: VET12345)
+- **Organization Admin**: org_demo@evmr.com / demodemo (ORG ID: ORG12345)
+
+To view the demo user credentials:
+```bash
+# Docker environment
+docker exec -it evmr-application node /app/backend/docker-show-demo-users.js
+```
+
+## Automatic Demo Data
+
+The system is pre-configured with comprehensive demo data for all three user types that is automatically loaded when you start the containers. All screens and features are populated with realistic data for testing and demonstration purposes.
+
+**One-Click Setup**: Simply run `docker compose up -d` and all demo data will be automatically loaded!
+
+```bash
+# Start the Docker containers with demo data
+docker compose up -d
+```
+
+No additional script execution is needed - the demo data is loaded automatically during container initialization.
+
 ## System Overview
 
 EVMR is designed to streamline veterinary practice management with the following modules:

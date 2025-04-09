@@ -200,8 +200,8 @@ const Login = ({ onLogin }) => {
       return;
     }
     
-    if (userType === 'institute_admin' && !organisationId) {
-      setError('Organisation ID is required for institute admins');
+    if (userType === 'organisation' && !organisationId) {
+      setError('Organisation ID is required for organisations');
       return;
     }
     
@@ -219,15 +219,27 @@ const Login = ({ onLogin }) => {
       // Add conditional fields based on user type
       if (userType === 'veterinarian') {
         loginData.id = id;
-      } else if (userType === 'institute_admin') {
+      } else if (userType === 'organisation') {
         loginData.organisationId = organisationId;
       }
       
       const response = await authService.login(loginData);
       
       if (response && response.token) {
+        // Check if user is system admin (should use system admin app)
+        if (response.user && response.user.role === 'admin' && userType !== 'organisation') {
+          setError('System administrators should login via the admin portal at port 3789');
+          setLoading(false);
+          return;
+        }
+        
         // Always store userType regardless of rememberMe setting
         localStorage.setItem('userType', userType);
+        
+        // Store user role for protected routes
+        if (response.user && response.user.role) {
+          localStorage.setItem('userRole', response.user.role);
+        }
         
         // Store email only if rememberMe is checked
         if (rememberMe) {
@@ -332,7 +344,7 @@ const Login = ({ onLogin }) => {
         >
           <MenuItem value="pet_parent">Pet Parent</MenuItem>
           <MenuItem value="veterinarian">Veterinarian</MenuItem>
-          <MenuItem value="institute_admin">Institute Admin</MenuItem>
+          <MenuItem value="organisation">Organisation</MenuItem>
         </Select>
       </FormControl>
       
@@ -386,7 +398,7 @@ const Login = ({ onLogin }) => {
           ? 'Welcome, Pet Parent!' 
           : userType === 'veterinarian'
             ? 'Welcome, Veterinarian!'
-            : 'Welcome, Institute Admin!'}
+            : 'Welcome, Organisation!'}
       </Typography>
       
       {error && (
@@ -418,7 +430,7 @@ const Login = ({ onLogin }) => {
           />
         )}
         
-        {userType === 'institute_admin' && (
+        {userType === 'organisation' && (
           <TextField
             margin="normal"
             required

@@ -65,7 +65,7 @@ const registerUser = async (req, res) => {
 
       // Handle clinic creation or lookup based on user type
       let clinicId = null;
-      
+
       // Only create or lookup clinic for institute_admin or veterinarian roles
       if (role === 'admin' && clinicName) {
         // Check if clinic exists for admin roles
@@ -86,7 +86,7 @@ const registerUser = async (req, res) => {
           );
           clinicId = newClinicResult.rows[0].id;
         }
-      } 
+      }
 
       // Hash password
       const salt = await bcrypt.genSalt(10);
@@ -111,7 +111,7 @@ const registerUser = async (req, res) => {
         // Generate temporary organisation ID for institute admins
         // This will be replaced with a permanent one upon approval
         const tempOrganisationId = 'ORG-TEMP-' + generateRandomString(8);
-        
+
         userDetails = {
           ...userDetails,
           country,
@@ -124,7 +124,7 @@ const registerUser = async (req, res) => {
             email: clinicEmail
           }
         };
-        
+
         console.log(`Created temporary organisation ID for ${email}: ${tempOrganisationId}`);
       } else if (role === 'client') { // Pet parent role
         userDetails = {
@@ -136,7 +136,7 @@ const registerUser = async (req, res) => {
 
       // Create user with pending status
       const userResult = await client.query(
-        `INSERT INTO users 
+        `INSERT INTO users
          (name, email, password, role, clinic_id, status, details, created_at, updated_at)
          VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
          RETURNING id`,
@@ -162,8 +162,8 @@ const registerUser = async (req, res) => {
         role,
         clinicName: clinicName || '',
         clinicAddress: clinicAddress || '',
-        userType: role === 'client' ? 'Pet Parent' : 
-                 role === 'veterinarian' ? 'Veterinarian' : 
+        userType: role === 'client' ? 'Pet Parent' :
+                 role === 'veterinarian' ? 'Veterinarian' :
                  role === 'admin' ? 'Institute Administrator' : 'User'
       };
 
@@ -175,13 +175,13 @@ const registerUser = async (req, res) => {
       try {
         // Send email to user
         await sendSignupVerificationEmail(userData);
-        
+
         // Send notification to admin
         await sendAdminNotificationEmail(userData);
-        
+
         // Send the data to the admin dashboard service
         try {
-          const adminServiceUrl = `http://admin-service:${process.env.ADMIN_PORT || 3789}/api/admin/registrations`;
+          const adminServiceUrl = `${process.env.ADMIN_SERVICE_URL || 'http://admin-service:' + (process.env.ADMIN_PORT || 3789)}/api/admin/registrations`;
           const adminServiceResponse = await axios.post(adminServiceUrl, {
             userData,
             user_id: userId // Include the user ID for reference
@@ -281,4 +281,4 @@ const checkExistingCredential = async (req, res) => {
 module.exports = {
   registerUser,
   checkExistingCredential
-}; 
+};

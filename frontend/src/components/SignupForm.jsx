@@ -96,8 +96,8 @@ const UserTypeStep = React.memo(({ formData, handleChange, errors }) => {
       description: 'Register as a veterinarian to provide care and access patient records'
     },
     {
-      value: 'institute_admin',
-      title: 'Institute Admin',
+      value: 'organisation',
+      title: 'Organisation',
       icon: <BusinessIcon sx={{ fontSize: 40 }} />,
       description: 'Register as an administrator for a veterinary practice or hospital'
     }
@@ -523,7 +523,7 @@ const AdditionalDetailsStep = React.memo(({ formData, handleChange, handleMultiS
         </Grid>
       </>
     );
-  } else if (formData.userType === 'institute_admin') {
+  } else if (formData.userType === 'organisation') {
     content = (
       <>
         <Typography variant="h6" gutterBottom>
@@ -687,7 +687,7 @@ const ReviewStep = React.memo(({ formData, handleChange, errors }) => {
     switch(type) {
       case 'pet_parent': return 'Pet Parent';
       case 'veterinarian': return 'Veterinarian';
-      case 'institute_admin': return 'Institute Admin';
+      case 'organisation': return 'Organisation';
       default: return 'User';
     }
   };
@@ -799,7 +799,7 @@ const ReviewStep = React.memo(({ formData, handleChange, errors }) => {
         </Paper>
       )}
 
-      {formData.userType === 'institute_admin' && (
+      {formData.userType === 'organisation' && (
         <Paper variant="outlined" sx={{ p: 3, mb: 3, borderRadius: 2 }}>
           <Typography variant="subtitle1" gutterBottom sx={{ fontWeight: 600, color: 'primary.main' }}>
             Clinic Information
@@ -913,7 +913,7 @@ const SignupForm = ({ onBack }) => {
     yearsOfExperience: '',
     licenseNumber: '',
 
-    // Institute admin specific
+    // Organisation specific
     clinicName: '',
     clinicAddress: '',
     country: '',
@@ -1034,7 +1034,7 @@ const SignupForm = ({ onBack }) => {
                   newErrors.yearsOfExperience = 'Please select years of experience';
               }
           }
-          else if (currentData.userType === 'institute_admin') {
+          else if (currentData.userType === 'organisation') {
               if (!currentData.clinicName.trim()) newErrors.clinicName = 'Clinic name is required';
               if (!currentData.clinicAddress.trim()) newErrors.clinicAddress = 'Clinic address is required';
               if (!currentData.country) newErrors.country = 'Country is required';
@@ -1181,7 +1181,7 @@ const SignupForm = ({ onBack }) => {
       switch (formData.userType) {
         case 'pet_parent': role = 'client'; break;
         case 'veterinarian': role = 'veterinarian'; break;
-        case 'institute_admin': role = 'admin'; break;
+        case 'organisation': role = 'admin'; break;
         default: role = 'user'; // Fallback role
       }
 
@@ -1208,7 +1208,7 @@ const SignupForm = ({ onBack }) => {
           yearsOfExperience: formData.yearsOfExperience,
           licenseNumber: formData.licenseNumber,
         }),
-        ...(formData.userType === 'institute_admin' && {
+        ...(formData.userType === 'organisation' && {
           clinicName: formData.clinicName,
           clinicAddress: formData.clinicAddress,
           country: formData.country,
