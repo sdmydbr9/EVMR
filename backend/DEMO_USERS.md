@@ -1,24 +1,24 @@
-# EVMR Demo Users
+# VetSphere Demo Users
 
-This document explains the demo user accounts available in the EVMR system.
+This document explains the demo user accounts available in the VetSphere system.
 
 ## Available Demo Users
 
 The following demo user accounts are automatically created when the application starts:
 
 1. **Pet Parent**
-   - Email: petparent_demo@evmr.com
+   - Email: petparent_demo@vetsphere.com
    - Password: demodemo
    - Role: client
 
 2. **Veterinarian**
-   - Email: vet_demo@evmr.com
+   - Email: vet_demo@vetsphere.com
    - Password: demodemo
    - Role: veterinarian
    - VET ID: Auto-generated (see instructions below to find it)
 
 3. **Organization Admin**
-   - Email: org_demo@evmr.com
+   - Email: org_demo@vetsphere.com
    - Password: demodemo
    - Role: admin
    - ORG ID: Auto-generated (see instructions below to find it)
@@ -32,7 +32,7 @@ To view the demo user credentials including the auto-generated VET ID and ORG ID
 node show-demo-users.js
 
 # For Docker environment
-docker exec -it evmr-application node show-demo-users.js
+docker exec -it vetsphere-application node show-demo-users.js
 ```
 
 This will display all the demo users with their login details.
@@ -41,20 +41,20 @@ This will display all the demo users with their login details.
 
 ### Pet Parent Login
 1. Select "Pet Parent" option on the login screen
-2. Enter the email: petparent_demo@evmr.com
+2. Enter the email: petparent_demo@vetsphere.com
 3. Enter the password: demodemo
 4. Click "Log In"
 
 ### Veterinarian Login
 1. Select "Veterinarian" option on the login screen
-2. Enter the email: vet_demo@evmr.com
+2. Enter the email: vet_demo@vetsphere.com
 3. Enter the password: demodemo
 4. Enter the VET ID shown when running the show-demo-users.js script
 5. Click "Log In"
 
 ### Organization Admin Login
 1. Select "Institute Admin" option on the login screen
-2. Enter the email: org_demo@evmr.com
+2. Enter the email: org_demo@vetsphere.com
 3. Enter the password: demodemo
 4. Enter the ORG ID shown when running the show-demo-users.js script
 5. Click "Log In"

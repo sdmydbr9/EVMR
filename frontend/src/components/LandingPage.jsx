@@ -128,7 +128,7 @@ const LandingPage = () => {
       name: "Dr. Sarah Johnson",
       role: "Veterinarian, Happy Paws Clinic",
       avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-      quote: "EVMR has transformed how we manage our practice. The time we save on paperwork means more time with our animal patients."
+      quote: "VetSphere has transformed how we manage our practice. The time we save on paperwork means more time with our animal patients."
     },
     {
       name: "Mark Peterson",
@@ -221,8 +221,17 @@ const LandingPage = () => {
                 alignItems: 'center'
               }}
             >
-              <PetsIcon sx={{ mr: 1 }} />
-              EVMR
+              <Box 
+                component="img" 
+                src="/assets/images/logos/black_transparent.png" 
+                alt="VetSphere logo" 
+                sx={{ 
+                  height: 40, 
+                  width: 'auto', 
+                  mr: 1 
+                }} 
+              />
+              VetSphere
             </Typography>
             
             {isMobile ? (
@@ -359,7 +368,7 @@ const LandingPage = () => {
                     paragraph
                     sx={{ mb: 4, maxWidth: 500 }}
                   >
-                    Streamline your veterinary practice with our comprehensive management system designed for vets, by vets.
+                    Beyond Records, Beyond Care. Streamline your veterinary practice with our comprehensive management system designed for vets, by vets.
                   </Typography>
                   <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
                     <Button 

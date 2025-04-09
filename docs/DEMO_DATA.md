@@ -1,14 +1,14 @@
-# EVMR Demo Data
+# VetSphere Demo Data
 
-This document explains the demo data automatically loaded in the EVMR system.
+This document explains the demo data automatically loaded in the VetSphere system.
 
 ## Available Demo Users
 
 The system includes built-in demo users for testing purposes:
 
-- **Pet Parent**: petparent_demo@evmr.com / demodemo
-- **Veterinarian**: vet_demo@evmr.com / demodemo (VET ID: VET12345)
-- **Organization Admin**: org_demo@evmr.com / demodemo (ORG ID: ORG12345)
+- **Pet Parent**: petparent_demo@vetsphere.com / demodemo
+- **Veterinarian**: vet_demo@vetsphere.com / demodemo (VET ID: VET12345)
+- **Organization Admin**: org_demo@vetsphere.com / demodemo (ORG ID: ORG12345)
 
 ## Automatic Demo Data Loading
 
@@ -26,7 +26,7 @@ All demo data will be initialized automatically during the PostgreSQL container 
 To view the demo user credentials:
 
 ```bash
-docker exec -it evmr-application node /app/backend/docker-show-demo-users.js
+docker exec -it vetsphere-application node /app/backend/docker-show-demo-users.js
 ```
 
 ## Demo Data Included
@@ -34,7 +34,7 @@ docker exec -it evmr-application node /app/backend/docker-show-demo-users.js
 The demo data includes:
 
 - **Users**: Pet parent, veterinarian, and admin users
-- **Clinic**: EVMR Demo Clinic with contact information
+- **Clinic**: VetSphere Demo Clinic with contact information
 - **Patients/Pets**: Several pets of different species with owners
 - **Appointments**: Scheduled and completed appointments
 - **Inventory**: Medications, vaccines, and supplies
@@ -44,20 +44,20 @@ The demo data includes:
 
 ### Pet Parent Login
 1. Select "Pet Parent" option on the login screen
-2. Enter the email: petparent_demo@evmr.com
+2. Enter the email: petparent_demo@vetsphere.com
 3. Enter the password: demodemo
 4. Click "Log In"
 
 ### Veterinarian Login
 1. Select "Veterinarian" option on the login screen
-2. Enter the email: vet_demo@evmr.com
+2. Enter the email: vet_demo@vetsphere.com
 3. Enter the password: demodemo
 4. Enter the VET ID: VET12345
 5. Click "Log In"
 
 ### Organization Admin Login
 1. Select "Institute Admin" option on the login screen
-2. Enter the email: org_demo@evmr.com
+2. Enter the email: org_demo@vetsphere.com
 3. Enter the password: demodemo
 4. Enter the ORG ID: ORG12345
 5. Click "Log In"
@@ -67,7 +67,7 @@ The demo data includes:
 If you need to make changes to the demo data or add more data, you can connect to the PostgreSQL database:
 
 ```bash
-docker exec -it evmr-database psql -U evmr_user -d evmr_database
+docker exec -it vetsphere-database psql -U vetsphere_user -d vetsphere_database
 ```
 
 ## Resetting Demo Data
@@ -79,7 +79,7 @@ To reset the demo data, you can:
    docker compose down -v
    ```
 
-2. Restart the EVMR containers:
+2. Restart the VetSphere containers:
    ```bash
    docker compose up -d
    ```
@@ -97,8 +97,8 @@ If you encounter issues with the demo data:
 
 2. Check the logs for errors:
    ```bash
-   docker logs evmr-database
-   docker logs evmr-application
+   docker logs vetsphere-database
+   docker logs vetsphere-application
    ```
 
 3. If the demo data doesn't appear to be loaded, try resetting the containers:

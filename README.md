@@ -1,19 +1,19 @@
-# Electronic Veterinary Medical Records (EVMR) System
+# VetSphere: Beyond Records, Beyond Care
 
-A comprehensive full-stack application for managing electronic veterinary medical records, appointments, inventory, and clinic operations.
+A comprehensive full-stack application for managing veterinary practices, medical records, appointments, inventory, and clinic operations.
 
 ## Demo Users
 
 The system includes built-in demo users for testing purposes:
 
-- **Pet Parent**: petparent_demo@evmr.com / demodemo
-- **Veterinarian**: vet_demo@evmr.com / demodemo (VET ID: VET12345)
-- **Organization Admin**: org_demo@evmr.com / demodemo (ORG ID: ORG12345)
+- **Pet Parent**: petparent_demo@vetsphere.com / demodemo
+- **Veterinarian**: vet_demo@vetsphere.com / demodemo (VET ID: VET12345)
+- **Organization Admin**: org_demo@vetsphere.com / demodemo (ORG ID: ORG12345)
 
 To view the demo user credentials:
 ```bash
 # Docker environment
-docker exec -it evmr-application node /app/backend/docker-show-demo-users.js
+docker exec -it vetsphere-application node /app/backend/docker-show-demo-users.js
 ```
 
 ## Automatic Demo Data
@@ -31,7 +31,7 @@ No additional script execution is needed - the demo data is loaded automatically
 
 ## System Overview
 
-EVMR is designed to streamline veterinary practice management with the following modules:
+VetSphere is designed to streamline veterinary practice management with the following modules:
 
 - **Patient Management**: Store and retrieve complete patient records
 - **Electronic Medical Records**: SOAP format medical documentation
@@ -89,7 +89,7 @@ The system uses the following database tables:
 1. Clone the repository:
    ```bash
    git clone <repository-url>
-   cd evmr
+   cd vetsphere
    ```
 
 2. Create a `.env` file in the root directory with the following variables:
@@ -120,8 +120,8 @@ The system uses the following database tables:
 
 The Docker setup includes:
 
-- **evmr-app**: Combined frontend and backend container
-- **evmr-db**: PostgreSQL database container
+- **vetsphere-app**: Combined frontend and backend container
+- **vetsphere-db**: PostgreSQL database container
 
 ## API Endpoints
 
@@ -244,13 +244,13 @@ For production deployment:
 The system uses PostgreSQL volumes for data persistence. To backup:
 
 ```bash
-docker exec evmr-database pg_dump -U evmr_user -d evmr_database > backup.sql
+docker exec vetsphere-database pg_dump -U vetsphere_user -d vetsphere_database > backup.sql
 ```
 
 To restore:
 
 ```bash
-cat backup.sql | docker exec -i evmr-database psql -U evmr_user -d evmr_database
+cat backup.sql | docker exec -i vetsphere-database psql -U vetsphere_user -d vetsphere_database
 ```
 
 ## Troubleshooting

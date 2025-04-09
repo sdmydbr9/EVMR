@@ -1,7 +1,7 @@
 {
-  "name": "evmr",
+  "name": "vetsphere",
   "version": "1.0.0",
-  "description": "Electronic Veterinary Medical Records System",
+  "description": "VetSphere - Beyond Records, Beyond Care",
   "scripts": {
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "start:backend": "cd backend && npm run dev",
@@ -13,5 +13,8 @@
     "concurrently": "^8.2.2",
     "dotenv": "^16.4.7",
     "pg": "^8.14.1"
+  },
+  "dependencies": {
+    "sharp": "^0.34.1"
   }
 }

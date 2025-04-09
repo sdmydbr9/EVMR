@@ -316,7 +316,7 @@ const Login = ({ onLogin }) => {
   const renderUserTypeStep = () => (
     <Box sx={{ animation: `${slideUp} 1s ease-out` }}>
       <Typography component="h1" variant="h3" sx={{ mb: 1, fontWeight: 300 }}>
-        Welcome to EVMR
+        Welcome to VetSphere
       </Typography>
       
       <Typography variant="h6" sx={{ mb: 4, fontWeight: 400, color: 'text.secondary' }}>
@@ -600,29 +600,26 @@ const Login = ({ onLogin }) => {
             <Box 
               sx={{ 
                 display: 'flex', 
+                flexDirection: 'column', 
                 alignItems: 'center', 
-                gap: 2, 
-                mb: 6,
-                animation: `${fadeIn} 1s ease-out`
+                mb: 4 
               }}
             >
               <Box
-                sx={{
-                  width: 50,
-                  height: 50,
-                  backgroundColor: theme.palette.primary.main,
-                  borderRadius: '50%',
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  boxShadow: `0 4px 20px ${theme.palette.primary.main}40`,
-                  animation: `${pulse} 2s infinite ease-in-out`
+                component="img"
+                src="/assets/images/logos/black_transparent.png"
+                alt="VetSphere"
+                sx={{ 
+                  height: 80, 
+                  mb: 2,
+                  animation: `${pulse} 3s infinite ease-in-out`
                 }}
-              >
-                <LockIcon sx={{ fontSize: 28, color: 'white' }} />
-              </Box>
-              <Typography variant="h4" sx={{ fontWeight: 500 }}>
-                EVMR System
+              />
+              <Typography variant="h4" component="h1" gutterBottom textAlign="center">
+                Welcome to VetSphere
+              </Typography>
+              <Typography variant="body1" color="text.secondary" textAlign="center">
+                Beyond Records, Beyond Care
               </Typography>
             </Box>
           </Slide>

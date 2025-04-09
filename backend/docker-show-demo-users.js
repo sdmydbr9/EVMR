@@ -9,11 +9,11 @@ const { Pool } = require('pg');
 
 // Database connection configuration for Docker environment
 const dbConfig = {
-  user: process.env.POSTGRES_USER || 'evmr_user',
+  user: process.env.POSTGRES_USER || 'vetsphere_user',
   password: process.env.DB_PASSWORD || 'postgres',
-  host: 'evmr-db',
+  host: 'vetsphere-db',
   port: parseInt(process.env.POSTGRES_PORT || '5432'),
-  database: process.env.POSTGRES_DB || 'evmr_database'
+  database: process.env.POSTGRES_DB || 'vetsphere_database'
 };
 
 console.log('Using database configuration:');
@@ -37,7 +37,7 @@ async function getDemoUsers() {
       const result = await client.query(`
         SELECT id, name, email, role, details 
         FROM users 
-        WHERE email LIKE '%demo@evmr.com'
+        WHERE email LIKE '%demo@vetsphere.com'
         ORDER BY role, email
       `);
       
@@ -47,7 +47,7 @@ async function getDemoUsers() {
         return;
       }
       
-      console.log('\n=== EVMR Demo User Credentials ===\n');
+      console.log('\n=== VetSphere Demo User Credentials ===\n');
       
       for (const user of result.rows) {
         console.log(`${user.name} (${user.role})`);

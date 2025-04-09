@@ -1,9 +1,9 @@
--- Demo data for EVMR system
+-- Demo data for VetSphere system
 -- This script adds sample data for the three types of users: Pet Parent, Veterinarian, and Admin
 
 -- Insert demo clinic
 INSERT INTO clinics (name, address, phone, email)
-VALUES ('EVMR Demo Clinic', '123 Veterinary Lane, Demo City', '555-123-4567', 'demo-clinic@evmr.com')
+VALUES ('VetSphere Demo Clinic', '123 Veterinary Lane, Demo City', '555-123-4567', 'demo-clinic@vetsphere.com')
 ON CONFLICT DO NOTHING;
 
 -- Insert demo users table if not exists
@@ -22,9 +22,9 @@ CREATE TABLE IF NOT EXISTS users (
 -- Note: In a real production system, passwords would be hashed with bcrypt
 INSERT INTO users (name, email, password_hash, role, details)
 VALUES 
-  ('Pet Parent Demo', 'petparent_demo@evmr.com', '$2a$10$K4iYhOXBl2yBWq1zs7T7F.dVlxuaoq5TA/zbL6HJGrnFdyQNgV4Y2', 'client', '{"phone": "555-111-2222", "address": "456 Pet Owner St, Demo City"}'),
-  ('Veterinarian Demo', 'vet_demo@evmr.com', '$2a$10$K4iYhOXBl2yBWq1zs7T7F.dVlxuaoq5TA/zbL6HJGrnFdyQNgV4Y2', 'veterinarian', '{"unique_id": "VET12345", "specialization": "Small Animals", "license_number": "DVM-12345", "clinic_id": 1}'),
-  ('Admin Demo', 'org_demo@evmr.com', '$2a$10$K4iYhOXBl2yBWq1zs7T7F.dVlxuaoq5TA/zbL6HJGrnFdyQNgV4Y2', 'admin', '{"organisation_id": "ORG12345", "clinic_id": 1, "permissions": ["manage_users", "manage_clinics", "view_reports"]}')
+  ('Pet Parent Demo', 'petparent_demo@vetsphere.com', '$2a$10$K4iYhOXBl2yBWq1zs7T7F.dVlxuaoq5TA/zbL6HJGrnFdyQNgV4Y2', 'client', '{"phone": "555-111-2222", "address": "456 Pet Owner St, Demo City"}'),
+  ('Veterinarian Demo', 'vet_demo@vetsphere.com', '$2a$10$K4iYhOXBl2yBWq1zs7T7F.dVlxuaoq5TA/zbL6HJGrnFdyQNgV4Y2', 'veterinarian', '{"unique_id": "VET12345", "specialization": "Small Animals", "license_number": "DVM-12345", "clinic_id": 1}'),
+  ('Admin Demo', 'org_demo@vetsphere.com', '$2a$10$K4iYhOXBl2yBWq1zs7T7F.dVlxuaoq5TA/zbL6HJGrnFdyQNgV4Y2', 'admin', '{"organisation_id": "ORG12345", "clinic_id": 1, "permissions": ["manage_users", "manage_clinics", "view_reports"]}')
 ON CONFLICT (email) DO NOTHING;
 
 -- Insert demo pet owners

@@ -1,4 +1,4 @@
--- Initialize EVMR database schema
+-- Initialize VetSphere database schema
 
 -- Create clinics table
 CREATE TABLE IF NOT EXISTS clinics (

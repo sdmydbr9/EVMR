@@ -1,17 +1,17 @@
-# EVMR System Docker Compose Configuration
+# VetSphere System Docker Compose Configuration
 
 services:
-  # EVMR application service
-  evmr-app:
+  # VetSphere application service
+  vetsphere-app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: evmr-application
+    container_name: vetsphere-application
     restart: unless-stopped
     ports:
       - "3786:3786" # Map container port to host port
     depends_on:
-      evmr-db: # Ensure database is started before the application
+      vetsphere-db: # Ensure database is started before the application
         condition: service_healthy
     environment:
       # Application configuration
@@ -53,11 +53,11 @@ services:
       - .env # Load additional environment variables from .env file
     volumes:
       # Mount for persistent storage of uploaded files (lab results, x-rays, etc.)
-      - evmr-uploads:/app/backend/uploads
+      - vetsphere-uploads:/app/backend/uploads
       # Mount for logs
-      - evmr-logs:/app/backend/logs
+      - vetsphere-logs:/app/backend/logs
     networks:
-      - evmr-network
+      - vetsphere-network
     # Healthcheck for application
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3786/health"]
@@ -67,16 +67,16 @@ services:
       start_period: 30s
 
   # Admin service for user registration approvals
-  evmr-admin:
+  vetsphere-admin:
     build:
       context: ./admin-service
       dockerfile: Dockerfile
-    container_name: evmr-admin-service
+    container_name: vetsphere-admin-service
     restart: unless-stopped
     ports:
       - "3789:3789" # Map container port to host port
     depends_on:
-      evmr-db: # Ensure database is started before the admin service
+      vetsphere-db: # Ensure database is started before the admin service
         condition: service_healthy
     environment:
       # Application configuration
@@ -109,9 +109,9 @@ services:
       - .env # Load additional environment variables from .env file
     volumes:
       # Mount for logs
-      - evmr-admin-logs:/app/admin-service/logs
+      - vetsphere-admin-logs:/app/admin-service/logs
     networks:
-      - evmr-network
+      - vetsphere-network
     # Healthcheck for admin service
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3789/health"]
@@ -121,9 +121,9 @@ services:
       start_period: 30s
 
   # PostgreSQL database service
-  evmr-db:
+  vetsphere-db:
     image: postgres:14-alpine
-    container_name: evmr-database
+    container_name: vetsphere-database
     restart: unless-stopped
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -133,13 +133,13 @@ services:
       - TZ=Asia/Kolkata
     volumes:
       # Persistent volume for database data
-      - evmr-db-data:/var/lib/postgresql/data
+      - vetsphere-db-data:/var/lib/postgresql/data
       # Mount init scripts for database setup and demo data
       - ./backend/config/database/init:/docker-entrypoint-initdb.d
     ports:
       - "5431:5432" # Expose PostgreSQL port (can be removed for production)
     networks:
-      - evmr-network
+      - vetsphere-network
     # Healthcheck for database
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
@@ -150,32 +150,32 @@ services:
 
 # Named volumes for persistent data
 volumes:
-  evmr-db-data:
+  vetsphere-db-data:
     # Stores all PostgreSQL data for:
     # - Patient records
     # - Medical history
     # - Appointment data
     # - Inventory records
     # - User accounts and access control
-  evmr-uploads:
+  vetsphere-uploads:
     # Stores uploaded files:
     # - Lab results
     # - X-rays and imaging
     # - Documents
     # - Vaccination certificates
-  evmr-logs:
+  vetsphere-logs:
     # Stores application logs
-  evmr-admin-logs:
+  vetsphere-admin-logs:
     # Stores admin service logs
 
-# Custom network for EVMR services
+# Custom network for VetSphere services
 networks:
-  evmr-network:
+  vetsphere-network:
     driver: bridge
 
 # This docker-compose configuration:
-# 1. Sets up the EVMR application container with its environment variables
-# 2. Sets up the EVMR admin service for user approval management
+# 1. Sets up the VetSphere application container with its environment variables
+# 2. Sets up the VetSphere admin service for user approval management
 # 3. Configures the PostgreSQL database with persistent storage
 # 4. Creates a dedicated network for secure communication between services
 # 5. Establishes volumes for data persistence across container restarts

@@ -381,6 +381,15 @@ const AppLayout = ({ onLogout, user }) => {
           color: theme.palette.text.primary
         }}
       >
+        <Box 
+          component="img" 
+          src="/assets/images/logos/black_transparent.png" 
+          alt="VetSphere" 
+          sx={{ 
+            height: 60, 
+            mb: 2 
+          }} 
+        />
         <Avatar 
           sx={{ 
             width: 70, 
