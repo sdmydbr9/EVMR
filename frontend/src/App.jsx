@@ -3,17 +3,21 @@ import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-d
 import { Box, CssBaseline, ThemeProvider, createTheme, Typography, Container, Paper } from '@mui/material';
 import { authService } from './services/api';
 
+// Import LandingPage directly
+import LandingPage from './components/LandingPage';
 // Import components from new structure using index files
 import { ProtectedRoute, Login } from './components/common';
 import { AppLayout } from './components/layout';
 
 // Pet Parent components
 import { 
-  PetParentDashboard,
-  VaccinationForm, 
-  DewormingForm, 
-  GroomingForm 
-} from './components/petParent';
+  PetParentDashboard
+} from './components';
+
+// Import pet parent forms directly
+import VaccinationForm from './components/petParent/VaccinationForm';
+import DewormingForm from './components/petParent/DewormingForm';
+import GroomingForm from './components/petParent/GroomingForm';
 
 // Veterinarian components
 import { 
@@ -286,61 +290,58 @@ const theme = createTheme({
 });
 
 const App = () => {
-  // Authentication state
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
-  const [user, setUser] = useState(null);
+  const [authenticated, setAuthenticated] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [userType, setUserType] = useState('');
+  // Store user info for display in the layout
+  const [userInfo, setUserInfo] = useState(null);
 
-  // Check token validity on app start
+  // Check if the user is authenticated on component mount
   useEffect(() => {
-    const checkAuth = async () => {
+    checkAuth();
+  }, []);
+
+  const checkAuth = async () => {
+    try {
+      // Check if there's a token in localStorage
       const token = localStorage.getItem('token');
       if (!token) {
-        setIsLoading(false);
+        setLoading(false);
         return;
       }
 
-      try {
-        // Verify token with backend
-        const response = await authService.verifyToken();
+      // Verify token with the backend
+      const response = await authService.verifyToken();
+      
+      if (response && response.user) {
+        // Set user data and role
+        setUserInfo(response.user);
+        setAuthenticated(true);
+        setUserType(response.user.role);
 
-        if (response.success) {
-          // Check if user is system admin - they should use the admin portal
-          const userType = localStorage.getItem('userType');
-          if (response.user && response.user.role === 'admin' && userType !== 'organisation') {
-            // Redirect to system admin portal
-            window.location.href = `${process.env.REACT_APP_ADMIN_URL || 'http://localhost:3789'}/admin`;
-            return;
-          }
-
-          setUser(response.user);
-          setIsAuthenticated(true);
-
-          // Store user role in localStorage for protected routes
-          if (response.user && response.user.role) {
-            localStorage.setItem('userRole', response.user.role);
-          }
-        } else {
-          // If token is invalid, clear it
-          localStorage.removeItem('token');
-          localStorage.removeItem('userRole');
-        }
-      } catch (error) {
-        console.error('Authentication check failed', error);
+        // Store user role in localStorage for protected routes
+        localStorage.setItem('userRole', response.user.role);
+        localStorage.setItem('userType', response.user.type || '');
+      } else {
+        // Invalid token, clear it
         localStorage.removeItem('token');
         localStorage.removeItem('userRole');
-      } finally {
-        setIsLoading(false);
+        localStorage.removeItem('userType');
       }
-    };
-
-    checkAuth();
-  }, []);
+    } catch (error) {
+      console.error('Authentication error:', error);
+      localStorage.removeItem('token');
+      localStorage.removeItem('userRole');
+      localStorage.removeItem('userType');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   // Handle login
   const handleLogin = (token) => {
     localStorage.setItem('token', token);
-    setIsAuthenticated(true);
+    setAuthenticated(true);
   };
 
   // Handle logout
@@ -349,8 +350,8 @@ const App = () => {
     localStorage.removeItem('userEmail');
     localStorage.removeItem('userType');
     localStorage.removeItem('userRole');
-    setIsAuthenticated(false);
-    setUser(null);
+    setAuthenticated(false);
+    setUserInfo(null);
   };
 
   // Check if user is a pet parent
@@ -366,7 +367,7 @@ const App = () => {
   };
 
   // Show loading indicator while checking authentication
-  if (isLoading) {
+  if (loading) {
     return (
       <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh' }}>
         Loading...
@@ -378,116 +379,72 @@ const App = () => {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Router>
-        <Box sx={{ display: 'flex', minHeight: '100vh', bgcolor: 'background.default', width: '100%', maxWidth: '100%' }}>
-          <Routes>
-            {/* Public routes */}
-            <Route
-              path="/login"
-              element={
-                isAuthenticated ?
-                <Navigate to="/" replace /> :
-                <Login onLogin={handleLogin} />
-              }
-            />
+        <Routes>
+          {/* Add Landing Page as the root route */}
+          <Route path="/" element={<LandingPage />} />
+          <Route path="/login" element={<Login onLogin={handleLogin} />} />
 
-            {/* Protected routes */}
-            <Route
-              path="/"
-              element={
-                isAuthenticated ?
-                <AppLayout onLogout={handleLogout} user={user} /> :
-                <Navigate to="/login" replace />
-              }
-            >
-              {/* Root route - redirects based on user type */}
-              <Route index element={
-                isPetParent() ?
-                <PetParentDashboard /> :
-                isOrganisation() ?
-                <Navigate to="/organisation/dashboard" replace /> :
-                <Navigate to="/patients" replace />
-              } />
+          {/* Protected routes within AppLayout */}
+          <Route
+            path="/app/*"
+            element={
+              <ProtectedRoute authenticated={authenticated} loading={loading}>
+                <AppLayout userType={userType} userInfo={userInfo} onLogout={handleLogout}>
+                  <Routes>
+                    {/* Pet Parent Routes */}
+                    {isPetParent() && (
+                      <>
+                        <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
+                        <Route path="/dashboard" element={<PetParentDashboard />} />
+                        <Route path="/vaccinations" element={<VaccinationForm />} />
+                        <Route path="/deworming" element={<DewormingForm />} />
+                        <Route path="/grooming" element={<GroomingForm />} />
+                      </>
+                    )}
 
-              {/* Veterinarian Routes */}
-              <Route path="patients" element={<PatientDashboard />} />
-              <Route path="appointments" element={<AppointmentDashboard />} />
-              <Route path="emr" element={<MedicalRecordsDashboard />} />
-              
-              {/* Organisation Routes */}
-              <Route path="inventory" element={<InventoryDashboard />} />
-              <Route path="doctors" element={<DoctorsDashboard />} />
-              <Route path="schedules" element={<ScheduleDashboard />} />
-              <Route path="reports" element={<ReportDashboard />} />
+                    {/* Veterinarian Routes */}
+                    {userType === 'veterinarian' && (
+                      <>
+                        <Route path="/" element={<Navigate to="/app/patients" replace />} />
+                        <Route path="/patients" element={<PatientDashboard />} />
+                        <Route path="/appointments" element={<AppointmentDashboard />} />
+                        <Route path="/medical-records" element={<MedicalRecordsDashboard />} />
+                      </>
+                    )}
 
-              {/* Organisation Dashboard Routes */}
-              <Route
-                path="organisation/dashboard"
-                element={
-                  <ProtectedRoute allowedRoles={['organisation']}>
-                    <OrganisationDashboard />
-                  </ProtectedRoute>
-                }
-              />
-              <Route path="services" element={
-                <ProtectedRoute allowedRoles={['organisation']}>
-                  <ServiceManagement />
-                </ProtectedRoute>
-              } />
-              <Route path="appointment-requests" element={
-                <ProtectedRoute allowedRoles={['organisation']}>
-                  <AppointmentManagement />
-                </ProtectedRoute>
-              } />
-              <Route path="doctor-workload" element={
-                <ProtectedRoute allowedRoles={['organisation']}>
-                  <DoctorWorkload />
-                </ProtectedRoute>
-              } />
-              <Route path="inventory-usage" element={
-                <ProtectedRoute allowedRoles={['organisation']}>
-                  <InventoryUsage />
-                </ProtectedRoute>
-              } />
-              <Route path="patient-visits" element={
-                <ProtectedRoute allowedRoles={['organisation']}>
-                  <PatientVisits />
-                </ProtectedRoute>
-              } />
-              <Route path="patient-records" element={
-                <ProtectedRoute allowedRoles={['organisation']}>
-                  <PlaceholderComponent title="Patient Records" />
-                </ProtectedRoute>
-              } />
-              <Route path="medical-reports" element={
-                <ProtectedRoute allowedRoles={['organisation']}>
-                  <PlaceholderComponent title="Medical Reports" />
-                </ProtectedRoute>
-              } />
-              <Route path="users" element={
-                <ProtectedRoute allowedRoles={['organisation']}>
-                  <PlaceholderComponent title="Staff Management" />
-                </ProtectedRoute>
-              } />
-              <Route path="settings" element={
-                <ProtectedRoute allowedRoles={['organisation']}>
-                  <PlaceholderComponent title="System Settings" />
-                </ProtectedRoute>
-              } />
+                    {/* Organisation Routes */}
+                    {isOrganisation() && (
+                      <>
+                        <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
+                        <Route path="/dashboard" element={<OrganisationDashboard />} />
+                        <Route path="/doctors" element={<DoctorsDashboard />} />
+                        <Route path="/schedule" element={<ScheduleDashboard />} />
+                        <Route path="/inventory" element={<InventoryDashboard />} />
+                        <Route path="/reports" element={<ReportDashboard />} />
+                        <Route path="/services" element={<ServiceManagement />} />
+                        <Route path="/appointments-management" element={<AppointmentManagement />} />
+                        <Route path="/workload" element={<DoctorWorkload />} />
+                        <Route path="/inventory-usage" element={<InventoryUsage />} />
+                        <Route path="/visits" element={<PatientVisits />} />
+                      </>
+                    )}
 
-              {/* Pet Parent Routes */}
-              <Route path="pets" element={<PetParentDashboard />} />
-              <Route path="vaccinations" element={<PetParentDashboard />} />
-              <Route path="medications" element={<PetParentDashboard />} />
-              <Route path="health" element={<PetParentDashboard />} />
-              <Route path="documents" element={<PetParentDashboard />} />
-              <Route path="pets/:petId/vaccination/add" element={<VaccinationForm />} />
-              <Route path="pets/:petId/deworming/add" element={<DewormingForm />} />
-              <Route path="pets/:petId/grooming/add" element={<GroomingForm />} />
+                    {/* Admin Routes */}
+                    {userType === 'admin' && (
+                      <>
+                        <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
+                        {/* Add admin specific routes here */}
+                      </>
+                    )}
 
-              <Route path="*" element={<Navigate to="/" replace />} />
-            </Route>
-          </Routes>
-        </Box>
+                    {/* Fallback route */}
+                    <Route path="*" element={<PlaceholderComponent title="Page Not Found" />} />
+                  </Routes>
+                </AppLayout>
+              </ProtectedRoute>
+            }
+          />
+        </Routes>
       </Router>
     </ThemeProvider>
   );
