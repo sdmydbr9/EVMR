@@ -43,7 +43,7 @@ const getLogoAttachment = (theme = 'dark') => {
   }
   
   return {
-    filename: 'vetsphere-logo.png',
+    filename: 'petsphere-logo.png',
     path: logoPath,
     cid: 'logo' // Same cid value as in the IMG src in the templates
   };
@@ -63,7 +63,7 @@ const sendEmail = async (options) => {
   const { theme, ...emailOptions } = options;
   
   const emailDefaults = {
-    from: process.env.EMAIL_FROM || 'VetSphere <notifications@vetsphere.com>',
+    from: process.env.EMAIL_FROM || 'PetSphere <notifications@petsphere.com>',
     attachments: [
       getLogoAttachment(theme)
     ]
@@ -97,7 +97,7 @@ const sendEmail = async (options) => {
  */
 const sendSignupVerificationEmail = async (user) => {
   const { text, html } = signupVerificationTemplate(user);
-  const subject = 'Your VetSphere Application is Being Processed';
+  const subject = 'Your PetSphere Application is Being Processed';
 
   return sendEmail({
     to: user.email,
@@ -121,7 +121,7 @@ const sendAdminNotificationEmail = async (user) => {
   }
 
   const { text, html } = adminNotificationTemplate(user);
-  const subject = 'New VetSphere Application Received';
+  const subject = 'New PetSphere Application Received';
 
   return sendEmail({
     to: adminEmail,
@@ -138,7 +138,7 @@ const sendAdminNotificationEmail = async (user) => {
  */
 const sendAccountApprovedEmail = async (user) => {
   const { text, html } = accountApprovedTemplate(user);
-  const subject = 'Your VetSphere Account has been Approved';
+  const subject = 'Your PetSphere Account has been Approved';
 
   return sendEmail({
     to: user.email,
@@ -172,7 +172,7 @@ const sendAppointmentReminder = async (appointmentData) => {
  */
 const sendPasswordResetEmail = async (data) => {
   const { text, html } = passwordResetTemplate(data);
-  const subject = 'Reset Your VetSphere Password';
+  const subject = 'Reset Your PetSphere Password';
 
   return sendEmail({
     to: data.email,

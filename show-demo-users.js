@@ -40,7 +40,7 @@ async function getDemoUsers() {
       const result = await client.query(`
         SELECT id, name, email, role, details 
         FROM users 
-        WHERE email LIKE '%demo@evmr.com'
+        WHERE email LIKE '%demo@petsphere.com'
         ORDER BY role, email
       `);
       
@@ -50,7 +50,7 @@ async function getDemoUsers() {
         return;
       }
       
-      console.log('\n=== EVMR Demo User Credentials ===\n');
+      console.log('\n=== PetSphere Demo User Credentials ===\n');
       
       for (const user of result.rows) {
         console.log(`${user.name} (${user.role})`);

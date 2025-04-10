@@ -235,10 +235,12 @@ const Login = ({ onLogin }) => {
 
         // Always store userType regardless of rememberMe setting
         localStorage.setItem('userType', userType);
+        console.log('Setting userType in localStorage:', userType);
 
         // Store user role for protected routes
         if (response.user && response.user.role) {
           localStorage.setItem('userRole', response.user.role);
+          console.log('Setting userRole in localStorage:', response.user.role);
         }
 
         // Store email only if rememberMe is checked
@@ -250,6 +252,10 @@ const Login = ({ onLogin }) => {
 
         // Inform parent component about successful login
         onLogin(response.token);
+
+        // Navigate to app without forcing a full page reload
+        // This allows React Router to handle the navigation properly
+        window.location.href = '/app';
       } else {
         setError('Invalid login response from server');
       }

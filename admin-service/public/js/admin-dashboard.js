@@ -897,7 +897,7 @@ function showToast(message, type = 'info') {
     toast.innerHTML = `
         <div class="toast-header">
             ${icon}
-            <strong class="me-auto ms-2">EVMR Admin</strong>
+            <strong class="me-auto ms-2">PetSphere Admin</strong>
             <small>Just now</small>
             <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
         </div>

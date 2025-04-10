@@ -38,7 +38,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/health', (req, res) => {
   res.status(200).json({ 
     status: 'UP', 
-    service: 'EVMR Admin Service',
+    service: 'PetSphere Admin Service',
     timestamp: new Date().toISOString() 
   });
 });
@@ -114,7 +114,7 @@ app.use('/api/admin/approvals', approvalRoutes);
 // Welcome message (API)
 app.get('/api', (req, res) => {
   res.status(200).json({
-    service: 'EVMR Admin Service',
+    service: 'PetSphere Admin Service',
     message: 'Admin service for managing user registrations',
     status: 'Running',
     version: '1.0.0'
@@ -143,7 +143,7 @@ app.use((err, req, res, next) => {
     
     // Start the server
     app.listen(PORT, '0.0.0.0', () => {
-      console.log(`EVMR Admin Service running on port ${PORT} in ${NODE_ENV} mode`);
+      console.log(`PetSphere Admin Service running on port ${PORT} in ${NODE_ENV} mode`);
     });
   } catch (err) {
     console.error('Failed to initialize database:', err);

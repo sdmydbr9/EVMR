@@ -10,27 +10,26 @@ import { ProtectedRoute, Login } from './components/common';
 import { AppLayout } from './components/layout';
 
 // Pet Parent components
-import { 
-  PetParentDashboard
-} from './components';
-
-// Import pet parent forms directly
-import VaccinationForm from './components/petParent/VaccinationForm';
-import DewormingForm from './components/petParent/DewormingForm';
-import GroomingForm from './components/petParent/GroomingForm';
+import {
+  PetParentDashboard,
+  VaccinationForm,
+  DewormingForm,
+  GroomingForm,
+  HealthRecords
+} from './components/petParent';
 
 // Veterinarian components
-import { 
-  PatientDashboard, 
-  AppointmentDashboard, 
-  MedicalRecordsDashboard 
+import {
+  PatientDashboard,
+  AppointmentDashboard,
+  MedicalRecordsDashboard
 } from './components/veterinarian';
 
 // Organisation components
-import { 
-  InventoryDashboard, 
-  DoctorsDashboard, 
-  ScheduleDashboard, 
+import {
+  InventoryDashboard,
+  DoctorsDashboard,
+  ScheduleDashboard,
   ReportDashboard,
   // Organisation Dashboard components
   OrganisationDashboard,
@@ -302,28 +301,35 @@ const App = () => {
   }, []);
 
   const checkAuth = async () => {
+    console.log('Running checkAuth...');
     try {
       // Check if there's a token in localStorage
       const token = localStorage.getItem('token');
+      console.log('Token found:', !!token);
       if (!token) {
         setLoading(false);
         return;
       }
 
       // Verify token with the backend
+      console.log('Verifying token with backend...');
       const response = await authService.verifyToken();
-      
+      console.log('Token verification response:', response);
+
       if (response && response.user) {
         // Set user data and role
+        console.log('User authenticated:', response.user);
         setUserInfo(response.user);
         setAuthenticated(true);
         setUserType(response.user.role);
 
         // Store user role in localStorage for protected routes
         localStorage.setItem('userRole', response.user.role);
-        localStorage.setItem('userType', response.user.type || '');
+        localStorage.setItem('userType', response.user.type || localStorage.getItem('userType') || '');
+        console.log('Updated localStorage - userRole:', response.user.role, 'userType:', localStorage.getItem('userType'));
       } else {
         // Invalid token, clear it
+        console.log('Invalid token response, clearing auth data');
         localStorage.removeItem('token');
         localStorage.removeItem('userRole');
         localStorage.removeItem('userType');
@@ -335,6 +341,7 @@ const App = () => {
       localStorage.removeItem('userType');
     } finally {
       setLoading(false);
+      console.log('checkAuth completed, loading set to false');
     }
   };
 
@@ -342,6 +349,10 @@ const App = () => {
   const handleLogin = (token) => {
     localStorage.setItem('token', token);
     setAuthenticated(true);
+
+    // After storing the token, trigger a checkAuth
+    // to get user info and facilitate proper routing
+    checkAuth();
   };
 
   // Handle logout
@@ -356,14 +367,23 @@ const App = () => {
 
   // Check if user is a pet parent
   const isPetParent = () => {
-    const userType = localStorage.getItem('userType');
-    return userType === 'pet_parent';
+    const isPP = userType === 'pet_parent' || localStorage.getItem('userType') === 'pet_parent' || localStorage.getItem('userRole') === 'client';
+    console.log('isPetParent check:', isPP, 'userType:', userType, 'localStorage userType:', localStorage.getItem('userType'), 'localStorage userRole:', localStorage.getItem('userRole'));
+    return isPP;
+  };
+
+  // Check if user is a veterinarian
+  const isVeterinarian = () => {
+    const isVet = userType === 'veterinarian' || localStorage.getItem('userType') === 'veterinarian' || localStorage.getItem('userRole') === 'veterinarian' || localStorage.getItem('userRole') === 'vet';
+    console.log('isVeterinarian check:', isVet, 'userType:', userType, 'localStorage userType:', localStorage.getItem('userType'), 'localStorage userRole:', localStorage.getItem('userRole'));
+    return isVet;
   };
 
   // Check if user is an organisation
   const isOrganisation = () => {
-    const userRole = localStorage.getItem('userRole');
-    return userRole === 'organisation';
+    const isOrg = userType === 'organisation' || localStorage.getItem('userType') === 'organisation' || localStorage.getItem('userRole') === 'organisation' || localStorage.getItem('userRole') === 'admin';
+    console.log('isOrganisation check:', isOrg, 'userType:', userType, 'localStorage userType:', localStorage.getItem('userType'), 'localStorage userRole:', localStorage.getItem('userRole'));
+    return isOrg;
   };
 
   // Show loading indicator while checking authentication
@@ -389,61 +409,45 @@ const App = () => {
             path="/app/*"
             element={
               <ProtectedRoute authenticated={authenticated} loading={loading}>
-                <AppLayout userType={userType} userInfo={userInfo} onLogout={handleLogout}>
-                  <Routes>
-                    {/* Pet Parent Routes */}
-                    {isPetParent() && (
-                      <>
-                        <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
-                        <Route path="/dashboard" element={<PetParentDashboard />} />
-                        <Route path="/vaccinations" element={<VaccinationForm />} />
-                        <Route path="/deworming" element={<DewormingForm />} />
-                        <Route path="/grooming" element={<GroomingForm />} />
-                      </>
-                    )}
-
-                    {/* Veterinarian Routes */}
-                    {userType === 'veterinarian' && (
-                      <>
-                        <Route path="/" element={<Navigate to="/app/patients" replace />} />
-                        <Route path="/patients" element={<PatientDashboard />} />
-                        <Route path="/appointments" element={<AppointmentDashboard />} />
-                        <Route path="/medical-records" element={<MedicalRecordsDashboard />} />
-                      </>
-                    )}
-
-                    {/* Organisation Routes */}
-                    {isOrganisation() && (
-                      <>
-                        <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
-                        <Route path="/dashboard" element={<OrganisationDashboard />} />
-                        <Route path="/doctors" element={<DoctorsDashboard />} />
-                        <Route path="/schedule" element={<ScheduleDashboard />} />
-                        <Route path="/inventory" element={<InventoryDashboard />} />
-                        <Route path="/reports" element={<ReportDashboard />} />
-                        <Route path="/services" element={<ServiceManagement />} />
-                        <Route path="/appointments-management" element={<AppointmentManagement />} />
-                        <Route path="/workload" element={<DoctorWorkload />} />
-                        <Route path="/inventory-usage" element={<InventoryUsage />} />
-                        <Route path="/visits" element={<PatientVisits />} />
-                      </>
-                    )}
-
-                    {/* Admin Routes */}
-                    {userType === 'admin' && (
-                      <>
-                        <Route path="/" element={<Navigate to="/app/dashboard" replace />} />
-                        {/* Add admin specific routes here */}
-                      </>
-                    )}
-
-                    {/* Fallback route */}
-                    <Route path="*" element={<PlaceholderComponent title="Page Not Found" />} />
-                  </Routes>
-                </AppLayout>
+                <AppLayout userType={userType} userInfo={userInfo} onLogout={handleLogout} />
               </ProtectedRoute>
             }
-          />
+          >
+            {/* Default index route */}
+            <Route index element={<Navigate to={isPetParent() ? "/app/dashboard" : isVeterinarian() ? "/app/patients" : "/app/dashboard"} replace />} />
+
+            {/* Dashboard Routes - Different for each user type */}
+            <Route path="dashboard" element={
+              isPetParent() ? <PetParentDashboard /> :
+              isOrganisation() ? <OrganisationDashboard /> :
+              isVeterinarian() ? <PatientDashboard /> :
+              <PlaceholderComponent title="Dashboard" />
+            } />
+            <Route path="vaccinations" element={isPetParent() ? <VaccinationForm /> : <PlaceholderComponent title="Vaccination Records" />} />
+            <Route path="deworming" element={isPetParent() ? <DewormingForm /> : <PlaceholderComponent title="Deworming Records" />} />
+            <Route path="grooming" element={isPetParent() ? <GroomingForm /> : <PlaceholderComponent title="Grooming Records" />} />
+            <Route path="health" element={isPetParent() ? <HealthRecords /> : <PlaceholderComponent title="Health Records" />} />
+            <Route path="pets" element={isPetParent() ? <PetParentDashboard /> : <PlaceholderComponent title="My Pets" />} />
+
+            {/* Veterinarian Routes */}
+            <Route path="patients" element={isVeterinarian() ? <PatientDashboard /> : <PlaceholderComponent title="Patient Dashboard" />} />
+            <Route path="appointments" element={isVeterinarian() ? <AppointmentDashboard /> : <PlaceholderComponent title="Appointment Dashboard" />} />
+            <Route path="medical-records" element={isVeterinarian() ? <MedicalRecordsDashboard /> : <PlaceholderComponent title="Medical Records Dashboard" />} />
+
+            {/* Organisation Routes */}
+            <Route path="doctors" element={isOrganisation() ? <DoctorsDashboard /> : <PlaceholderComponent title="Doctors Dashboard" />} />
+            <Route path="schedule" element={isOrganisation() ? <ScheduleDashboard /> : <PlaceholderComponent title="Schedule Dashboard" />} />
+            <Route path="inventory" element={isOrganisation() ? <InventoryDashboard /> : <PlaceholderComponent title="Inventory Dashboard" />} />
+            <Route path="reports" element={isOrganisation() ? <ReportDashboard /> : <PlaceholderComponent title="Reports Dashboard" />} />
+            <Route path="services" element={isOrganisation() ? <ServiceManagement /> : <PlaceholderComponent title="Service Management" />} />
+            <Route path="appointments-management" element={isOrganisation() ? <AppointmentManagement /> : <PlaceholderComponent title="Appointment Management" />} />
+            <Route path="workload" element={isOrganisation() ? <DoctorWorkload /> : <PlaceholderComponent title="Doctor Workload" />} />
+            <Route path="inventory-usage" element={isOrganisation() ? <InventoryUsage /> : <PlaceholderComponent title="Inventory Usage" />} />
+            <Route path="visits" element={isOrganisation() ? <PatientVisits /> : <PlaceholderComponent title="Patient Visits" />} />
+
+            {/* Fallback route for any unmatched paths */}
+            <Route path="*" element={<PlaceholderComponent title="Page Not Found" />} />
+          </Route>
         </Routes>
       </Router>
     </ThemeProvider>

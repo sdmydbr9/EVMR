@@ -128,7 +128,7 @@ const LandingPage = () => {
       name: "Dr. Sarah Johnson",
       role: "Veterinarian, Happy Paws Clinic",
       avatar: "https://randomuser.me/api/portraits/women/44.jpg",
-      quote: "VetSphere has transformed how we manage our practice. The time we save on paperwork means more time with our animal patients."
+      quote: "PetSphere has transformed how we manage our practice. The time we save on paperwork means more time with our animal patients."
     },
     {
       name: "Mark Peterson",
@@ -224,14 +224,14 @@ const LandingPage = () => {
               <Box 
                 component="img" 
                 src="/assets/images/logos/black_transparent.png" 
-                alt="VetSphere logo" 
+                alt="PetSphere logo" 
                 sx={{ 
                   height: 40, 
                   width: 'auto', 
                   mr: 1 
                 }} 
               />
-              VetSphere
+              PetSphere
             </Typography>
             
             {isMobile ? (
@@ -973,7 +973,7 @@ const LandingPage = () => {
                 variant="body2"
                 color="textSecondary"
               >
-                © {new Date().getFullYear()} EVMR. All rights reserved.
+                © {new Date().getFullYear()} PetSphere. All rights reserved.
               </Typography>
             </Grid>
             <Grid item xs={6} sm={3} md={2}>

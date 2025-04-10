@@ -22,7 +22,7 @@ const transporter = nodemailer.createTransport({
  */
 const sendEmail = async (options) => {
   const emailDefaults = {
-    from: process.env.EMAIL_FROM || 'EVMR Admin System <noreply@example.com>',
+    from: process.env.EMAIL_FROM || 'PetSphere Admin System <noreply@example.com>',
   };
 
   try {
@@ -49,7 +49,7 @@ const sendEmail = async (options) => {
  * @returns {Promise} - Promise that resolves with the email sending result
  */
 const sendApprovalEmail = async (user) => {
-  const subject = 'Your EVMR Account Has Been Approved';
+  const subject = 'Your PetSphere Account Has Been Approved';
 
   // Prepare ID information based on user role
   let idInfo = '';
@@ -71,7 +71,7 @@ const sendApprovalEmail = async (user) => {
   const text = `
     Dear ${user.name},
 
-    Great news! Your EVMR System account${user.clinicName ? ` for ${user.clinicName}` : ''} has been approved.
+    Great news! Your PetSphere System account${user.clinicName ? ` for ${user.clinicName}` : ''} has been approved.
 
     ${user.role === 'veterinarian' && user.uniqueId ?
       `Your unique Veterinarian ID is: ${user.uniqueId}
@@ -89,18 +89,18 @@ const sendApprovalEmail = async (user) => {
     If you have any questions, please don't hesitate to contact our support team.
 
     Best regards,
-    The EVMR Team
+    The PetSphere Team
   `;
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="background-color: #007AFF; padding: 20px; text-align: center; color: white;">
-        <h1 style="margin: 0;">EVMR System</h1>
+        <h1 style="margin: 0;">PetSphere System</h1>
       </div>
       <div style="padding: 20px; border: 1px solid #e0e0e0; border-top: none;">
         <p>Dear <strong>${user.name}</strong>,</p>
 
-        <p><strong>Great news!</strong> Your EVMR System account${user.clinicName ? ` for <strong>${user.clinicName}</strong>` : ''} has been approved.</p>
+        <p><strong>Great news!</strong> Your PetSphere System account${user.clinicName ? ` for <strong>${user.clinicName}</strong>` : ''} has been approved.</p>
 
         ${idInfo ? `
         <div style="background-color: #f8f9fa; border-left: 4px solid #007AFF; padding: 15px; margin: 20px 0;">
@@ -114,7 +114,7 @@ const sendApprovalEmail = async (user) => {
 
         <p>If you have any questions, please don't hesitate to contact our support team.</p>
 
-        <p>Best regards,<br>The EVMR Team</p>
+        <p>Best regards,<br>The PetSphere Team</p>
       </div>
       <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #666;">
         <p>This is an automated message, please do not reply to this email.</p>
@@ -137,12 +137,12 @@ const sendApprovalEmail = async (user) => {
  * @returns {Promise} - Promise that resolves with the email sending result
  */
 const sendRejectionEmail = async (user, reason) => {
-  const subject = 'Update on Your EVMR Application';
+  const subject = 'Update on Your PetSphere Application';
 
   const text = `
     Dear ${user.name},
 
-    Thank you for your interest in the EVMR System.
+    Thank you for your interest in the PetSphere System.
 
     After reviewing your application, we regret to inform you that we are unable to approve your account at this time for the following reason:
 
@@ -151,18 +151,18 @@ const sendRejectionEmail = async (user, reason) => {
     If you believe this decision was made in error or if you would like to provide additional information, please reply to this email.
 
     Best regards,
-    The EVMR Team
+    The PetSphere Team
   `;
 
   const html = `
     <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
       <div style="background-color: #007AFF; padding: 20px; text-align: center; color: white;">
-        <h1 style="margin: 0;">EVMR System</h1>
+        <h1 style="margin: 0;">PetSphere System</h1>
       </div>
       <div style="padding: 20px; border: 1px solid #e0e0e0; border-top: none;">
         <p>Dear <strong>${user.name}</strong>,</p>
 
-        <p>Thank you for your interest in the EVMR System.</p>
+        <p>Thank you for your interest in the PetSphere System.</p>
 
         <p>After reviewing your application, we regret to inform you that we are unable to approve your account at this time for the following reason:</p>
 
@@ -172,7 +172,7 @@ const sendRejectionEmail = async (user, reason) => {
 
         <p>If you believe this decision was made in error or if you would like to provide additional information, please reply to this email.</p>
 
-        <p>Best regards,<br>The EVMR Team</p>
+        <p>Best regards,<br>The PetSphere Team</p>
       </div>
       <div style="background-color: #f5f5f5; padding: 15px; text-align: center; font-size: 12px; color: #666;">
         <p>This is an automated message. For inquiries, please contact our support team.</p>

@@ -1,7 +1,7 @@
 {
-  "name": "vetsphere",
+  "name": "petsphere",
   "version": "1.0.0",
-  "description": "VetSphere - Beyond Records, Beyond Care",
+  "description": "PetSphere - Beyond Records, Beyond Care",
   "scripts": {
     "start": "concurrently \"npm run start:backend\" \"npm run start:frontend\"",
     "start:backend": "cd backend && npm run dev",

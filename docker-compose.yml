@@ -1,17 +1,17 @@
-# VetSphere System Docker Compose Configuration
+# PetSphere System Docker Compose Configuration
 
 services:
-  # VetSphere application service
-  vetsphere-app:
+  # PetSphere application service
+  petsphere-app:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: vetsphere-application
+    container_name: petsphere-application
     restart: unless-stopped
     ports:
       - "3786:3786" # Map container port to host port
     depends_on:
-      vetsphere-db: # Ensure database is started before the application
+      petsphere-db: # Ensure database is started before the application
         condition: service_healthy
     environment:
       # Application configuration
@@ -53,11 +53,11 @@ services:
       - .env # Load additional environment variables from .env file
     volumes:
       # Mount for persistent storage of uploaded files (lab results, x-rays, etc.)
-      - vetsphere-uploads:/app/backend/uploads
+      - petsphere-uploads:/app/backend/uploads
       # Mount for logs
-      - vetsphere-logs:/app/backend/logs
+      - petsphere-logs:/app/backend/logs
     networks:
-      - vetsphere-network
+      - petsphere-network
     # Healthcheck for application
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3786/health"]
@@ -67,16 +67,16 @@ services:
       start_period: 30s
 
   # Admin service for user registration approvals
-  vetsphere-admin:
+  petsphere-admin:
     build:
       context: ./admin-service
       dockerfile: Dockerfile
-    container_name: vetsphere-admin-service
+    container_name: petsphere-admin-service
     restart: unless-stopped
     ports:
       - "3789:3789" # Map container port to host port
     depends_on:
-      vetsphere-db: # Ensure database is started before the admin service
+      petsphere-db: # Ensure database is started before the admin service
         condition: service_healthy
     environment:
       # Application configuration
@@ -109,9 +109,9 @@ services:
       - .env # Load additional environment variables from .env file
     volumes:
       # Mount for logs
-      - vetsphere-admin-logs:/app/admin-service/logs
+      - petsphere-admin-logs:/app/admin-service/logs
     networks:
-      - vetsphere-network
+      - petsphere-network
     # Healthcheck for admin service
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3789/health"]
@@ -121,9 +121,9 @@ services:
       start_period: 30s
 
   # PostgreSQL database service
-  vetsphere-db:
+  petsphere-db:
     image: postgres:14-alpine
-    container_name: vetsphere-database
+    container_name: petsphere-database
     restart: unless-stopped
     environment:
       - POSTGRES_USER=${POSTGRES_USER}
@@ -133,13 +133,13 @@ services:
       - TZ=Asia/Kolkata
     volumes:
       # Persistent volume for database data
-      - vetsphere-db-data:/var/lib/postgresql/data
+      - petsphere-db-data:/var/lib/postgresql/data
       # Mount init scripts for database setup and demo data
       - ./backend/config/database/init:/docker-entrypoint-initdb.d
     ports:
       - "5431:5432" # Expose PostgreSQL port (can be removed for production)
     networks:
-      - vetsphere-network
+      - petsphere-network
     # Healthcheck for database
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER} -d ${POSTGRES_DB}"]
@@ -150,32 +150,32 @@ services:
 
 # Named volumes for persistent data
 volumes:
-  vetsphere-db-data:
+  petsphere-db-data:
     # Stores all PostgreSQL data for:
     # - Patient records
     # - Medical history
     # - Appointment data
     # - Inventory records
     # - User accounts and access control
-  vetsphere-uploads:
+  petsphere-uploads:
     # Stores uploaded files:
     # - Lab results
     # - X-rays and imaging
     # - Documents
     # - Vaccination certificates
-  vetsphere-logs:
+  petsphere-logs:
     # Stores application logs
-  vetsphere-admin-logs:
+  petsphere-admin-logs:
     # Stores admin service logs
 
-# Custom network for VetSphere services
+# Custom network for PetSphere services
 networks:
-  vetsphere-network:
+  petsphere-network:
     driver: bridge
 
 # This docker-compose configuration:
-# 1. Sets up the VetSphere application container with its environment variables
-# 2. Sets up the VetSphere admin service for user approval management
+# 1. Sets up the PetSphere application container with its environment variables
+# 2. Sets up the PetSphere admin service for user approval management
 # 3. Configures the PostgreSQL database with persistent storage
 # 4. Creates a dedicated network for secure communication between services
 # 5. Establishes volumes for data persistence across container restarts

@@ -69,9 +69,9 @@ const menuCategories = {
 // iCloud-inspired app menu items for staff
 const staffAppItems = [
   // Dashboard category
-  { 
-    name: 'Dashboard', 
-    icon: <DashboardIcon />, 
+  {
+    name: 'Dashboard',
+    icon: <DashboardIcon />,
     path: '/',
     description: 'Main dashboard',
     category: menuCategories.DASHBOARD
@@ -84,11 +84,11 @@ const staffAppItems = [
     roles: ['organisation'],
     category: menuCategories.DASHBOARD
   },
-  
+
   // Patients & Records category
-  { 
-    name: 'Patients', 
-    icon: <PetsIcon />, 
+  {
+    name: 'Patients',
+    icon: <PetsIcon />,
     path: '/patients',
     description: 'Manage patient records',
     category: menuCategories.PATIENTS
@@ -100,108 +100,108 @@ const staffAppItems = [
     description: 'View detailed patient records',
     category: menuCategories.PATIENTS
   },
-  { 
-    name: 'Medical Records', 
-    icon: <HealingIcon />, 
+  {
+    name: 'Medical Records',
+    icon: <HealingIcon />,
     path: '/emr',
     description: 'View and update medical records',
     category: menuCategories.PATIENTS
   },
-  
+
   // Appointments & Scheduling category
-  { 
-    name: 'Appointments', 
-    icon: <EventIcon />, 
+  {
+    name: 'Appointments',
+    icon: <EventIcon />,
     path: '/appointments',
     description: 'Schedule and track appointments',
     category: menuCategories.APPOINTMENTS
   },
-  { 
-    name: 'Appointment Requests', 
-    icon: <AppointmentRequestsIcon />, 
+  {
+    name: 'Appointment Requests',
+    icon: <AppointmentRequestsIcon />,
     path: '/appointment-requests',
     description: 'Manage appointment requests',
     category: menuCategories.APPOINTMENTS
   },
-  { 
-    name: 'Schedules', 
-    icon: <ScheduleIcon />, 
+  {
+    name: 'Schedules',
+    icon: <ScheduleIcon />,
     path: '/schedules',
     description: 'Manage doctor schedules',
     category: menuCategories.APPOINTMENTS
   },
-  
+
   // Services & Inventory category
-  { 
-    name: 'Services', 
-    icon: <ServicesIcon />, 
+  {
+    name: 'Services',
+    icon: <ServicesIcon />,
     path: '/services',
     description: 'Manage service offerings',
     category: menuCategories.SERVICES
   },
-  { 
-    name: 'Inventory', 
-    icon: <InventoryIcon />, 
+  {
+    name: 'Inventory',
+    icon: <InventoryIcon />,
     path: '/inventory',
     description: 'Manage clinic inventory',
     category: menuCategories.SERVICES
   },
-  { 
-    name: 'Inventory Usage', 
-    icon: <InventoryIcon />, 
+  {
+    name: 'Inventory Usage',
+    icon: <InventoryIcon />,
     path: '/inventory-usage',
     description: 'Track inventory usage',
     category: menuCategories.SERVICES
   },
-  
+
   // Staff & Doctors category
-  { 
-    name: 'Doctors', 
-    icon: <DoctorIcon />, 
+  {
+    name: 'Doctors',
+    icon: <DoctorIcon />,
     path: '/doctors',
     description: 'Manage doctor profiles',
     category: menuCategories.STAFF
   },
-  { 
-    name: 'Doctor Workload', 
-    icon: <DoctorIcon />, 
+  {
+    name: 'Doctor Workload',
+    icon: <DoctorIcon />,
     path: '/doctor-workload',
     description: 'View doctor workload',
     category: menuCategories.STAFF
   },
-  { 
-    name: 'Staff Management', 
-    icon: <PeopleIcon />, 
+  {
+    name: 'Staff Management',
+    icon: <PeopleIcon />,
     path: '/users',
     description: 'Manage staff accounts',
     category: menuCategories.STAFF
   },
-  
+
   // Analytics & Reports category
-  { 
-    name: 'Reports', 
-    icon: <AssessmentIcon />, 
+  {
+    name: 'Reports',
+    icon: <AssessmentIcon />,
     path: '/reports',
     description: 'Generate analytical reports',
     category: menuCategories.ANALYTICS
   },
-  { 
-    name: 'Medical Reports', 
-    icon: <MedicalReportsIcon />, 
+  {
+    name: 'Medical Reports',
+    icon: <MedicalReportsIcon />,
     path: '/medical-reports',
     description: 'View medical reports and analytics',
     category: menuCategories.ANALYTICS
   },
-  { 
-    name: 'Patient Visits', 
-    icon: <PetsIcon />, 
+  {
+    name: 'Patient Visits',
+    icon: <PetsIcon />,
     path: '/patient-visits',
     description: 'Track patient visits',
     category: menuCategories.ANALYTICS
   },
-  { 
-    name: 'Settings', 
-    icon: <SettingsIcon />, 
+  {
+    name: 'Settings',
+    icon: <SettingsIcon />,
     path: '/settings',
     description: 'System settings',
     category: menuCategories.DASHBOARD
@@ -210,39 +210,39 @@ const staffAppItems = [
 
 // Pet parent app menu items
 const petParentAppItems = [
-  { 
-    name: 'Dashboard', 
-    icon: <DashboardIcon />, 
+  {
+    name: 'Dashboard',
+    icon: <DashboardIcon />,
     path: '/',
     description: 'View your pet dashboard'
   },
-  { 
-    name: 'My Pets', 
-    icon: <PetsIcon />, 
+  {
+    name: 'My Pets',
+    icon: <PetsIcon />,
     path: '/pets',
     description: 'Manage your pets'
   },
-  { 
-    name: 'Vaccinations', 
-    icon: <VaccinesIcon />, 
+  {
+    name: 'Vaccinations',
+    icon: <VaccinesIcon />,
     path: '/vaccinations',
     description: 'View vaccination records'
   },
-  { 
-    name: 'Medications', 
-    icon: <MedicationIcon />, 
+  {
+    name: 'Medications',
+    icon: <MedicationIcon />,
     path: '/medications',
     description: 'Track medications'
   },
-  { 
-    name: 'Health Records', 
-    icon: <HealthIcon />, 
+  {
+    name: 'Health Records',
+    icon: <HealthIcon />,
     path: '/health',
     description: 'View health history'
   },
-  { 
-    name: 'Documents', 
-    icon: <DocumentsIcon />, 
+  {
+    name: 'Documents',
+    icon: <DocumentsIcon />,
     path: '/documents',
     description: 'Access pet documents'
   }
@@ -251,14 +251,17 @@ const petParentAppItems = [
 // Drawer width
 const drawerWidth = 240;
 
-const AppLayout = ({ onLogout, user }) => {
+const AppLayout = ({ onLogout, userInfo, userType }) => {
   const theme = useTheme();
   const navigate = useNavigate();
   const location = useLocation();
   const [anchorEl, setAnchorEl] = useState(null);
   const [mobileOpen, setMobileOpen] = useState(false);
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-  
+
+  // Use the passed userInfo and userType props for consistency
+  const user = userInfo;
+
   const handleMenu = (event) => {
     setAnchorEl(event.currentTarget);
   };
@@ -279,7 +282,15 @@ const AppLayout = ({ onLogout, user }) => {
   // Check if user is a pet parent
   const isPetParent = () => {
     const userType = localStorage.getItem('userType');
-    return userType === 'pet_parent';
+    const userRole = localStorage.getItem('userRole');
+    return userType === 'pet_parent' || userRole === 'client';
+  };
+
+  // Check if user is a veterinarian
+  const isVeterinarian = () => {
+    const userType = localStorage.getItem('userType');
+    const userRole = localStorage.getItem('userRole');
+    return userType === 'veterinarian' || userRole === 'veterinarian' || userRole === 'vet';
   };
 
   // Get user role from localStorage
@@ -290,17 +301,27 @@ const AppLayout = ({ onLogout, user }) => {
   // Check if user is an organisation
   const isOrganisation = () => {
     const userRole = getUserRole();
-    return userRole === 'organisation';
+    const userType = localStorage.getItem('userType');
+    return userRole === 'organisation' || userType === 'organisation' || userRole === 'admin';
   };
 
   // Filter app items based on user role
   const getFilteredAppItems = () => {
     const userRole = getUserRole();
-    
+
     if (isPetParent()) {
       return petParentAppItems;
     }
-    
+
+    // For veterinarians, filter out organization-specific items
+    if (isVeterinarian()) {
+      return staffAppItems.filter(item => {
+        // Exclude items that are specifically for organisation role
+        return !item.roles || !item.roles.includes('organisation');
+      });
+    }
+
+    // For organization users or other staff
     return staffAppItems.filter(item => {
       // Include the item if it has no roles requirement or if the user's role is in the allowed roles
       return !item.roles || item.roles.includes(userRole);
@@ -309,13 +330,13 @@ const AppLayout = ({ onLogout, user }) => {
 
   // Get the appropriate app items based on user type and role
   const appItems = getFilteredAppItems();
-  
+
   // Organize items by category
   const getItemsByCategory = () => {
     if (isPetParent()) {
       return { '': petParentAppItems }; // No categories for pet parents
     }
-    
+
     const categories = {};
     appItems.forEach(item => {
       const category = item.category || '';
@@ -324,46 +345,113 @@ const AppLayout = ({ onLogout, user }) => {
       }
       categories[category].push(item);
     });
-    
+
     return categories;
   };
-  
+
   const itemsByCategory = getItemsByCategory();
-  
+
   // Get the current app name for the app bar title
   const pathSegments = location.pathname.split('/').filter(Boolean);
-  const currentPath = '/' + (pathSegments.length > 0 ? pathSegments.join('/') : '');
+  console.log('Current path segments:', pathSegments);
+
+  // Remove 'app' from path segments if present
+  const relevantSegments = pathSegments.filter(segment => segment !== 'app');
+  const currentPath = '/' + (relevantSegments.length > 0 ? relevantSegments.join('/') : '');
+  console.log('Processed current path:', currentPath);
+
   const currentItem = appItems.find(item => item.path === currentPath) || {};
   const currentApp = currentItem.name || 'Dashboard';
+  console.log('Current app:', currentApp);
 
   // Handle navigation with optional tab parameter
   const handleNavigation = (item) => {
     if (isMobile) {
       setMobileOpen(false);
     }
-    
+
+    // Get the adapted path for the current user type
+    let targetPath = getAdaptedPath(item);
+
+    // Ensure all paths start with /app to respect the app's routing structure
+    if (!targetPath.startsWith('/app') && !targetPath.startsWith('/')) {
+      targetPath = `/app${targetPath.startsWith('/') ? '' : '/'}${targetPath}`;
+    } else if (targetPath === '/') {
+      targetPath = '/app';
+    }
+
+    console.log('Navigating to:', targetPath, 'from item:', item.name, 'user types:', {
+      isPetParent: isPetParent(),
+      isVeterinarian: isVeterinarian(),
+      isOrganisation: isOrganisation()
+    });
+
     if (item.pathParams && item.pathParams.tab !== undefined) {
-      navigate(`${item.path}?tab=${item.pathParams.tab}`);
+      navigate(`${targetPath}?tab=${item.pathParams.tab}`);
     } else {
-      navigate(item.path);
+      navigate(targetPath);
     }
   };
 
-  // Update routing for organization-specific views
+  // Update routing for all user types
   const getAdaptedPath = (item) => {
-    // For organization users, map certain paths to admin dashboard tabs
-    if (isOrganisation() && item.name === 'Services') {
-      return '/admin/dashboard?tab=1';
-    } else if (isOrganisation() && item.name === 'Appointment Requests') {
-      return '/admin/dashboard?tab=2';
-    } else if (isOrganisation() && item.name === 'Doctor Workload') {
-      return '/admin/dashboard?tab=3'; 
-    } else if (isOrganisation() && item.name === 'Inventory Usage') {
-      return '/admin/dashboard?tab=4';
-    } else if (isOrganisation() && item.name === 'Patient Visits') {
-      return '/admin/dashboard?tab=5';
+    // For organization users, map certain paths to dashboard tabs or dedicated organization routes
+    if (isOrganisation()) {
+      if (item.name === 'Dashboard') {
+        return '/app/dashboard';
+      } else if (item.name === 'Organisation Dashboard') {
+        return '/app/dashboard';
+      } else if (item.name === 'Services') {
+        return '/app/services';
+      } else if (item.name === 'Appointment Requests') {
+        return '/app/appointments-management';
+      } else if (item.name === 'Doctor Workload') {
+        return '/app/workload';
+      } else if (item.name === 'Inventory Usage') {
+        return '/app/inventory-usage';
+      } else if (item.name === 'Patient Visits') {
+        return '/app/visits';
+      } else if (item.name === 'Doctors') {
+        return '/app/doctors';
+      } else if (item.name === 'Schedules') {
+        return '/app/schedule';
+      } else if (item.name === 'Inventory') {
+        return '/app/inventory';
+      } else if (item.name === 'Reports') {
+        return '/app/reports';
+      }
     }
-    
+
+    // For veterinarian users
+    if (isVeterinarian()) {
+      if (item.name === 'Dashboard') {
+        return '/app/patients';
+      } else if (item.name === 'Patients') {
+        return '/app/patients';
+      } else if (item.name === 'Appointments') {
+        return '/app/appointments';
+      } else if (item.name === 'Medical Records') {
+        return '/app/medical-records';
+      }
+    }
+
+    // For pet parent users
+    if (isPetParent()) {
+      if (item.name === 'Dashboard') {
+        return '/app/dashboard';
+      } else if (item.name === 'My Pets') {
+        return '/app/pets';
+      } else if (item.name === 'Vaccinations') {
+        return '/app/vaccinations';
+      } else if (item.name === 'Medications') {
+        return '/app/medications';
+      } else if (item.name === 'Health Records') {
+        return '/app/health';
+      } else if (item.name === 'Documents') {
+        return '/app/documents';
+      }
+    }
+
     return item.path;
   };
 
@@ -381,19 +469,19 @@ const AppLayout = ({ onLogout, user }) => {
           color: theme.palette.text.primary
         }}
       >
-        <Box 
-          component="img" 
-          src="/assets/images/logos/black_transparent.png" 
-          alt="VetSphere" 
-          sx={{ 
-            height: 60, 
-            mb: 2 
-          }} 
+        <Box
+          component="img"
+          src="/assets/images/logos/black_transparent.png"
+          alt="VetSphere"
+          sx={{
+            height: 60,
+            mb: 2
+          }}
         />
-        <Avatar 
-          sx={{ 
-            width: 70, 
-            height: 70, 
+        <Avatar
+          sx={{
+            width: 70,
+            height: 70,
             mb: 1.5,
             bgcolor: theme.palette.primary.main,
             color: 'white'
@@ -405,13 +493,13 @@ const AppLayout = ({ onLogout, user }) => {
           {user?.name || 'User'}
         </Typography>
         <Typography variant="body2" color="text.secondary">
-          {isOrganisation() ? 'Organisation Admin' : isPetParent() ? 'Pet Parent' : 'Staff'}
+          {isOrganisation() ? 'Organisation Admin' : isPetParent() ? 'Pet Parent' : isVeterinarian() ? 'Veterinarian' : 'Staff'}
         </Typography>
       </Box>
-      
+
       <Divider sx={{ mx: 2, mb: 1 }} />
-      
-      <List component="nav" aria-label="main menu" sx={{ 
+
+      <List component="nav" aria-label="main menu" sx={{
         pb: 0,
         '& .MuiListSubheader-root': {
           bgcolor: 'transparent',
@@ -430,20 +518,26 @@ const AppLayout = ({ onLogout, user }) => {
                 {category}
               </ListSubheader>
             )}
-            
+
             {itemsByCategory[category].map((item) => {
               const adaptedPath = getAdaptedPath(item);
-              const isActive = location.pathname === item.path || 
-                location.pathname + location.search === adaptedPath ||
-                (adaptedPath.includes('?tab=') && 
-                  location.pathname === adaptedPath.split('?')[0] && 
+              // Check if this menu item is active based on the current path
+              const isActive = location.pathname === adaptedPath ||
+                location.pathname.endsWith(item.path) ||
+                (adaptedPath.includes('?tab=') &&
+                  location.pathname === adaptedPath.split('?')[0] &&
                   location.search.includes(adaptedPath.split('?')[1]));
-                
+
+              console.log('Menu item:', item.name, 'Path:', item.path, 'Adapted:', adaptedPath, 'Active:', isActive);
+
               return (
                 <ListItem disablePadding key={item.name} sx={{ px: 1 }}>
-                  <ListItemButton 
+                  <ListItemButton
                     selected={isActive}
-                    onClick={() => navigate(adaptedPath)}
+                    onClick={() => {
+                      console.log('Navigating to:', adaptedPath);
+                      navigate(adaptedPath);
+                    }}
                     sx={{
                       borderRadius: 2,
                       my: 0.5,
@@ -456,16 +550,16 @@ const AppLayout = ({ onLogout, user }) => {
                       }
                     }}
                   >
-                    <ListItemIcon sx={{ 
+                    <ListItemIcon sx={{
                       color: isActive ? theme.palette.primary.main : theme.palette.text.secondary,
                       minWidth: 40
                     }}>
                       {item.icon}
                     </ListItemIcon>
-                    <ListItemText 
-                      primary={item.name} 
-                      sx={{ 
-                        '& .MuiTypography-root': { 
+                    <ListItemText
+                      primary={item.name}
+                      sx={{
+                        '& .MuiTypography-root': {
                           fontWeight: isActive ? 600 : 500,
                           fontSize: '0.95rem',
                           color: isActive ? theme.palette.primary.main : theme.palette.text.primary
@@ -476,17 +570,17 @@ const AppLayout = ({ onLogout, user }) => {
                 </ListItem>
               );
             })}
-            
+
             {category && <Box sx={{ height: 8 }} />}
           </React.Fragment>
         ))}
       </List>
-      
+
       <Divider sx={{ mx: 2, my: 1 }} />
-      
+
       <List sx={{ px: 1 }}>
         <ListItem disablePadding>
-          <ListItemButton 
+          <ListItemButton
             onClick={handleLogout}
             sx={{
               borderRadius: 2,
@@ -498,10 +592,10 @@ const AppLayout = ({ onLogout, user }) => {
             <ListItemIcon sx={{ minWidth: 40, color: theme.palette.error.main }}>
               <LogoutIcon />
             </ListItemIcon>
-            <ListItemText 
-              primary="Logout" 
-              sx={{ 
-                '& .MuiTypography-root': { 
+            <ListItemText
+              primary="Logout"
+              sx={{
+                '& .MuiTypography-root': {
                   fontWeight: 500,
                   color: theme.palette.error.main
                 }
@@ -516,7 +610,7 @@ const AppLayout = ({ onLogout, user }) => {
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
-      
+
       <AppBar
         position="fixed"
         sx={{
@@ -538,11 +632,11 @@ const AppLayout = ({ onLogout, user }) => {
           >
             <MenuIcon />
           </IconButton>
-          
+
           <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 600 }}>
             {currentApp}
           </Typography>
-          
+
           <Tooltip title="Notifications">
             <IconButton color="primary" sx={{ mr: 1 }}>
               <Badge badgeContent={3} color="error" variant="dot">
@@ -550,17 +644,17 @@ const AppLayout = ({ onLogout, user }) => {
               </Badge>
             </IconButton>
           </Tooltip>
-          
+
           <Tooltip title="Account">
             <IconButton
               onClick={handleMenu}
               color="primary"
               size="small"
-              sx={{ 
+              sx={{
                 backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 122, 255, 0.1)' : 'rgba(255, 255, 255, 0.1)',
                 '&:hover': {
                   backgroundColor: theme.palette.mode === 'light' ? 'rgba(0, 122, 255, 0.2)' : 'rgba(255, 255, 255, 0.2)',
-                } 
+                }
               }}
             >
               <Avatar sx={{ width: 32, height: 32, bgcolor: theme.palette.primary.main }}>
@@ -568,7 +662,7 @@ const AppLayout = ({ onLogout, user }) => {
               </Avatar>
             </IconButton>
           </Tooltip>
-          
+
           <Menu
             id="menu-appbar"
             anchorEl={anchorEl}
@@ -613,7 +707,7 @@ const AppLayout = ({ onLogout, user }) => {
           </Menu>
         </Toolbar>
       </AppBar>
-      
+
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
@@ -629,8 +723,8 @@ const AppLayout = ({ onLogout, user }) => {
           }}
           sx={{
             display: { xs: 'block', sm: 'none' },
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
               width: drawerWidth,
               borderRight: '1px solid rgba(0, 0, 0, 0.1)',
               backgroundColor: 'rgba(250, 250, 250, 0.95)',
@@ -639,14 +733,14 @@ const AppLayout = ({ onLogout, user }) => {
         >
           {drawer}
         </Drawer>
-        
+
         {/* Desktop drawer */}
         <Drawer
           variant="permanent"
           sx={{
             display: { xs: 'none', sm: 'block' },
-            '& .MuiDrawer-paper': { 
-              boxSizing: 'border-box', 
+            '& .MuiDrawer-paper': {
+              boxSizing: 'border-box',
               width: drawerWidth,
               borderRight: '1px solid rgba(0, 0, 0, 0.1)',
               backgroundColor: 'rgba(250, 250, 250, 0.95)',
@@ -658,12 +752,12 @@ const AppLayout = ({ onLogout, user }) => {
           {drawer}
         </Drawer>
       </Box>
-      
+
       <Box
         component="main"
-        sx={{ 
-          flexGrow: 1, 
-          p: 3, 
+        sx={{
+          flexGrow: 1,
+          p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           backgroundColor: theme.palette.background.default,
           minHeight: '100vh'
@@ -676,4 +770,4 @@ const AppLayout = ({ onLogout, user }) => {
   );
 };
 
-export default AppLayout; 
+export default AppLayout;

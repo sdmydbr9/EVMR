@@ -397,7 +397,7 @@ const initDatabase = async () => {
 
     // Check if demo users exist
     const demoUsersCheckResult = await client.query(
-      "SELECT email FROM users WHERE email LIKE '%_demo@evmr.com'"
+      "SELECT email FROM users WHERE email LIKE '%_demo@petsphere.com'"
     );
 
     if (demoUsersCheckResult.rowCount === 0) {
@@ -417,7 +417,7 @@ const initDatabase = async () => {
          RETURNING id`,
         [
           'Demo Pet Parent',
-          'petparent_demo@evmr.com',
+          'petparent_demo@petsphere.com',
           hashedDemoPassword,
           'client',
           'active',
@@ -465,7 +465,7 @@ const initDatabase = async () => {
          VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
         [
           'Demo Veterinarian',
-          'vet_demo@evmr.com',
+          'vet_demo@petsphere.com',
           hashedDemoPassword,
           'veterinarian',
           demoClinicId,
@@ -496,7 +496,7 @@ const initDatabase = async () => {
          VALUES ($1, $2, $3, $4, $5, $6, $7, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)`,
         [
           'Demo Organization Admin',
-          'org_demo@evmr.com',
+          'org_demo@petsphere.com',
           hashedDemoPassword,
           'admin',
           demoClinicId,
@@ -506,9 +506,9 @@ const initDatabase = async () => {
       );
       
       console.log('Demo users created successfully:');
-      console.log('- Pet Parent: petparent_demo@evmr.com / demodemo');
-      console.log(`- Veterinarian: vet_demo@evmr.com / demodemo (VET ID: ${vetId})`);
-      console.log(`- Organization Admin: org_demo@evmr.com / demodemo (ORG ID: ${orgId})`);
+      console.log('- Pet Parent: petparent_demo@petsphere.com / demodemo');
+      console.log(`- Veterinarian: vet_demo@petsphere.com / demodemo (VET ID: ${vetId})`);
+      console.log(`- Organization Admin: org_demo@petsphere.com / demodemo (ORG ID: ${orgId})`);
     }
 
     await client.query('COMMIT');

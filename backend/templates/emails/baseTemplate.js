@@ -1,5 +1,5 @@
 /**
- * Base email template with VetSphere branding
+ * Base email template with PetSphere branding
  * @param {Object} options - Template options
  * @param {string} options.title - Email title
  * @param {string} options.content - Main email content (HTML)
@@ -85,7 +85,7 @@ const baseTemplate = (options) => {
     <body>
       <div class="container">
         <div class="header">
-          <img src="cid:logo" alt="VetSphere" class="logo" />
+          <img src="cid:logo" alt="PetSphere" class="logo" />
           <div class="tagline">Beyond Records, Beyond Care</div>
         </div>
         <div class="content">
@@ -94,7 +94,7 @@ const baseTemplate = (options) => {
         </div>
         <div class="footer">
           <p>${footerText}</p>
-          <p>&copy; ${new Date().getFullYear()} VetSphere. All rights reserved.</p>
+          <p>&copy; ${new Date().getFullYear()} PetSphere. All rights reserved.</p>
         </div>
       </div>
     </body>

@@ -6,11 +6,11 @@ require('dotenv').config();
 
 // Force Docker configuration for script running in container
 const dbConfig = {
-  user: process.env.POSTGRES_USER || 'vetsphere_user',
+  user: process.env.POSTGRES_USER || 'petsphere_user',
   password: process.env.DB_PASSWORD || 'postgres',
-  host: process.env.POSTGRES_HOST || 'vetsphere-db',
-  port: parseInt(process.env.POSTGRES_PORT || '5432'),
-  database: process.env.POSTGRES_DB || 'vetsphere_database'
+  host: process.env.POSTGRES_HOST || 'petsphere-db',
+  port: process.env.POSTGRES_PORT || 5432,
+  database: process.env.POSTGRES_DB || 'petsphere_database'
 };
 
 console.log('Attempting to connect to database:');
