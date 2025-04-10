@@ -57,6 +57,11 @@ export const authService = {
   verifyToken: async () => {
     const response = await api.get('/auth/verify');
     return response.data;
+  },
+  
+  getDemoCredentials: async () => {
+    const response = await api.get('/auth/demo-credentials');
+    return response.data;
   }
 };
 

@@ -86,6 +86,7 @@ const Login = ({ onLogin }) => {
   const [rememberMe, setRememberMe] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
   const [showSignup, setShowSignup] = useState(false);
+  const [showDemoCredentials, setShowDemoCredentials] = useState(false);
 
   // Field-specific validation errors
   const [emailError, setEmailError] = useState('');
@@ -130,6 +131,50 @@ const Login = ({ onLogin }) => {
       icon: <SecurityIcon sx={{ fontSize: 40, color: "#007AFF" }} />
     }
   ];
+
+  // Demo account credentials - will be populated from API
+  const [demoAccounts, setDemoAccounts] = useState({
+    pet_parent: { email: '', password: '' },
+    veterinarian: { email: '', password: '', id: '' },
+    organisation: { email: '', password: '', organisationId: '' }
+  });
+  
+  // Fetch demo credentials
+  const fetchDemoCredentials = async () => {
+    try {
+      const { success, demoCredentials } = await authService.getDemoCredentials();
+      if (success && demoCredentials) {
+        setDemoAccounts(demoCredentials);
+      }
+    } catch (err) {
+      console.error('Error fetching demo credentials:', err);
+    }
+  };
+
+  // Autofill demo credentials
+  const fillDemoCredentials = () => {
+    if (!userType || !demoAccounts[userType]) return;
+    
+    const demoAccount = demoAccounts[userType];
+    setEmail(demoAccount.email);
+    setPassword(demoAccount.password);
+    
+    if (userType === 'veterinarian') {
+      setId(demoAccount.id);
+    } else if (userType === 'organisation') {
+      setOrganisationId(demoAccount.organisationId);
+    }
+  };
+  
+  // Update showDemoCredentials when userType changes and fetch credentials
+  useEffect(() => {
+    if (userType) {
+      setShowDemoCredentials(true);
+      fetchDemoCredentials();
+    } else {
+      setShowDemoCredentials(false);
+    }
+  }, [userType]);
 
   // Cycle through features automatically
   useEffect(() => {
@@ -411,6 +456,46 @@ const Login = ({ onLogin }) => {
         <Alert severity="error" sx={{ mt: 1, mb: 2, width: '100%', borderRadius: 2, animation: `${slideUp} 0.3s ease-out` }}>
           {error}
         </Alert>
+      )}
+
+      {showDemoCredentials && (
+        <Box sx={{ 
+          mb: 3, 
+          p: 2, 
+          bgcolor: 'info.light', 
+          borderRadius: 2,
+          color: 'info.contrastText',
+          animation: `${slideUp} 0.3s ease-out`
+        }}>
+          <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 500 }}>
+            Demo Account Credentials:
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 0.5 }}>
+            Email: {demoAccounts[userType].email}
+          </Typography>
+          <Typography variant="body2" sx={{ mb: 0.5 }}>
+            Password: {demoAccounts[userType].password}
+          </Typography>
+          {userType === 'veterinarian' && (
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              Vet ID: {demoAccounts[userType].id}
+            </Typography>
+          )}
+          {userType === 'organisation' && (
+            <Typography variant="body2" sx={{ mb: 0.5 }}>
+              Organisation ID: {demoAccounts[userType].organisationId}
+            </Typography>
+          )}
+          <Button
+            size="small"
+            variant="contained"
+            color="primary"
+            onClick={fillDemoCredentials}
+            sx={{ mt: 1, borderRadius: 1.5, textTransform: 'none' }}
+          >
+            Autofill Demo Credentials
+          </Button>
+        </Box>
       )}
 
       <Box component="form" onSubmit={handleSubmit} sx={{ width: '100%' }}>

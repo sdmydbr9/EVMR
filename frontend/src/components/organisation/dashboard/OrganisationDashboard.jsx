@@ -65,6 +65,7 @@ import AppointmentManagement from './AppointmentManagement';
 import DoctorWorkload from './DoctorWorkload';
 import InventoryUsage from './InventoryUsage';
 import PatientVisits from './PatientVisits';
+import PatientManagement from '../PatientManagement';
 
 const COLORS = ['#00C49F', '#FF8042', '#8884d8', '#72FF7D', '#FF6B6B', '#FFBB28'];
 
@@ -99,7 +100,7 @@ const OrganisationDashboard = () => {
         const tabParam = searchParams.get('tab');
         if (tabParam) {
             const tabValue = parseInt(tabParam, 10);
-            if (!isNaN(tabValue) && tabValue >= 0 && tabValue <= 5) {
+            if (!isNaN(tabValue) && tabValue >= 0 && tabValue <= 6) {
                 setActiveTab(tabValue);
             }
         }
@@ -704,6 +705,12 @@ const OrganisationDashboard = () => {
                         color: activeTab === 5 ? 'primary.main' : 'text.secondary',
                         '&.Mui-selected': { color: 'primary.main' },
                     }} />
+                    <Tab label="Patient Management" sx={{
+                        textTransform: 'none',
+                        fontWeight: 500,
+                        color: activeTab === 6 ? 'primary.main' : 'text.secondary',
+                        '&.Mui-selected': { color: 'primary.main' },
+                    }} />
                 </Tabs>
 
                 {activeTab === 0 && (
@@ -1037,6 +1044,7 @@ const OrganisationDashboard = () => {
                 {activeTab === 3 && <DoctorWorkload />}
                 {activeTab === 4 && <InventoryUsage />}
                 {activeTab === 5 && <PatientVisits />}
+                {activeTab === 6 && <PatientManagement />}
             </Box>
         </Container>
     );

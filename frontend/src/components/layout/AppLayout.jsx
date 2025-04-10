@@ -63,7 +63,8 @@ const menuCategories = {
   APPOINTMENTS: 'Appointments & Scheduling',
   SERVICES: 'Services & Inventory',
   STAFF: 'Staff & Doctors',
-  ANALYTICS: 'Analytics & Reports'
+  ANALYTICS: 'Analytics & Reports',
+  SETTINGS: 'Settings'
 };
 
 // iCloud-inspired app menu items for staff
@@ -72,62 +73,40 @@ const staffAppItems = [
   {
     name: 'Dashboard',
     icon: <DashboardIcon />,
-    path: '/',
+    path: '/dashboard',
     description: 'Main dashboard',
-    category: menuCategories.DASHBOARD
-  },
-  {
-    name: 'Organisation Dashboard',
-    icon: <AnalyticsIcon />,
-    path: '/admin/dashboard',
-    description: 'Organisation administration dashboard',
-    roles: ['organisation'],
     category: menuCategories.DASHBOARD
   },
 
   // Patients & Records category
   {
-    name: 'Patients',
+    name: 'Patient Management',
     icon: <PetsIcon />,
-    path: '/patients',
+    path: '/patients/management',
     description: 'Manage patient records',
     category: menuCategories.PATIENTS
   },
   {
-    name: 'Patient Records',
-    icon: <PatientRecordIcon />,
-    path: '/patient-records',
-    description: 'View detailed patient records',
-    category: menuCategories.PATIENTS
-  },
-  {
     name: 'Medical Records',
-    icon: <HealingIcon />,
-    path: '/emr',
+    icon: <PatientRecordIcon />,
+    path: '/records',
     description: 'View and update medical records',
     category: menuCategories.PATIENTS
   },
 
   // Appointments & Scheduling category
   {
-    name: 'Appointments',
+    name: 'Appointment Scheduling',
     icon: <EventIcon />,
     path: '/appointments',
     description: 'Schedule and track appointments',
     category: menuCategories.APPOINTMENTS
   },
   {
-    name: 'Appointment Requests',
+    name: 'Calendar',
     icon: <AppointmentRequestsIcon />,
-    path: '/appointment-requests',
-    description: 'Manage appointment requests',
-    category: menuCategories.APPOINTMENTS
-  },
-  {
-    name: 'Schedules',
-    icon: <ScheduleIcon />,
-    path: '/schedules',
-    description: 'Manage doctor schedules',
+    path: '/schedule',
+    description: 'View calendar and schedules',
     category: menuCategories.APPOINTMENTS
   },
 
@@ -135,7 +114,7 @@ const staffAppItems = [
   {
     name: 'Services',
     icon: <ServicesIcon />,
-    path: '/services',
+    path: '/services/management',
     description: 'Manage service offerings',
     category: menuCategories.SERVICES
   },
@@ -146,15 +125,15 @@ const staffAppItems = [
     description: 'Manage clinic inventory',
     category: menuCategories.SERVICES
   },
-  {
-    name: 'Inventory Usage',
-    icon: <InventoryIcon />,
-    path: '/inventory-usage',
-    description: 'Track inventory usage',
-    category: menuCategories.SERVICES
-  },
 
   // Staff & Doctors category
+  {
+    name: 'Staff Management',
+    icon: <PeopleIcon />,
+    path: '/staff',
+    description: 'Manage staff accounts',
+    category: menuCategories.STAFF
+  },
   {
     name: 'Doctors',
     icon: <DoctorIcon />,
@@ -162,29 +141,8 @@ const staffAppItems = [
     description: 'Manage doctor profiles',
     category: menuCategories.STAFF
   },
-  {
-    name: 'Doctor Workload',
-    icon: <DoctorIcon />,
-    path: '/doctor-workload',
-    description: 'View doctor workload',
-    category: menuCategories.STAFF
-  },
-  {
-    name: 'Staff Management',
-    icon: <PeopleIcon />,
-    path: '/users',
-    description: 'Manage staff accounts',
-    category: menuCategories.STAFF
-  },
 
   // Analytics & Reports category
-  {
-    name: 'Reports',
-    icon: <AssessmentIcon />,
-    path: '/reports',
-    description: 'Generate analytical reports',
-    category: menuCategories.ANALYTICS
-  },
   {
     name: 'Medical Reports',
     icon: <MedicalReportsIcon />,
@@ -193,18 +151,41 @@ const staffAppItems = [
     category: menuCategories.ANALYTICS
   },
   {
+    name: 'Analytics Dashboard',
+    icon: <AnalyticsIcon />,
+    path: '/reports',
+    description: 'Generate analytical reports',
+    category: menuCategories.ANALYTICS
+  },
+  {
+    name: 'Doctor Workload',
+    icon: <DoctorIcon />,
+    path: '/analytics/doctor-workload',
+    description: 'View doctor workload',
+    category: menuCategories.ANALYTICS
+  },
+  {
+    name: 'Inventory Usage',
+    icon: <InventoryIcon />,
+    path: '/analytics/inventory-usage',
+    description: 'Track inventory usage',
+    category: menuCategories.ANALYTICS
+  },
+  {
     name: 'Patient Visits',
     icon: <PetsIcon />,
-    path: '/patient-visits',
+    path: '/analytics/patient-visits',
     description: 'Track patient visits',
     category: menuCategories.ANALYTICS
   },
+
+  // Settings
   {
     name: 'Settings',
     icon: <SettingsIcon />,
     path: '/settings',
-    description: 'System settings',
-    category: menuCategories.DASHBOARD
+    description: 'System settings and configuration',
+    category: menuCategories.SETTINGS
   }
 ];
 
@@ -411,6 +392,10 @@ const AppLayout = ({ onLogout, userInfo, userType }) => {
         return '/app/inventory-usage';
       } else if (item.name === 'Patient Visits') {
         return '/app/visits';
+      } else if (item.name === 'Patient Management') {
+        return '/app/patients/management';
+      } else if (item.name === 'Medical Records') {
+        return '/app/patients/records';
       } else if (item.name === 'Doctors') {
         return '/app/doctors';
       } else if (item.name === 'Schedules') {
@@ -472,7 +457,7 @@ const AppLayout = ({ onLogout, userInfo, userType }) => {
         <Box
           component="img"
           src="/assets/images/logos/black_transparent.png"
-          alt="VetSphere"
+          alt="PetSphere"
           sx={{
             height: 60,
             mb: 2

@@ -1,6 +1,145 @@
 # PetSphere System Docker Compose Configuration
 
 services:
+  # Authentication Service
+  auth-service:
+    build:
+      context: ./services/auth-service
+      dockerfile: Dockerfile
+    container_name: petsphere-auth-service
+    restart: unless-stopped
+    ports:
+      - "5101:5101"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=5101
+      - MONGODB_URI=mongodb://mongodb:27017/auth-service
+      - JWT_SECRET=${JWT_SECRET}
+      - JWT_EXPIRES_IN=24h
+      - REDIS_HOST=redis
+      - REDIS_PORT=7529
+      - LOG_LEVEL=info
+    env_file:
+      - .env
+    networks:
+      - petsphere-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5101/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # Patient Service
+  patient-service:
+    build:
+      context: ./services/patient-service
+      dockerfile: Dockerfile
+    container_name: petsphere-patient-service
+    restart: unless-stopped
+    ports:
+      - "5102:5102"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=5102
+      - MONGODB_URI=mongodb://mongodb:27017/patient-service
+      - AUTH_SERVICE_URL=http://auth-service:5101
+      - LOG_LEVEL=info
+    env_file:
+      - .env
+    networks:
+      - petsphere-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5102/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # Appointment Service
+  appointment-service:
+    build:
+      context: ./services/appointment-service
+      dockerfile: Dockerfile
+    container_name: petsphere-appointment-service
+    restart: unless-stopped
+    ports:
+      - "5103:5103"
+    depends_on:
+      mongodb:
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      patient-service:
+        condition: service_healthy
+    environment:
+      - NODE_ENV=${NODE_ENV}
+      - PORT=5103
+      - MONGODB_URI=mongodb://mongodb:27017/appointment-service
+      - AUTH_SERVICE_URL=http://auth-service:5101
+      - PATIENT_SERVICE_URL=http://patient-service:5102
+      - LOG_LEVEL=info
+    env_file:
+      - .env
+    networks:
+      - petsphere-network
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:5103/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 30s
+
+  # MongoDB Service
+  mongodb:
+    image: mongo:6
+    container_name: petsphere-mongodb
+    restart: unless-stopped
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=${MONGO_ROOT_USER}
+      - MONGO_INITDB_ROOT_PASSWORD=${MONGO_ROOT_PASSWORD}
+    volumes:
+      - mongodb-data:/data/db
+    ports:
+      - "27017:27017"
+    networks:
+      - petsphere-network
+    healthcheck:
+      test: echo 'db.runCommand("ping").ok' | mongosh localhost:27017/test --quiet
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # Redis Service
+  redis:
+    image: redis:alpine
+    container_name: petsphere-redis
+    restart: unless-stopped
+    ports:
+      - "7529:7529"
+    command: ["redis-server", "--port", "7529"]
+    volumes:
+      - redis-data:/data
+    networks:
+      - petsphere-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-p", "7529", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
   # PetSphere application service
   petsphere-app:
     build:
@@ -12,6 +151,12 @@ services:
       - "3786:3786" # Map container port to host port
     depends_on:
       petsphere-db: # Ensure database is started before the application
+        condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      patient-service:
+        condition: service_healthy
+      appointment-service:
         condition: service_healthy
     environment:
       # Application configuration
@@ -49,6 +194,12 @@ services:
       # Demo user IDs (fixed values for consistency)
       - VET_DEMO_ID=VET12345
       - ORG_DEMO_ID=ORG12345
+      # Auth service configuration
+      - AUTH_SERVICE_URL=http://auth-service:5101
+      # Patient service configuration
+      - PATIENT_SERVICE_URL=http://patient-service:5102
+      # Appointment service configuration
+      - APPOINTMENT_SERVICE_URL=http://appointment-service:5103
     env_file:
       - .env # Load additional environment variables from .env file
     volumes:
@@ -78,6 +229,12 @@ services:
     depends_on:
       petsphere-db: # Ensure database is started before the admin service
         condition: service_healthy
+      auth-service:
+        condition: service_healthy
+      patient-service:
+        condition: service_healthy
+      appointment-service:
+        condition: service_healthy
     environment:
       # Application configuration
       - NODE_ENV=${NODE_ENV}
@@ -105,6 +262,12 @@ services:
       - SMTP_USER=${SMTP_USER}
       - SMTP_PASS=${SMTP_PASS}
       - EMAIL_FROM=${EMAIL_FROM}
+      # Auth service configuration
+      - AUTH_SERVICE_URL=http://auth-service:5101
+      # Patient service configuration
+      - PATIENT_SERVICE_URL=http://patient-service:5102
+      # Appointment service configuration
+      - APPOINTMENT_SERVICE_URL=http://appointment-service:5103
     env_file:
       - .env # Load additional environment variables from .env file
     volumes:
@@ -167,6 +330,10 @@ volumes:
     # Stores application logs
   petsphere-admin-logs:
     # Stores admin service logs
+  mongodb-data:
+    # Stores MongoDB data for auth service
+  redis-data:
+    # Stores Redis data for caching and session management
 
 # Custom network for PetSphere services
 networks:
@@ -174,9 +341,12 @@ networks:
     driver: bridge
 
 # This docker-compose configuration:
-# 1. Sets up the PetSphere application container with its environment variables
-# 2. Sets up the PetSphere admin service for user approval management
-# 3. Configures the PostgreSQL database with persistent storage
-# 4. Creates a dedicated network for secure communication between services
-# 5. Establishes volumes for data persistence across container restarts
-# 6. Implements healthchecks to ensure services are running correctly
+# 1. Sets up the Authentication Service with MongoDB and Redis
+# 2. Sets up the Patient Service for patient record management
+# 3. Sets up the Appointment Service for scheduling management
+# 4. Sets up the PetSphere application container with its environment variables
+# 5. Sets up the PetSphere admin service for user approval management
+# 6. Configures the PostgreSQL database with persistent storage
+# 7. Creates a dedicated network for secure communication between services
+# 8. Establishes volumes for data persistence across container restarts
+# 9. Implements healthchecks to ensure services are running correctly

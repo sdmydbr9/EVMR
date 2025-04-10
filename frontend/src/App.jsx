@@ -37,7 +37,14 @@ import {
   AppointmentManagement,
   DoctorWorkload,
   InventoryUsage,
-  PatientVisits
+  PatientVisits,
+  // New components for Organisation
+  PatientManagement,
+  MedicalRecords,
+  AppointmentScheduling,
+  Settings,
+  StaffManagement,
+  MedicalReports
 } from './components/organisation';
 
 // Create a placeholder component for routes that don't have dedicated components yet
@@ -308,6 +315,7 @@ const App = () => {
       console.log('Token found:', !!token);
       if (!token) {
         setLoading(false);
+        setAuthenticated(false);
         return;
       }
 
@@ -333,12 +341,16 @@ const App = () => {
         localStorage.removeItem('token');
         localStorage.removeItem('userRole');
         localStorage.removeItem('userType');
+        setAuthenticated(false);
+        setUserType('');
       }
     } catch (error) {
       console.error('Authentication error:', error);
       localStorage.removeItem('token');
       localStorage.removeItem('userRole');
       localStorage.removeItem('userType');
+      setAuthenticated(false);
+      setUserType('');
     } finally {
       setLoading(false);
       console.log('checkAuth completed, loading set to false');
@@ -401,8 +413,20 @@ const App = () => {
       <Router>
         <Routes>
           {/* Add Landing Page as the root route */}
-          <Route path="/" element={<LandingPage />} />
-          <Route path="/login" element={<Login onLogin={handleLogin} />} />
+          <Route path="/" element={
+            authenticated ? (
+              <Navigate to={isPetParent() ? "/app/dashboard" : isVeterinarian() ? "/app/patients" : "/app/dashboard"} replace />
+            ) : (
+              <LandingPage />
+            )
+          } />
+          <Route path="/login" element={
+            authenticated ? (
+              <Navigate to={isPetParent() ? "/app/dashboard" : isVeterinarian() ? "/app/patients" : "/app/dashboard"} replace />
+            ) : (
+              <Login onLogin={handleLogin} />
+            )
+          } />
 
           {/* Protected routes within AppLayout */}
           <Route
@@ -435,15 +459,47 @@ const App = () => {
             <Route path="medical-records" element={isVeterinarian() ? <MedicalRecordsDashboard /> : <PlaceholderComponent title="Medical Records Dashboard" />} />
 
             {/* Organisation Routes */}
-            <Route path="doctors" element={isOrganisation() ? <DoctorsDashboard /> : <PlaceholderComponent title="Doctors Dashboard" />} />
-            <Route path="schedule" element={isOrganisation() ? <ScheduleDashboard /> : <PlaceholderComponent title="Schedule Dashboard" />} />
+            
+            {/* Patient Routes */}
+            <Route path="patients/management" element={isOrganisation() ? <PatientManagement /> : <PlaceholderComponent title="Patient Management" />} />
+            <Route path="patients/records" element={isOrganisation() ? <MedicalRecords /> : <PlaceholderComponent title="Medical Records" />} />
+            <Route path="patients/visits" element={isOrganisation() ? <PatientVisits /> : <PlaceholderComponent title="Patient Visits" />} />
+
+            {/* Appointment Routes */}
+            <Route path="appointments/scheduling" element={isOrganisation() ? <AppointmentScheduling /> : <PlaceholderComponent title="Appointment Scheduling" />} />
+            <Route path="appointments/management" element={isOrganisation() ? <AppointmentManagement /> : <PlaceholderComponent title="Appointment Management" />} />
+            
+            {/* Service Routes */}
+            <Route path="services/management" element={isOrganisation() ? <ServiceManagement /> : <PlaceholderComponent title="Service Management" />} />
+            
+            {/* Staff Routes */}
+            <Route path="staff/management" element={isOrganisation() ? <StaffManagement /> : <PlaceholderComponent title="Staff Management" />} />
+            <Route path="staff/doctors" element={isOrganisation() ? <DoctorsDashboard /> : <PlaceholderComponent title="Doctor Management" />} />
+            <Route path="staff/schedule" element={isOrganisation() ? <ScheduleDashboard /> : <PlaceholderComponent title="Staff Schedule" />} />
+
+            {/* Analytics Routes */}
+            <Route path="analytics/doctor-workload" element={isOrganisation() ? <DoctorWorkload /> : <PlaceholderComponent title="Doctor Workload" />} />
+            <Route path="analytics/inventory-usage" element={isOrganisation() ? <InventoryUsage /> : <PlaceholderComponent title="Inventory Usage" />} />
+            <Route path="analytics/patient-visits" element={isOrganisation() ? <PatientVisits /> : <PlaceholderComponent title="Patient Visits" />} />
+            <Route path="analytics/reports" element={isOrganisation() ? <ReportDashboard /> : <PlaceholderComponent title="Reports" />} />
+            <Route path="analytics/medical-reports" element={isOrganisation() ? <MedicalReports /> : <PlaceholderComponent title="Medical Reports" />} />
+
+            {/* Settings Routes */}
+            <Route path="settings" element={isOrganisation() ? <Settings /> : <PlaceholderComponent title="Settings" />} />
+            <Route path="settings/general" element={isOrganisation() ? <Settings /> : <PlaceholderComponent title="General Settings" />} />
+            <Route path="settings/billing" element={isOrganisation() ? <PlaceholderComponent title="Billing Settings" /> : <PlaceholderComponent title="Billing Settings" />} />
+
+            {/* Additional Organisation Routes (backward compatibility) */}
+            <Route path="doctors" element={<Navigate to="/app/staff/doctors" replace />} />
+            <Route path="schedule" element={<Navigate to="/app/staff/schedule" replace />} />
             <Route path="inventory" element={isOrganisation() ? <InventoryDashboard /> : <PlaceholderComponent title="Inventory Dashboard" />} />
-            <Route path="reports" element={isOrganisation() ? <ReportDashboard /> : <PlaceholderComponent title="Reports Dashboard" />} />
-            <Route path="services" element={isOrganisation() ? <ServiceManagement /> : <PlaceholderComponent title="Service Management" />} />
-            <Route path="appointments-management" element={isOrganisation() ? <AppointmentManagement /> : <PlaceholderComponent title="Appointment Management" />} />
-            <Route path="workload" element={isOrganisation() ? <DoctorWorkload /> : <PlaceholderComponent title="Doctor Workload" />} />
-            <Route path="inventory-usage" element={isOrganisation() ? <InventoryUsage /> : <PlaceholderComponent title="Inventory Usage" />} />
-            <Route path="visits" element={isOrganisation() ? <PatientVisits /> : <PlaceholderComponent title="Patient Visits" />} />
+            <Route path="reports" element={<Navigate to="/app/analytics/reports" replace />} />
+            <Route path="services" element={<Navigate to="/app/services/management" replace />} />
+            <Route path="workload" element={<Navigate to="/app/analytics/doctor-workload" replace />} />
+            <Route path="visits" element={<Navigate to="/app/patients/visits" replace />} />
+            <Route path="records" element={<Navigate to="/app/patients/records" replace />} />
+            <Route path="staff" element={<Navigate to="/app/staff/management" replace />} />
+            <Route path="medical-reports" element={<Navigate to="/app/analytics/medical-reports" replace />} />
 
             {/* Fallback route for any unmatched paths */}
             <Route path="*" element={<PlaceholderComponent title="Page Not Found" />} />

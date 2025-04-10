@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { login, verifyToken } = require('../controllers/authController');
+const { login, verifyToken, getDemoCredentials } = require('../controllers/authController');
 const { authenticate } = require('../middleware/auth');
 const { pool } = require('../config/database');
 
@@ -9,6 +9,9 @@ router.post('/login', login);
 
 // Verify token route (authenticated)
 router.get('/verify', authenticate, verifyToken);
+
+// Get demo credentials route (public)
+router.get('/demo-credentials', getDemoCredentials);
 
 // DEBUG ONLY - Remove in production
 // Helper route to check user structure for debugging

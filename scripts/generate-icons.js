@@ -11,7 +11,7 @@ const fs = require('fs');
 const path = require('path');
 
 // Source logo file (non-transparent version works best for icons)
-const SOURCE_LOGO = path.join(__dirname, '../frontend/public/assets/images/logos/non_transparent_blackText_whiteBackground.png');
+const SOURCE_LOGO = path.join(__dirname, '../new_logos/logo_black_transparent.png');
 
 // Output directory for icons
 const OUTPUT_DIR = path.join(__dirname, '../frontend/public/assets/images/logos/icons');

@@ -157,7 +157,74 @@ const verifyToken = (req, res) => {
   });
 };
 
+/**
+ * Get demo user credentials
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
+ */
+const getDemoCredentials = async (req, res) => {
+  try {
+    // Environment variables or defaults for demo user IDs
+    const VET_DEMO_ID = process.env.VET_DEMO_ID || 'VET12345';
+    const ORG_DEMO_ID = process.env.ORG_DEMO_ID || 'ORG12345';
+
+    // Query for demo users (uses wildcard to catch any demo email pattern)
+    const result = await pool.query(`
+      SELECT id, name, email, role, details 
+      FROM users 
+      WHERE email LIKE '%demo%'
+      ORDER BY role, email
+    `);
+    
+    if (result.rowCount === 0) {
+      return res.status(404).json({
+        success: false,
+        message: 'No demo users found in the database'
+      });
+    }
+    
+    // Format the demo credentials for frontend use
+    const demoCredentials = {};
+    
+    for (const user of result.rows) {
+      let userType = '';
+      let additionalInfo = {};
+      
+      // Map backend roles to frontend user types
+      if (user.role === 'client') {
+        userType = 'pet_parent';
+      } else if (user.role === 'veterinarian') {
+        userType = 'veterinarian';
+        additionalInfo.id = user.details?.unique_id || VET_DEMO_ID;
+      } else if (user.role === 'admin') {
+        userType = 'organisation';
+        additionalInfo.organisationId = user.details?.organisation_id || ORG_DEMO_ID;
+      }
+      
+      if (userType) {
+        demoCredentials[userType] = {
+          email: user.email,
+          password: 'demodemo', // Fixed demo password
+          ...additionalInfo
+        };
+      }
+    }
+    
+    return res.json({
+      success: true,
+      demoCredentials
+    });
+  } catch (err) {
+    console.error('Error retrieving demo credentials:', err);
+    return res.status(500).json({
+      success: false,
+      message: 'Server error retrieving demo credentials'
+    });
+  }
+};
+
 module.exports = {
   login,
-  verifyToken
+  verifyToken,
+  getDemoCredentials
 };
