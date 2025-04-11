@@ -1,6 +1,4 @@
 const nodemailer = require('nodemailer');
-const path = require('path');
-const fs = require('fs');
 require('dotenv').config();
 
 // Import email templates
@@ -24,49 +22,20 @@ const transporter = nodemailer.createTransport({
 });
 
 /**
- * Get logo attachment based on theme (light or dark)
- * @param {string} theme - 'light' for white logo, 'dark' for black logo
- * @returns {Object} - Logo attachment configuration for nodemailer
- */
-const getLogoAttachment = (theme = 'dark') => {
-  // Default to dark theme (black logo)
-  let logoPath = path.join(__dirname, '../assets/images/black_transparent.png');
-  
-  // Use white logo for dark-themed emails
-  if (theme === 'light') {
-    logoPath = path.join(__dirname, '../assets/images/white_transparent.png');
-  }
-  
-  // Fallback to non-transparent logo if neither exists
-  if (!fs.existsSync(logoPath)) {
-    logoPath = path.join(__dirname, '../assets/images/non_transparent_blackText_whiteBackground.png');
-  }
-  
-  return {
-    filename: 'petsphere-logo.png',
-    path: logoPath,
-    cid: 'logo' // Same cid value as in the IMG src in the templates
-  };
-};
-
-/**
  * Send an email
  * @param {Object} options - Email options
  * @param {string} options.to - Recipient email
  * @param {string} options.subject - Email subject
  * @param {string} options.text - Plain text version of the email
  * @param {string} options.html - HTML version of the email
- * @param {string} options.theme - Optional theme for logo ('light' or 'dark')
+ * @param {string} options.theme - Optional theme for email ('light' or 'dark')
  * @returns {Promise} - Promise that resolves with the email sending result
  */
 const sendEmail = async (options) => {
-  const { theme, ...emailOptions } = options;
+  const { theme = 'light', ...emailOptions } = options;
   
   const emailDefaults = {
-    from: process.env.EMAIL_FROM || 'PetSphere <notifications@petsphere.com>',
-    attachments: [
-      getLogoAttachment(theme)
-    ]
+    from: process.env.EMAIL_FROM || 'PetSphere <notifications@petsphere.com>'
   };
 
   try {
@@ -97,13 +66,14 @@ const sendEmail = async (options) => {
  */
 const sendSignupVerificationEmail = async (user) => {
   const { text, html } = signupVerificationTemplate(user);
-  const subject = 'Your PetSphere Application is Being Processed';
+  const subject = 'Registration Successful';
 
   return sendEmail({
     to: user.email,
     subject,
     text,
     html,
+    theme: 'light'
   });
 };
 
@@ -121,13 +91,14 @@ const sendAdminNotificationEmail = async (user) => {
   }
 
   const { text, html } = adminNotificationTemplate(user);
-  const subject = 'New PetSphere Application Received';
+  const subject = 'New Application Received';
 
   return sendEmail({
     to: adminEmail,
     subject,
     text,
     html,
+    theme: 'light'
   });
 };
 
@@ -138,13 +109,14 @@ const sendAdminNotificationEmail = async (user) => {
  */
 const sendAccountApprovedEmail = async (user) => {
   const { text, html } = accountApprovedTemplate(user);
-  const subject = 'Your PetSphere Account has been Approved';
+  const subject = 'Account Approved';
 
   return sendEmail({
     to: user.email,
     subject,
     text,
     html,
+    theme: 'light'
   });
 };
 
@@ -155,13 +127,14 @@ const sendAccountApprovedEmail = async (user) => {
  */
 const sendAppointmentReminder = async (appointmentData) => {
   const { text, html } = appointmentReminderTemplate(appointmentData);
-  const subject = 'Upcoming Appointment Reminder';
+  const subject = 'Appointment Reminder';
 
   return sendEmail({
     to: appointmentData.ownerEmail,
     subject,
     text,
     html,
+    theme: 'light'
   });
 };
 
@@ -179,6 +152,7 @@ const sendPasswordResetEmail = async (data) => {
     subject,
     text,
     html,
+    theme: 'light'
   });
 };
 

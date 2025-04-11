@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing - PetSphere</title>
+    <link rel="icon" href="/assets/images/logos/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 40px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #3a4f9a;
+            font-weight: 700;
+        }
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #3a4f9a;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #3a4f9a;
+            text-align: center;
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #3a4f9a;
+        }
+        p, ul, ol {
+            margin-bottom: 20px;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .pricing-intro {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto 60px;
+        }
+        .pricing-toggle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 40px;
+        }
+        .toggle-option {
+            padding: 10px 20px;
+            cursor: pointer;
+            font-weight: 500;
+        }
+        .toggle-option.active {
+            background-color: #3a4f9a;
+            color: white;
+            border-radius: 30px;
+        }
+        .pricing-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        .pricing-card {
+            border: 1px solid #eee;
+            border-radius: 8px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .pricing-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+        .pricing-card.highlighted {
+            border: 2px solid #3a4f9a;
+            box-shadow: 0 10px 20px rgba(58, 79, 154, 0.1);
+            position: relative;
+        }
+        .pricing-card.highlighted::before {
+            content: "Most Popular";
+            position: absolute;
+            top: -12px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3a4f9a;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        .plan-name {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #3a4f9a;
+            margin-bottom: 10px;
+        }
+        .plan-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+        .plan-period {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .plan-features {
+            list-style: none;
+            padding: 0;
+            margin-bottom: 30px;
+            min-height: 300px;
+        }
+        .plan-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .plan-features li:last-child {
+            border-bottom: none;
+        }
+        .plan-cta {
+            display: inline-block;
+            background-color: #3a4f9a;
+            color: white;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: background-color 0.3s ease;
+        }
+        .plan-cta:hover {
+            background-color: #2c3e7a;
+        }
+        .plan-cta.outlined {
+            background-color: transparent;
+            color: #3a4f9a;
+            border: 2px solid #3a4f9a;
+        }
+        .plan-cta.outlined:hover {
+            background-color: #f0f4ff;
+        }
+        .faq-section {
+            margin-top: 80px;
+        }
+        .faq-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .faq-question {
+            font-weight: 600;
+            color: #3a4f9a;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+        }
+        .comparison-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 40px;
+        }
+        .comparison-table th, .comparison-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .comparison-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        .comparison-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        .feature-available {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+        .feature-unavailable {
+            color: #F44336;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3a4f9a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #2c3e7a;
+        }
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+        }
+        footer a {
+            color: #3a4f9a;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        @media (max-width: 768px) {
+            .pricing-grid {
+                grid-template-columns: 1fr;
+            }
+            .comparison-table {
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <img src="/assets/images/logos/black_transparent.png" alt="PetSphere Logo">
+            <span>PetSphere</span>
+        </a>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/features.html">Features</a>
+            <a href="/contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Simple, Transparent Pricing</h1>
+        <div class="pricing-intro">
+            <p>
+                Choose the plan that fits your practice size and needs. All plans include our core features, 
+                with higher tiers offering additional capabilities for growing practices.
+            </p>
+        </div>
+
+        <div class="pricing-toggle">
+            <div class="toggle-option">Monthly</div>
+            <div class="toggle-option active">Annual (Save 20%)</div>
+        </div>
+
+        <div class="pricing-grid">
+            <div class="pricing-card">
+                <div class="plan-name">Starter</div>
+                <div class="plan-price">$99</div>
+                <div class="plan-period">per month, billed annually</div>
+                <ul class="plan-features">
+                    <li>Up to 2 veterinarians</li>
+                    <li>Up to 5 staff members</li>
+                    <li>Patient records management</li>
+                    <li>Appointment scheduling</li>
+                    <li>Basic reporting</li>
+                    <li>Client communications</li>
+                    <li>Inventory management</li>
+                    <li>5GB storage</li>
+                    <li>Email support</li>
+                    <li><span class="feature-unavailable">✕</span> Client portal</li>
+                    <li><span class="feature-unavailable">✕</span> Lab integrations</li>
+                    <li><span class="feature-unavailable">✕</span> Advanced analytics</li>
+                </ul>
+                <a href="/signup.html" class="plan-cta outlined">Start Free Trial</a>
+            </div>
+
+            <div class="pricing-card highlighted">
+                <div class="plan-name">Professional</div>
+                <div class="plan-price">$199</div>
+                <div class="plan-period">per month, billed annually</div>
+                <ul class="plan-features">
+                    <li>Up to 5 veterinarians</li>
+                    <li>Up to 15 staff members</li>
+                    <li>Patient records management</li>
+                    <li>Appointment scheduling</li>
+                    <li>Advanced reporting</li>
+                    <li>Client communications</li>
+                    <li>Inventory management</li>
+                    <li>20GB storage</li>
+                    <li>Priority email & chat support</li>
+                    <li><span class="feature-available">✓</span> Client portal</li>
+                    <li><span class="feature-available">✓</span> Lab integrations</li>
+                    <li><span class="feature-unavailable">✕</span> Advanced analytics</li>
+                </ul>
+                <a href="/signup.html" class="plan-cta">Start Free Trial</a>
+            </div>
+
+            <div class="pricing-card">
+                <div class="plan-name">Enterprise</div>
+                <div class="plan-price">Custom</div>
+                <div class="plan-period">tailored to your needs</div>
+                <ul class="plan-features">
+                    <li>Unlimited veterinarians</li>
+                    <li>Unlimited staff members</li>
+                    <li>Patient records management</li>
+                    <li>Appointment scheduling</li>
+                    <li>Custom reporting</li>
+                    <li>Client communications</li>
+                    <li>Inventory management</li>
+                    <li>Unlimited storage</li>
+                    <li>24/7 phone, email & chat support</li>
+                    <li><span class="feature-available">✓</span> Client portal</li>
+                    <li><span class="feature-available">✓</span> Lab integrations</li>
+                    <li><span class="feature-available">✓</span> Advanced analytics</li>
+                    <li><span class="feature-available">✓</span> Multi-location support</li>
+                    <li><span class="feature-available">✓</span> Custom integrations</li>
+                    <li><span class="feature-available">✓</span> Dedicated account manager</li>
+                </ul>
+                <a href="/contact.html" class="plan-cta">Contact Sales</a>
+            </div>
+        </div>
+
+        <h2>Feature Comparison</h2>
+        <table class="comparison-table">
+            <thead>
+                <tr>
+                    <th>Feature</th>
+                    <th>Starter</th>
+                    <th>Professional</th>
+                    <th>Enterprise</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Patient Records</td>
+                    <td><span class="feature-available">✓</span></td>
+                    <td><span class="feature-available">✓</span></td>
+                    <td><span class="feature-available">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Appointment Scheduling</td>
+                    <td><span class="feature-available">✓</span></td>
+                    <td><span class="feature-available">✓</span></td>
+                    <td><span class="feature-available">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Inventory Management</td>
+                    <td><span class="feature-available">✓</span> Basic</td>
+                    <td><span class="feature-available">✓</span> Advanced</td>
+                    <td><span class="feature-available">✓</span> Advanced</td>
+                </tr>
+                <tr>
+                    <td>Client Communications</td>
+                    <td><span class="feature-available">✓</span> Email only</td>
+                    <td><span class="feature-available">✓</span> Email & SMS</td>
+                    <td><span class="feature-available">✓</span> Email, SMS & Custom</td>
+                </tr>
+                <tr>
+                    <td>Reporting</td>
+                    <td><span class="feature-available">✓</span> Basic</td>
+                    <td><span class="feature-available">✓</span> Advanced</td>
+                    <td><span class="feature-available">✓</span> Custom</td>
+                </tr>
+                <tr>
+                    <td>Client Portal</td>
+                    <td><span class="feature-unavailable">✕</span></td>
+                    <td><span class="feature-available">✓</span></td>
+                    <td><span class="feature-available">✓</span></td>
+                </tr>
+                <tr>
+                    <td>Lab Integrations</td>
+                    <td><span class="feature-unavailable">✕</span></td>
+                    <td><span class="feature-available">✓</span> Major labs</td>
+                    <td><span class="feature-available">✓</span> All labs</td>
+                </tr>
+                <tr>
+                    <td>Telemedicine</td>
+                    <td><span class="feature-unavailable">✕</span></td>
+                    <td><span class="feature-available">✓</span> Additional fee</td>
+                    <td><span class="feature-available">✓</span> Included</td>
+                </tr>
+                <tr>
+                    <td>Multi-Location Support</td>
+                    <td><span class="feature-unavailable">✕</span></td>
+                    <td><span class="feature-unavailable">✕</span></td>
+                    <td><span class="feature-available">✓</span></td>
+                </tr>
+                <tr>
+                    <td>API Access</td>
+                    <td><span class="feature-unavailable">✕</span></td>
+                    <td><span class="feature-available">✓</span> Limited</td>
+                    <td><span class="feature-available">✓</span> Full</td>
+                </tr>
+                <tr>
+                    <td>Support</td>
+                    <td>Email</td>
+                    <td>Email & Chat</td>
+                    <td>24/7 Phone, Email & Chat</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I switch plans later?</div>
+                <div class="faq-answer">
+                    <p>Yes, you can upgrade or downgrade your plan at any time. When upgrading, the new features will be available immediately, and we'll prorate the difference in price. When downgrading, the changes will take effect at the start of your next billing cycle.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Is there a setup fee?</div>
+                <div class="faq-answer">
+                    <p>No, there are no setup fees for any of our plans. We offer free data migration assistance for practices switching from another system.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How long is the free trial?</div>
+                <div class="faq-answer">
+                    <p>We offer a 30-day free trial for all plans. No credit card is required to start your trial, and you can cancel at any time.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Do you offer discounts for non-profits or educational institutions?</div>
+                <div class="faq-answer">
+                    <p>Yes, we offer special pricing for non-profit animal shelters, rescue organizations, and veterinary schools. Please contact our sales team for more information.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">What kind of support is included?</div>
+                <div class="faq-answer">
+                    <p>All plans include access to our knowledge base and community forum. The Starter plan includes email support with a 24-hour response time. The Professional plan adds chat support with a 4-hour response time. The Enterprise plan includes 24/7 phone, email, and chat support with a dedicated account manager.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I cancel my subscription?</div>
+                <div class="faq-answer">
+                    <p>Yes, you can cancel your subscription at any time. If you cancel, you'll continue to have access to the system until the end of your current billing period. We don't offer refunds for partial billing periods.</p>
+                </div>
+            </div>
+        </div>
+
+        <a href="/" class="back-button">Back to Home</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 PetSphere. All rights reserved.</p>
+        <div>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+            <a href="/cookie-policy.html">Cookie Policy</a>
+            <a href="/compliance.html">Compliance</a>
+        </div>
+    </footer>
+</body>
+</html>

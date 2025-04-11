@@ -101,22 +101,27 @@ const registerUser = async (req, res) => {
 
       // Add role-specific details
       if (role === 'veterinarian') {
+        // For veterinarians, generate a unique ID
+        const uniqueVetId = 'VET-' + generateRandomString(8);
+        
         userDetails = {
           ...userDetails,
           specialties: specialties || [],
           yearsOfExperience: yearsOfExperience || '',
-          licenseNumber: licenseNumber || ''
+          licenseNumber: licenseNumber || '',
+          unique_id: uniqueVetId // Add unique ID for veterinarian
         };
+        
+        console.log(`Created unique veterinarian ID for ${email}: ${uniqueVetId}`);
       } else if (role === 'admin') {
-        // Generate temporary organisation ID for institute admins
-        // This will be replaced with a permanent one upon approval
-        const tempOrganisationId = 'ORG-TEMP-' + generateRandomString(8);
+        // Generate organisation ID for institute admins
+        const organisationId = 'ORG-' + generateRandomString(8);
 
         userDetails = {
           ...userDetails,
           country,
           teamSize,
-          organisation_id: tempOrganisationId, // Add the organisation_id field
+          organisation_id: organisationId,
           clinicDetails: {
             name: clinicName,
             address: clinicAddress,
@@ -125,7 +130,7 @@ const registerUser = async (req, res) => {
           }
         };
 
-        console.log(`Created temporary organisation ID for ${email}: ${tempOrganisationId}`);
+        console.log(`Created organisation ID for ${email}: ${organisationId}`);
       } else if (role === 'client') { // Pet parent role
         userDetails = {
           ...userDetails,
@@ -134,7 +139,10 @@ const registerUser = async (req, res) => {
         };
       }
 
-      // Create user with pending status
+      // Check if the email contains 'demo' - if so, mark this as a demo account (for testing only)
+      const status = email.includes('demo') ? 'active' : 'pending';
+
+      // Create user with pending status (or active for demo)
       const userResult = await client.query(
         `INSERT INTO users
          (name, email, password, role, clinic_id, status, details, created_at, updated_at)
@@ -146,11 +154,27 @@ const registerUser = async (req, res) => {
           hashedPassword,
           role,
           clinicId, // This might be null for client/pet parent
-          'pending', // Set initial status as pending
+          status, // 'pending' for real users, 'active' for demo
           JSON.stringify(userDetails)
         ]
       );
       const userId = userResult.rows[0].id;
+      
+      // For real users (non-demo), initialize empty data structures if needed
+      // Note: Demo users will get sample data on first access
+      if (!email.includes('demo')) {
+        // For pet parents, initialize empty pets table
+        if (role === 'client') {
+          console.log(`New user signup: Initializing empty data for pet parent ${userId}`);
+          // No need to create anything - they'll start with an empty state
+        }
+        
+        // For veterinarians, initialize empty patient data
+        if (role === 'veterinarian') {
+          console.log(`New user signup: Initializing empty data for veterinarian ${userId}`);
+          // No sample patients or appointments - they'll start with an empty state
+        }
+      }
 
       await client.query('COMMIT');
 

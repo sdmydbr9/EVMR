@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Support - PetSphere</title>
+    <link rel="icon" href="/assets/images/logos/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 40px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #3a4f9a;
+            font-weight: 700;
+        }
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #3a4f9a;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #3a4f9a;
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #3a4f9a;
+        }
+        p, ul, ol {
+            margin-bottom: 20px;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .support-hero {
+            background-color: #f0f4ff;
+            padding: 60px 40px;
+            border-radius: 8px;
+            text-align: center;
+            margin-bottom: 60px;
+        }
+        .support-hero h1 {
+            margin-bottom: 20px;
+        }
+        .support-hero p {
+            max-width: 800px;
+            margin: 0 auto 30px;
+            font-size: 1.2rem;
+        }
+        .search-form {
+            max-width: 600px;
+            margin: 0 auto;
+            display: flex;
+        }
+        .search-input {
+            flex-grow: 1;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px 0 0 4px;
+            font-family: 'Roboto', sans-serif;
+            font-size: 1rem;
+        }
+        .search-button {
+            background-color: #3a4f9a;
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 0 4px 4px 0;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+            font-size: 1rem;
+        }
+        .search-button:hover {
+            background-color: #2c3e7a;
+        }
+        .support-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-bottom: 60px;
+        }
+        .support-card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .support-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .support-icon {
+            font-size: 2.5rem;
+            color: #3a4f9a;
+            margin-bottom: 15px;
+        }
+        .support-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #3a4f9a;
+        }
+        .support-card p {
+            margin-bottom: 20px;
+            color: #666;
+        }
+        .support-link {
+            display: inline-block;
+            color: #3a4f9a;
+            font-weight: 600;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+        .support-link:hover {
+            color: #2c3e7a;
+        }
+        .faq-section {
+            margin-bottom: 60px;
+        }
+        .faq-item {
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .faq-question {
+            font-weight: 600;
+            color: #3a4f9a;
+            margin-bottom: 10px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .faq-question:after {
+            content: "+";
+            font-size: 1.5rem;
+            color: #3a4f9a;
+        }
+        .faq-answer {
+            display: none;
+            padding-top: 10px;
+        }
+        .contact-section {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 40px;
+            margin-bottom: 60px;
+        }
+        .contact-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+        .contact-method {
+            text-align: center;
+        }
+        .contact-icon {
+            font-size: 2.5rem;
+            color: #3a4f9a;
+            margin-bottom: 15px;
+        }
+        .contact-method h3 {
+            margin-bottom: 10px;
+            color: #3a4f9a;
+        }
+        .contact-method p {
+            color: #666;
+            margin-bottom: 15px;
+        }
+        .contact-button {
+            display: inline-block;
+            background-color: #3a4f9a;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 500;
+            transition: background-color 0.3s ease;
+        }
+        .contact-button:hover {
+            background-color: #2c3e7a;
+        }
+        .support-plans {
+            margin-bottom: 60px;
+        }
+        .plan-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .plan-table th, .plan-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        .plan-table th {
+            background-color: #f5f5f5;
+            font-weight: 600;
+        }
+        .plan-table tr:hover {
+            background-color: #f9f9f9;
+        }
+        .feature-available {
+            color: #4CAF50;
+            font-weight: 600;
+        }
+        .feature-unavailable {
+            color: #F44336;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3a4f9a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #2c3e7a;
+        }
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+        }
+        footer a {
+            color: #3a4f9a;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        @media (max-width: 768px) {
+            .support-hero {
+                padding: 40px 20px;
+            }
+            .contact-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <img src="/assets/images/logos/black_transparent.png" alt="PetSphere Logo">
+            <span>PetSphere</span>
+        </a>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/features.html">Features</a>
+            <a href="/contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <div class="support-hero">
+            <h1>How Can We Help You?</h1>
+            <p>
+                Find answers to your questions, explore our knowledge base, or contact our support team.
+            </p>
+            <form class="search-form">
+                <input type="text" placeholder="Search for help..." class="search-input">
+                <button type="submit" class="search-button">Search</button>
+            </form>
+        </div>
+
+        <div class="support-grid">
+            <div class="support-card">
+                <div class="support-icon">📚</div>
+                <h3>Knowledge Base</h3>
+                <p>
+                    Browse our comprehensive collection of articles, tutorials, and guides to help you get the most out of PetSphere.
+                </p>
+                <a href="/docs/website/index.html" class="support-link">Explore Knowledge Base →</a>
+            </div>
+            <div class="support-card">
+                <div class="support-icon">📝</div>
+                <h3>User Guides</h3>
+                <p>
+                    Step-by-step instructions for using PetSphere's features, from basic setup to advanced configurations.
+                </p>
+                <a href="/docs/website/guides/index.html" class="support-link">View User Guides →</a>
+            </div>
+            <div class="support-card">
+                <div class="support-icon">🎓</div>
+                <h3>Video Tutorials</h3>
+                <p>
+                    Watch our video tutorials to learn how to use PetSphere effectively and efficiently.
+                </p>
+                <a href="/tutorials.html" class="support-link">Watch Tutorials →</a>
+            </div>
+            <div class="support-card">
+                <div class="support-icon">💬</div>
+                <h3>Community Forum</h3>
+                <p>
+                    Connect with other PetSphere users, share tips, and get answers from the community.
+                </p>
+                <a href="/community.html" class="support-link">Join the Discussion →</a>
+            </div>
+            <div class="support-card">
+                <div class="support-icon">🔄</div>
+                <h3>Release Notes</h3>
+                <p>
+                    Stay up-to-date with the latest features, improvements, and bug fixes in PetSphere.
+                </p>
+                <a href="/release-notes.html" class="support-link">View Release Notes →</a>
+            </div>
+            <div class="support-card">
+                <div class="support-icon">🛠️</div>
+                <h3>Troubleshooting</h3>
+                <p>
+                    Find solutions to common issues and learn how to resolve them quickly.
+                </p>
+                <a href="/troubleshooting.html" class="support-link">Troubleshoot Issues →</a>
+            </div>
+        </div>
+
+        <div class="faq-section">
+            <h2>Frequently Asked Questions</h2>
+            
+            <div class="faq-item">
+                <div class="faq-question">How do I reset my password?</div>
+                <div class="faq-answer">
+                    <p>
+                        To reset your password, click on the "Forgot Password" link on the login page. Enter your email address, and we'll send you a password reset link. Click the link in the email and follow the instructions to create a new password.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How do I add a new user to my practice?</div>
+                <div class="faq-answer">
+                    <p>
+                        To add a new user:
+                    </p>
+                    <ol>
+                        <li>Log in as an administrator</li>
+                        <li>Go to Settings > User Management</li>
+                        <li>Click "Add New User"</li>
+                        <li>Fill in the user's information and select their role</li>
+                        <li>Click "Save" to create the user account</li>
+                    </ol>
+                    <p>
+                        The new user will receive an email with instructions to set up their password.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Can I import data from my current practice management system?</div>
+                <div class="faq-answer">
+                    <p>
+                        Yes, PetSphere supports data migration from most popular veterinary practice management systems. We offer a comprehensive data migration service to help you transition smoothly. Our team will work with you to export data from your current system and import it into PetSphere, ensuring that your patient records, client information, and appointment history are preserved.
+                    </p>
+                    <p>
+                        For more information about data migration, please contact our support team or visit our <a href="/data-migration.html">Data Migration Guide</a>.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">How do I set up appointment reminders?</div>
+                <div class="faq-answer">
+                    <p>
+                        To set up automatic appointment reminders:
+                    </p>
+                    <ol>
+                        <li>Go to Settings > Appointment Settings</li>
+                        <li>Click on "Reminder Settings"</li>
+                        <li>Configure your preferred reminder schedule (e.g., 24 hours before appointment)</li>
+                        <li>Select reminder methods (email, SMS, or both)</li>
+                        <li>Customize the reminder message template</li>
+                        <li>Click "Save Changes"</li>
+                    </ol>
+                    <p>
+                        Reminders will be sent automatically based on your settings. You can also send manual reminders from the appointment details page.
+                    </p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">Is my data secure with PetSphere?</div>
+                <div class="faq-answer">
+                    <p>
+                        Yes, data security is our top priority. PetSphere implements multiple layers of security to protect your data:
+                    </p>
+                    <ul>
+                        <li>All data is encrypted both in transit and at rest using industry-standard encryption protocols</li>
+                        <li>We maintain SOC 2 Type II compliance and adhere to HIPAA security standards</li>
+                        <li>Regular security audits and penetration testing ensure our systems remain secure</li>
+                        <li>Comprehensive backup systems protect against data loss</li>
+                        <li>Role-based access controls ensure users can only access the data they need</li>
+                    </ul>
+                    <p>
+                        For more information about our security measures, please visit our <a href="/security.html">Security</a> page.
+                    </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h2>Contact Support</h2>
+            <p>
+                Can't find what you're looking for? Our support team is here to help.
+            </p>
+            <div class="contact-grid">
+                <div class="contact-method">
+                    <div class="contact-icon">📧</div>
+                    <h3>Email Support</h3>
+                    <p>
+                        Send us an email and we'll get back to you within 24 hours.
+                    </p>
+                    <a href="mailto:support@petsphere.com" class="contact-button">Email Us</a>
+                </div>
+                <div class="contact-method">
+                    <div class="contact-icon">💬</div>
+                    <h3>Live Chat</h3>
+                    <p>
+                        Chat with our support team in real-time during business hours.
+                    </p>
+                    <a href="#" class="contact-button">Start Chat</a>
+                </div>
+                <div class="contact-method">
+                    <div class="contact-icon">📞</div>
+                    <h3>Phone Support</h3>
+                    <p>
+                        Call us directly for immediate assistance with urgent issues.
+                    </p>
+                    <a href="tel:+18005551234" class="contact-button">Call Support</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="support-plans">
+            <h2>Support Plans</h2>
+            <p>
+                PetSphere offers different levels of support based on your subscription plan. 
+                Upgrade your plan for enhanced support options.
+            </p>
+            <table class="plan-table">
+                <thead>
+                    <tr>
+                        <th>Support Feature</th>
+                        <th>Starter</th>
+                        <th>Professional</th>
+                        <th>Enterprise</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Knowledge Base Access</td>
+                        <td><span class="feature-available">✓</span></td>
+                        <td><span class="feature-available">✓</span></td>
+                        <td><span class="feature-available">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>Community Forum</td>
+                        <td><span class="feature-available">✓</span></td>
+                        <td><span class="feature-available">✓</span></td>
+                        <td><span class="feature-available">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>Email Support</td>
+                        <td><span class="feature-available">✓</span> (24hr response)</td>
+                        <td><span class="feature-available">✓</span> (8hr response)</td>
+                        <td><span class="feature-available">✓</span> (4hr response)</td>
+                    </tr>
+                    <tr>
+                        <td>Live Chat Support</td>
+                        <td><span class="feature-unavailable">✕</span></td>
+                        <td><span class="feature-available">✓</span> (Business hours)</td>
+                        <td><span class="feature-available">✓</span> (Extended hours)</td>
+                    </tr>
+                    <tr>
+                        <td>Phone Support</td>
+                        <td><span class="feature-unavailable">✕</span></td>
+                        <td><span class="feature-unavailable">✕</span></td>
+                        <td><span class="feature-available">✓</span> (24/7)</td>
+                    </tr>
+                    <tr>
+                        <td>Dedicated Account Manager</td>
+                        <td><span class="feature-unavailable">✕</span></td>
+                        <td><span class="feature-unavailable">✕</span></td>
+                        <td><span class="feature-available">✓</span></td>
+                    </tr>
+                    <tr>
+                        <td>Onboarding Assistance</td>
+                        <td>Basic</td>
+                        <td>Enhanced</td>
+                        <td>Premium</td>
+                    </tr>
+                    <tr>
+                        <td>Training Sessions</td>
+                        <td>1 session</td>
+                        <td>3 sessions</td>
+                        <td>Unlimited</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <a href="/" class="back-button">Back to Home</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 PetSphere. All rights reserved.</p>
+        <div>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+            <a href="/cookie-policy.html">Cookie Policy</a>
+            <a href="/compliance.html">Compliance</a>
+        </div>
+    </footer>
+
+    <script>
+        // Simple script to toggle FAQ answers
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const answer = question.nextElementSibling;
+                if (answer.style.display === 'block') {
+                    answer.style.display = 'none';
+                    question.style.fontWeight = '600';
+                    question.style.color = '#3a4f9a';
+                    question.innerHTML = question.innerHTML.replace('−', '+');
+                } else {
+                    answer.style.display = 'block';
+                    question.style.fontWeight = '700';
+                    question.style.color = '#2c3e7a';
+                    question.innerHTML = question.innerHTML.replace('+', '−');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

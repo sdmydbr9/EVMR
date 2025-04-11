@@ -52,6 +52,8 @@ import BadgeIcon from '@mui/icons-material/Badge';
 import ScheduleIcon from '@mui/icons-material/Schedule';
 import { useNavigate, useLocation } from 'react-router-dom';
 import api from '../../services/api';
+import { isDemoUser } from '../../utils/auth';
+import { DataGrid, GridActionsCellItem } from '@mui/x-data-grid';
 
 const StaffManagement = () => {
   const navigate = useNavigate();
@@ -109,12 +111,11 @@ const StaffManagement = () => {
     setLoading(true);
     try {
       // Check if we're using the demo account
-      const isDemoUser = localStorage.getItem('email') === 'demo@petsphere.com' || 
-                         localStorage.getItem('email') === 'demo@example.com';
+      const demoUser = isDemoUser();
       
       let data = [];
       
-      if (isDemoUser) {
+      if (demoUser) {
         // Use demo data
         data = generateDemoStaff();
       } else {

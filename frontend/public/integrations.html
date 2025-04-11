@@ -1,0 +1,516 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Integrations - PetSphere</title>
+    <link rel="icon" href="/assets/images/logos/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 40px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #3a4f9a;
+            font-weight: 700;
+        }
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #3a4f9a;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #3a4f9a;
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #3a4f9a;
+        }
+        p, ul, ol {
+            margin-bottom: 20px;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .integration-section {
+            margin-bottom: 60px;
+        }
+        .integration-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        .integration-card {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            text-align: center;
+        }
+        .integration-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .integration-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f5f5f5;
+            border-radius: 50%;
+        }
+        .integration-logo img {
+            max-width: 60%;
+            max-height: 60%;
+        }
+        .integration-name {
+            font-weight: 600;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            color: #3a4f9a;
+        }
+        .integration-description {
+            font-size: 0.9rem;
+            color: #666;
+        }
+        .integration-status {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        .status-available {
+            background-color: #e6f7e6;
+            color: #2e7d32;
+        }
+        .status-coming-soon {
+            background-color: #fff8e1;
+            color: #f57c00;
+        }
+        .api-section {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 30px;
+            margin-top: 40px;
+        }
+        .code-block {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Roboto Mono', monospace;
+            margin: 20px 0;
+        }
+        .cta-section {
+            background-color: #3a4f9a;
+            color: white;
+            padding: 50px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 60px 0;
+        }
+        .cta-section h2 {
+            color: white;
+            margin-top: 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: #3a4f9a;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .cta-button:hover {
+            background-color: #f0f0f0;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3a4f9a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #2c3e7a;
+        }
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+        }
+        footer a {
+            color: #3a4f9a;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        @media (max-width: 768px) {
+            .integration-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            }
+            .cta-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <img src="/assets/images/logos/black_transparent.png" alt="PetSphere Logo">
+            <span>PetSphere</span>
+        </a>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/features.html">Features</a>
+            <a href="/contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Integrations</h1>
+        <p>
+            PetSphere seamlessly connects with the tools and services you already use, creating a unified 
+            ecosystem for your veterinary practice. Our growing list of integrations helps you streamline 
+            workflows, reduce double entry, and enhance client service.
+        </p>
+
+        <div class="integration-section">
+            <h2>Laboratory Integrations</h2>
+            <p>
+                Connect directly with major veterinary laboratories to order tests and receive results 
+                automatically in your patients' records.
+            </p>
+            <div class="integration-grid">
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">🧪</span>
+                    </div>
+                    <div class="integration-name">IDEXX Laboratories</div>
+                    <div class="integration-description">
+                        Seamless integration with IDEXX Reference Laboratories, IDEXX VetLab Station, and IDEXX ImageVue.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">🔬</span>
+                    </div>
+                    <div class="integration-name">Antech Diagnostics</div>
+                    <div class="integration-description">
+                        Direct connection to Antech for lab orders and results, including imaging services.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">🧬</span>
+                    </div>
+                    <div class="integration-name">Zoetis Reference Labs</div>
+                    <div class="integration-description">
+                        Integrate with Zoetis diagnostic services for comprehensive lab testing.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">📊</span>
+                    </div>
+                    <div class="integration-name">VetConnect Plus</div>
+                    <div class="integration-description">
+                        Access and analyze diagnostic results from multiple laboratories in one place.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="integration-section">
+            <h2>Imaging Integrations</h2>
+            <p>
+                Connect with digital imaging systems to streamline your radiology workflow and enhance 
+                diagnostic capabilities.
+            </p>
+            <div class="integration-grid">
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">📷</span>
+                    </div>
+                    <div class="integration-name">IDEXX ImageVue</div>
+                    <div class="integration-description">
+                        Integrate with IDEXX digital radiography systems for seamless image management.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">🔍</span>
+                    </div>
+                    <div class="integration-name">Sound Smart DR</div>
+                    <div class="integration-description">
+                        Connect with Sound's digital radiography solutions for enhanced imaging workflow.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">📱</span>
+                    </div>
+                    <div class="integration-name">VetImaging</div>
+                    <div class="integration-description">
+                        Integrate with VetImaging's mobile and cloud-based imaging solutions.
+                    </div>
+                    <div class="integration-status status-coming-soon">Coming Soon</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">💾</span>
+                    </div>
+                    <div class="integration-name">DICOM Storage</div>
+                    <div class="integration-description">
+                        Store and manage DICOM images from any compatible imaging device.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="integration-section">
+            <h2>Payment Processing</h2>
+            <p>
+                Streamline your payment collection with integrated payment processing solutions.
+            </p>
+            <div class="integration-grid">
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">💳</span>
+                    </div>
+                    <div class="integration-name">Stripe</div>
+                    <div class="integration-description">
+                        Process credit card payments securely with Stripe's payment platform.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">💰</span>
+                    </div>
+                    <div class="integration-name">Square</div>
+                    <div class="integration-description">
+                        Accept payments in-person and online with Square's payment solutions.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">📱</span>
+                    </div>
+                    <div class="integration-name">PayPal</div>
+                    <div class="integration-description">
+                        Offer clients the convenience of PayPal for online payments.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">💵</span>
+                    </div>
+                    <div class="integration-name">Scratchpay</div>
+                    <div class="integration-description">
+                        Provide financing options for clients through Scratchpay integration.
+                    </div>
+                    <div class="integration-status status-coming-soon">Coming Soon</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="integration-section">
+            <h2>Communication Tools</h2>
+            <p>
+                Enhance client communication with integrated messaging and notification tools.
+            </p>
+            <div class="integration-grid">
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">📧</span>
+                    </div>
+                    <div class="integration-name">Mailchimp</div>
+                    <div class="integration-description">
+                        Create and send marketing campaigns to your client base.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">💬</span>
+                    </div>
+                    <div class="integration-name">Twilio</div>
+                    <div class="integration-description">
+                        Send SMS appointment reminders and notifications to clients.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">📞</span>
+                    </div>
+                    <div class="integration-name">VoIP Phone Systems</div>
+                    <div class="integration-description">
+                        Integrate with popular VoIP providers for click-to-call functionality.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">📱</span>
+                    </div>
+                    <div class="integration-name">WhatsApp Business</div>
+                    <div class="integration-description">
+                        Connect with clients through WhatsApp messaging.
+                    </div>
+                    <div class="integration-status status-coming-soon">Coming Soon</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="integration-section">
+            <h2>Additional Integrations</h2>
+            <p>
+                Connect with other essential tools to create a comprehensive practice management ecosystem.
+            </p>
+            <div class="integration-grid">
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">📊</span>
+                    </div>
+                    <div class="integration-name">QuickBooks</div>
+                    <div class="integration-description">
+                        Sync financial data with QuickBooks for streamlined accounting.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">📅</span>
+                    </div>
+                    <div class="integration-name">Google Calendar</div>
+                    <div class="integration-description">
+                        Sync appointments with Google Calendar for staff convenience.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">📝</span>
+                    </div>
+                    <div class="integration-name">Microsoft 365</div>
+                    <div class="integration-description">
+                        Integrate with Microsoft 365 for document management and email.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+                <div class="integration-card">
+                    <div class="integration-logo">
+                        <span style="font-size: 2rem;">🔄</span>
+                    </div>
+                    <div class="integration-name">Zapier</div>
+                    <div class="integration-description">
+                        Connect PetSphere with thousands of apps through Zapier.
+                    </div>
+                    <div class="integration-status status-available">Available</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="api-section">
+            <h2>API Access</h2>
+            <p>
+                For practices with unique integration needs, we offer a robust API that allows you to build 
+                custom integrations with your existing systems or third-party services.
+            </p>
+            <p>
+                Our RESTful API provides secure access to:
+            </p>
+            <ul>
+                <li>Patient records</li>
+                <li>Appointment scheduling</li>
+                <li>Inventory management</li>
+                <li>Billing and invoicing</li>
+                <li>Client information</li>
+            </ul>
+            <p>
+                Example API request to retrieve patient information:
+            </p>
+            <div class="code-block">
+                <pre>GET /api/v1/patients/12345
+Authorization: Bearer {your_api_key}
+Accept: application/json</pre>
+            </div>
+            <p>
+                API access is available on Professional and Enterprise plans. For detailed API documentation, 
+                please visit our <a href="/docs/website/api/index.html">Developer Portal</a>.
+            </p>
+        </div>
+
+        <div class="cta-section">
+            <h2>Need a custom integration?</h2>
+            <p>Our team can help you connect PetSphere with your existing systems or third-party services.</p>
+            <a href="/contact.html" class="cta-button">Contact Our Integration Team</a>
+        </div>
+
+        <a href="/" class="back-button">Back to Home</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 PetSphere. All rights reserved.</p>
+        <div>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+            <a href="/cookie-policy.html">Cookie Policy</a>
+            <a href="/compliance.html">Compliance</a>
+        </div>
+    </footer>
+</body>
+</html>

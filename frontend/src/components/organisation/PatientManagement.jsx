@@ -45,6 +45,8 @@ import PetsIcon from '@mui/icons-material/Pets';
 import api from '../../services/api';
 import mockApi from '../../services/mockApi';
 import { generateDemoPatients } from '../../services/demoData';
+import moment from 'moment';
+import { isDemoUser } from '../../utils/auth';
 
 const PatientManagement = () => {
   const navigate = useNavigate();
@@ -89,12 +91,11 @@ const PatientManagement = () => {
     setLoading(true);
     try {
       // Check if we're using the demo account
-      const isDemoUser = localStorage.getItem('email') === 'demo@petsphere.com' ||
-                         localStorage.getItem('email') === 'demo@example.com';
+      const demoUser = isDemoUser();
 
       let data = [];
 
-      if (isDemoUser) {
+      if (demoUser) {
         // Use demo data for demo users
         data = generateDemoPatients();
       } else {
@@ -311,10 +312,9 @@ const PatientManagement = () => {
   const handleDeletePatient = async (patient) => {
     if (window.confirm(`Are you sure you want to delete ${patient.firstName} ${patient.lastName}?`)) {
       try {
-        const isDemoUser = localStorage.getItem('email') === 'demo@petsphere.com' ||
-                          localStorage.getItem('email') === 'demo@example.com';
+        const demoUser = isDemoUser();
 
-        if (!isDemoUser) {
+        if (!demoUser) {
           try {
             // For real users, try to delete via API
             await api.delete(`/patients/${patient.id}`);
@@ -363,125 +363,110 @@ const PatientManagement = () => {
 
   const handleSavePatient = async () => {
     try {
-      const isDemoUser = localStorage.getItem('email') === 'demo@petsphere.com' ||
-                         localStorage.getItem('email') === 'demo@example.com';
-
+      const demoUser = isDemoUser();
+      
       if (dialogMode === 'add') {
-        // Create new patient object with default values
-        let newPatient = {
-          id: `PAT${1000 + patients.length}`,
-          ...patientForm,
+        // Prepare new patient object
+        const newPatient = {
+          id: `PAT${Math.floor(Math.random() * 10000)}`,
+          firstName: patientForm.firstName,
+          lastName: patientForm.lastName,
+          email: patientForm.email,
+          phone: patientForm.phone,
+          address: patientForm.address,
           registrationDate: new Date().toISOString().split('T')[0],
-          petCount: 0,
+          status: 'active',
+          petCount: patientForm.pets.length,
           lastVisit: null,
-          pets: [],
-          visits: []
+          pets: patientForm.pets
         };
-
-        if (!isDemoUser) {
+        
+        if (!demoUser) {
           try {
             // For real users, try to use the API
-            // Transform the data to match the API's expected format
-            const apiPatientData = {
-              name: `${patientForm.firstName} ${patientForm.lastName}`,
-              species: 'Unknown', // Default value
-              breed: '',
-              gender: 'unknown',
-              owner: {
-                name: `${patientForm.firstName} ${patientForm.lastName}`,
-                phone: patientForm.phone,
-                email: patientForm.email,
-                address: patientForm.address
-              }
-            };
-
-            const response = await api.post('/patients', apiPatientData);
-
-            // If API call is successful, use returned data and transform it to match our component's format
-            if (response.data) {
-              const apiPatient = response.data;
-              newPatient = {
-                id: apiPatient.id,
-                firstName: patientForm.firstName,
-                lastName: patientForm.lastName,
-                email: patientForm.email,
-                phone: patientForm.phone,
-                address: patientForm.address,
-                registrationDate: new Date().toISOString().split('T')[0],
-                status: patientForm.status,
-                petCount: 0,
-                lastVisit: null,
-                pets: [],
-                visits: []
-              };
+            const response = await api.post('/patients', {
+              firstName: patientForm.firstName,
+              lastName: patientForm.lastName,
+              email: patientForm.email,
+              phone: patientForm.phone,
+              address: patientForm.address,
+              pets: patientForm.pets
+            });
+            
+            // If API call is successful, use the returned ID
+            if (response.data && response.data.patientId) {
+              newPatient.id = response.data.patientId;
             }
-          } catch (error) {
-            console.error('Error saving patient to API:', error);
-            // Try to use mock API
-            try {
-              const mockResponse = await mockApi.patients.createPatient(patientForm);
-              newPatient = mockResponse;
-            } catch (mockError) {
-              console.error('Mock API error:', mockError);
-              // Continue with local state update even if both APIs fail
-            }
+          } catch (apiError) {
+            console.error('API error while adding patient:', apiError);
+            setNotification({
+              open: true,
+              message: 'Error adding patient: ' + (apiError.response?.data?.message || apiError.message),
+              severity: 'error'
+            });
+            return; // Don't continue if API call fails
           }
         }
-
+        
         // Update local state
         setPatients([newPatient, ...patients]);
-
+        
         setNotification({
           open: true,
           message: 'Patient added successfully',
           severity: 'success'
         });
       } else if (dialogMode === 'edit') {
-        if (!isDemoUser) {
+        if (!demoUser) {
           try {
             // For real users, try to update via API
-            // Transform the data to match the API's expected format
-            const apiPatientData = {
-              name: `${patientForm.firstName} ${patientForm.lastName}`,
-              owner: {
-                name: `${patientForm.firstName} ${patientForm.lastName}`,
-                phone: patientForm.phone,
-                email: patientForm.email,
-                address: patientForm.address
-              }
-            };
-
-            await api.put(`/patients/${selectedPatient.id}`, apiPatientData);
-          } catch (error) {
-            console.error('Error updating patient via API:', error);
-            // Try to use mock API
-            try {
-              await mockApi.patients.updatePatient(selectedPatient.id, patientForm);
-            } catch (mockError) {
-              console.error('Mock API error:', mockError);
-              // Continue with local state update even if both APIs fail
-            }
+            await api.put(`/patients/${selectedPatient.id}`, {
+              firstName: patientForm.firstName,
+              lastName: patientForm.lastName,
+              email: patientForm.email,
+              phone: patientForm.phone,
+              address: patientForm.address,
+              pets: patientForm.pets
+            });
+          } catch (apiError) {
+            console.error('API error while updating patient:', apiError);
+            setNotification({
+              open: true,
+              message: 'Error updating patient: ' + (apiError.response?.data?.message || apiError.message),
+              severity: 'error'
+            });
+            return; // Don't continue if API call fails
           }
         }
-
-        // Update local state
-        setPatients(patients.map(p =>
-          p.id === selectedPatient.id ? { ...p, ...patientForm } : p
+        
+        // Update local state regardless of API call
+        setPatients(patients.map(p => 
+          p.id === selectedPatient.id ? 
+          {
+            ...p,
+            firstName: patientForm.firstName,
+            lastName: patientForm.lastName,
+            email: patientForm.email,
+            phone: patientForm.phone,
+            address: patientForm.address,
+            petCount: patientForm.pets.length,
+            pets: patientForm.pets
+          } : p
         ));
-
+        
         setNotification({
           open: true,
           message: 'Patient updated successfully',
           severity: 'success'
         });
       }
-
-      handleCloseDialog();
+      
+      setOpenDialog(false);
     } catch (error) {
       console.error('Error saving patient:', error);
       setNotification({
         open: true,
-        message: 'Error saving patient',
+        message: 'Error saving patient: ' + error.message,
         severity: 'error'
       });
     }

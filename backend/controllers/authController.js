@@ -105,13 +105,17 @@ const login = async (req, res) => {
         message: 'Invalid credentials'
       });
     }
+    
+    // Check if this is a demo user
+    const isDemo = email.includes('demo') && email.includes('@petsphere.com');
 
     // Create JWT payload without sensitive info
     const payload = {
       id: user.id,
       name: user.name,
       email: user.email,
-      role: user.role
+      role: user.role,
+      isDemo: isDemo
     };
 
     // Generate JWT token
@@ -121,7 +125,7 @@ const login = async (req, res) => {
       { expiresIn: process.env.JWT_EXPIRATION || '1d' }
     );
 
-    console.log(`Successful login for: ${email}, role: ${user.role}`);
+    console.log(`Successful login for: ${email}, role: ${user.role}, demo: ${isDemo}`);
 
     // Return success with token and user info
     res.json({
@@ -131,7 +135,8 @@ const login = async (req, res) => {
         id: user.id,
         name: user.name,
         email: user.email,
-        role: user.role
+        role: user.role,
+        isDemo: isDemo
       }
     });
   } catch (err) {

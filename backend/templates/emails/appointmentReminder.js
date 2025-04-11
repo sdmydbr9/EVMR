@@ -1,4 +1,5 @@
-const baseTemplate = require('./baseTemplate');
+const newBaseTemplate = require('./newBaseTemplate');
+const fallbackTemplate = require('./fallbackTemplate');
 
 /**
  * Generate an appointment reminder email template
@@ -12,11 +13,13 @@ const baseTemplate = require('./baseTemplate');
  * @param {string} data.clinicAddress - Clinic address
  * @param {string} data.clinicPhone - Clinic phone
  * @param {string} data.appointmentId - Unique appointment ID for reference
+ * @param {string} data.theme - 'light' or 'dark' theme for the email
  * @returns {Object} - Email template with text and HTML versions
  */
 const appointmentReminderTemplate = (data) => {
-  const title = 'Upcoming Appointment Reminder';
+  const title = 'Appointment Reminder';
   const appUrl = process.env.BASE_URL || 'https://petsphere.com';
+  const { theme = 'light' } = data;
 
   // Plain text version
   const text = `
@@ -61,16 +64,20 @@ const appointmentReminderTemplate = (data) => {
       <p class="highlight-item"><strong>Appointment ID:</strong> <span style="font-family: monospace;">${data.appointmentId}</span></p>
     </div>
 
-    <h3>Location</h3>
-    <p>
-      ${data.clinicName}<br>
-      ${data.clinicAddress}<br>
-      Phone: <a href="tel:${data.clinicPhone.replace(/\D/g, '')}">${data.clinicPhone}</a>
-    </p>
+    <div style="background-color: #f8f8f8; border-radius: 8px; padding: 20px; margin: 24px 0;">
+      <p style="margin-top: 0; font-weight: 500; color: #000000;">Location</p>
+      <p style="margin-bottom: 0;">
+        ${data.clinicName}<br>
+        ${data.clinicAddress}<br>
+        Phone: <a href="tel:${data.clinicPhone.replace(/\D/g, '')}">${data.clinicPhone}</a>
+      </p>
+    </div>
 
     <p>If you need to reschedule or cancel, please contact us at least 24 hours in advance.</p>
 
-    <a href="${appUrl}/appointments/${data.appointmentId}" class="button">View Appointment</a>
+    <div style="text-align: center; margin: 40px 0;">
+      <a href="${appUrl}/appointments/${data.appointmentId}" class="button">View Appointment</a>
+    </div>
 
     <div class="quote-box">
       <p class="quote-text">"Beyond Records, Beyond Care"</p>
@@ -81,12 +88,27 @@ const appointmentReminderTemplate = (data) => {
     <p>Best regards,<br>The ${data.clinicName} Team</p>
   `;
 
+  // Try to use the main template, fall back to basic template if it fails
+  let html;
+  try {
+    html = newBaseTemplate({
+      title,
+      content,
+      theme
+    });
+  } catch (error) {
+    console.error('Error generating email with newBaseTemplate:', error.message);
+    // Use fallback template instead
+    html = fallbackTemplate({
+      title,
+      content,
+      theme
+    });
+  }
+
   return {
     text,
-    html: baseTemplate({
-      title,
-      content
-    })
+    html
   };
 };
 

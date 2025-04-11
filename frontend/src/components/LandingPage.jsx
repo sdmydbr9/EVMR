@@ -981,16 +981,40 @@ const LandingPage = () => {
                 Platform
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/features.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Features
                 </Button>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/pricing.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Pricing
                 </Button>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/security.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Security
                 </Button>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/integrations.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Integrations
                 </Button>
               </Box>
@@ -1000,22 +1024,40 @@ const LandingPage = () => {
                 Resources
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Button 
-                  component="a" 
-                  href="/docs/website/index.html" 
-                  target="_blank" 
-                  color="inherit" 
+                <Button
+                  component="a"
+                  href="/docs/website/index.html"
+                  target="_blank"
+                  color="inherit"
                   sx={{ justifyContent: 'flex-start', p: 0 }}
                 >
                   Documentation
                 </Button>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/blog.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Blog
                 </Button>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/support.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Support
                 </Button>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/faqs.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   FAQs
                 </Button>
               </Box>
@@ -1025,16 +1067,40 @@ const LandingPage = () => {
                 Company
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/about.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   About Us
                 </Button>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/careers.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Careers
                 </Button>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/contact.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Contact
                 </Button>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/partners.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Partners
                 </Button>
               </Box>
@@ -1044,16 +1110,40 @@ const LandingPage = () => {
                 Legal
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/privacy.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Privacy Policy
                 </Button>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/terms.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Terms of Service
                 </Button>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/compliance.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Compliance
                 </Button>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  component="a"
+                  href="/cookie-policy.html"
+                  target="_blank"
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                >
                   Cookie Policy
                 </Button>
               </Box>

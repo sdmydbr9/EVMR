@@ -63,17 +63,43 @@ router.get('/', async (req, res) => {
   try {
     // Get user ID from the authenticated user
     const userId = req.user.id;
+    const isDemo = req.user.isDemo || false;
 
-    // Query for pets belonging to this user only
-    const result = await pool.query(
-      `SELECT * FROM pets WHERE owner_id = $1 ORDER BY name ASC`,
-      [userId]
-    );
+    // Different handling for demo users vs real users
+    let pets = [];
 
-    const pets = result.rows.map(pet => {
-      console.log('Pet data from database:', pet);
-      return pet;
-    });
+    if (isDemo) {
+      // For demo users, retrieve demo pets (may include pre-populated sample data)
+      const result = await pool.query(
+        `SELECT * FROM pets WHERE owner_id = $1 ORDER BY name ASC`,
+        [userId]
+      );
+      
+      // If no demo pets exist yet, create some sample data for the demo user
+      if (result.rowCount === 0) {
+        console.log('Creating sample pets for demo user', userId);
+        // Create sample pets for demo user
+        await createSamplePetsForDemo(userId);
+        
+        // Fetch the newly created sample pets
+        const sampleResult = await pool.query(
+          `SELECT * FROM pets WHERE owner_id = $1 ORDER BY name ASC`,
+          [userId]
+        );
+        
+        pets = sampleResult.rows;
+      } else {
+        pets = result.rows;
+      }
+    } else {
+      // For real users, only show their own data (strict isolation)
+      const result = await pool.query(
+        `SELECT * FROM pets WHERE owner_id = $1 ORDER BY name ASC`,
+        [userId]
+      );
+      
+      pets = result.rows;
+    }
 
     res.json({ success: true, pets });
   } catch (err) {
@@ -81,6 +107,71 @@ router.get('/', async (req, res) => {
     res.status(500).json({ success: false, message: 'Failed to fetch pets' });
   }
 });
+
+/**
+ * Creates sample pets for demo users
+ * @param {number} userId - Demo user ID
+ */
+async function createSamplePetsForDemo(userId) {
+  try {
+    const samplePets = [
+      {
+        name: 'Max',
+        species: 'Dog',
+        breed: 'Labrador Retriever',
+        color: 'Yellow',
+        dateOfBirth: '2019-05-12',
+        gender: 'Male',
+        isNeutered: true,
+        microchipId: 'DEMO-CHIP-001'
+      },
+      {
+        name: 'Luna',
+        species: 'Cat',
+        breed: 'Maine Coon',
+        color: 'Tabby',
+        dateOfBirth: '2020-03-15',
+        gender: 'Female',
+        isNeutered: true,
+        microchipId: 'DEMO-CHIP-002'
+      },
+      {
+        name: 'Rocky',
+        species: 'Dog',
+        breed: 'German Shepherd',
+        color: 'Black and Tan',
+        dateOfBirth: '2018-11-23',
+        gender: 'Male',
+        isNeutered: false,
+        microchipId: 'DEMO-CHIP-003'
+      }
+    ];
+
+    for (const pet of samplePets) {
+      await pool.query(
+        `INSERT INTO pets (
+          name, species, breed, color, date_of_birth, gender,
+          is_neutered, microchip_id, owner_id, image_url
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, NULL)`,
+        [
+          pet.name, 
+          pet.species, 
+          pet.breed, 
+          pet.color, 
+          pet.dateOfBirth, 
+          pet.gender, 
+          pet.isNeutered, 
+          pet.microchipId, 
+          userId
+        ]
+      );
+    }
+    
+    console.log(`Created ${samplePets.length} sample pets for demo user ${userId}`);
+  } catch (error) {
+    console.error('Error creating sample pets for demo user:', error);
+  }
+}
 
 // Get a specific pet by ID (ensuring it belongs to the current user)
 router.get('/:id', async (req, res) => {

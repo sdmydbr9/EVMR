@@ -57,6 +57,7 @@ import MonitorHeartIcon from '@mui/icons-material/MonitorHeart';
 import MedicationIcon from '@mui/icons-material/Medication';
 import NoteAltIcon from '@mui/icons-material/NoteAlt';
 import api from '../../services/api';
+import { isDemoUser } from '../../utils/auth';
 
 const MedicalRecords = () => {
   const navigate = useNavigate();
@@ -104,26 +105,34 @@ const MedicalRecords = () => {
     setLoading(true);
     try {
       // Check if we're using the demo account
-      const isDemoUser = localStorage.getItem('email') === 'demo@petsphere.com' ||
-                         localStorage.getItem('email') === 'demo@example.com';
+      const demoUser = isDemoUser();
 
       let data = [];
 
-      if (isDemoUser) {
+      if (demoUser) {
         // Use demo data
         data = generateDemoRecords();
       } else {
         // Fetch from API
-        const response = await api.get('/emr/records');
-        // Ensure data is an array
-        data = Array.isArray(response.data) ? response.data : [];
+        try {
+          const response = await api.get('/emr/records');
+          if (response.data && response.data.records) {
+            data = response.data.records;
+          } else {
+            console.error('Unexpected API response format:', response.data);
+            data = [];
+          }
+        } catch (apiError) {
+          console.error('API error fetching records:', apiError);
+          data = [];
+        }
       }
 
       // Ensure we always set an array to the records state
       setRecords(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching records:', error);
-      setRecords(generateDemoRecords());
+      setRecords([]);
     } finally {
       setLoading(false);
     }
@@ -281,10 +290,14 @@ const MedicalRecords = () => {
   const handleDeleteRecord = async (record) => {
     if (window.confirm(`Are you sure you want to delete record ${record.id}?`)) {
       try {
-        // In a real app, you would call the API
-        // await api.delete(`/emr/records/${record.id}`);
+        const demoUser = isDemoUser();
+        
+        if (!demoUser) {
+          // For real users, call the API
+          await api.delete(`/emr/records/${record.id}`);
+        }
 
-        // For demo, just remove from the local state
+        // Remove from local state
         setRecords(records.filter(r => r.id !== record.id));
 
         setNotification({
@@ -317,18 +330,30 @@ const MedicalRecords = () => {
 
   const handleSaveRecord = async () => {
     try {
+      const demoUser = isDemoUser();
+      
       if (dialogMode === 'add') {
-        // In a real app, you would call the API
-        // const response = await api.post('/emr/records', recordForm);
-
-        // For demo, just add to the local state
-        const newRecord = {
-          id: `REC${10000 + records.length}`,
-          ...recordForm,
-          status: 'completed'
-        };
-
-        setRecords([newRecord, ...records]);
+        if (!demoUser) {
+          // For real users, call the API
+          const response = await api.post('/emr/records', recordForm);
+          if (response.data && response.data.recordId) {
+            // Add the new record with the returned ID
+            const newRecord = {
+              id: response.data.recordId,
+              ...recordForm,
+              status: 'completed'
+            };
+            setRecords([newRecord, ...records]);
+          }
+        } else {
+          // For demo, just add to the local state
+          const newRecord = {
+            id: `REC${10000 + records.length}`,
+            ...recordForm,
+            status: 'completed'
+          };
+          setRecords([newRecord, ...records]);
+        }
 
         setNotification({
           open: true,
@@ -336,10 +361,12 @@ const MedicalRecords = () => {
           severity: 'success'
         });
       } else if (dialogMode === 'edit') {
-        // In a real app, you would call the API
-        // await api.put(`/emr/records/${selectedRecord.id}`, recordForm);
+        if (!demoUser) {
+          // For real users, call the API
+          await api.put(`/emr/records/${selectedRecord.id}`, recordForm);
+        }
 
-        // For demo, just update the local state
+        // Update the local state
         setRecords(records.map(r =>
           r.id === selectedRecord.id ? { ...r, ...recordForm } : r
         ));
@@ -356,7 +383,7 @@ const MedicalRecords = () => {
       console.error('Error saving record:', error);
       setNotification({
         open: true,
-        message: 'Error saving record',
+        message: 'Error saving record: ' + (error.response?.data?.message || error.message),
         severity: 'error'
       });
     }

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - PetSphere</title>
+    <link rel="stylesheet" href="assets/css/styles.css">
+    <link rel="icon" href="assets/images/favicon.ico">
+</head>
+<body>
+    <header>
+        <nav>
+            <div class="logo">
+                <a href="/">
+                    <img src="assets/images/logo.svg" alt="PetSphere Logo">
+                    <span>PetSphere</span>
+                </a>
+            </div>
+            <div class="nav-links">
+                <a href="/features.html">Features</a>
+                <a href="/pricing.html">Pricing</a>
+                <a href="/integrations.html">Integrations</a>
+                <a href="/security.html">Security</a>
+                <a href="/blog.html">Blog</a>
+                <a href="/support.html">Support</a>
+                <a href="/docs/website/index.html">Documentation</a>
+            </div>
+            <div class="auth-buttons">
+                <a href="/login" class="login-button">Log In</a>
+                <a href="/signup.html" class="signup-button">Sign Up</a>
+            </div>
+        </nav>
+    </header>
+
+    <main class="content-container">
+        <h1>Contact Us</h1>
+        
+        <div class="contact-intro">
+            <p>
+                We're here to help! Whether you have questions about our platform, need technical support, 
+                or want to learn more about how PetSphere can benefit your veterinary practice, 
+                our team is ready to assist you.
+            </p>
+        </div>
+        
+        <div class="contact-grid">
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <img src="assets/images/icons/email.svg" alt="Email Icon">
+                </div>
+                <h3>Email Us</h3>
+                <p>For general inquiries:</p>
+                <p><a href="mailto:info@petsphere.com">info@petsphere.com</a></p>
+                <p>For support:</p>
+                <p><a href="mailto:support@petsphere.com">support@petsphere.com</a></p>
+                <p>For sales:</p>
+                <p><a href="mailto:sales@petsphere.com">sales@petsphere.com</a></p>
+            </div>
+            
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <img src="assets/images/icons/phone.svg" alt="Phone Icon">
+                </div>
+                <h3>Call Us</h3>
+                <p>Customer Support:</p>
+                <p><a href="tel:+18001234567">+1 (800) 123-4567</a></p>
+                <p>Sales Team:</p>
+                <p><a href="tel:+18001234568">+1 (800) 123-4568</a></p>
+                <p>Hours: Monday-Friday, 9am-6pm EST</p>
+            </div>
+            
+            <div class="contact-card">
+                <div class="contact-icon">
+                    <img src="assets/images/icons/chat.svg" alt="Chat Icon">
+                </div>
+                <h3>Live Chat</h3>
+                <p>
+                    Chat with our support team in real-time during business hours.
+                </p>
+                <button class="chat-button">Start Chat</button>
+            </div>
+        </div>
+        
+        <div class="contact-form-section">
+            <h2>Send Us a Message</h2>
+            <form class="contact-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="name">Your Name</label>
+                        <input type="text" id="name" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email Address</label>
+                        <input type="email" id="email" name="email" required>
+                    </div>
+                </div>
+                
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="phone">Phone Number (Optional)</label>
+                        <input type="tel" id="phone" name="phone">
+                    </div>
+                    <div class="form-group">
+                        <label for="subject">Subject</label>
+                        <select id="subject" name="subject" required>
+                            <option value="">Select a subject</option>
+                            <option value="general">General Inquiry</option>
+                            <option value="support">Technical Support</option>
+                            <option value="sales">Sales Question</option>
+                            <option value="demo">Request a Demo</option>
+                            <option value="feedback">Feedback</option>
+                        </select>
+                    </div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="message">Your Message</label>
+                    <textarea id="message" name="message" rows="5" required></textarea>
+                </div>
+                
+                <div class="form-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" name="privacy" required>
+                        I have read and agree to the <a href="/privacy.html">Privacy Policy</a>
+                    </label>
+                </div>
+                
+                <button type="submit" class="submit-button">Send Message</button>
+            </form>
+        </div>
+        
+        <div class="company-info">
+            <h2>Company Information</h2>
+            <div class="company-info-grid">
+                <div class="company-info-item">
+                    <h3>Headquarters</h3>
+                    <p>
+                        123 Main Street<br>
+                        Suite 456<br>
+                        Anytown, USA 12345
+                    </p>
+                </div>
+                
+                <div class="company-info-item">
+                    <h3>Business Hours</h3>
+                    <p>
+                        Monday - Friday: 9:00 AM - 6:00 PM EST<br>
+                        Saturday: 10:00 AM - 2:00 PM EST<br>
+                        Sunday: Closed
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="map-section">
+            <h2>Visit Us</h2>
+            <div class="map-container">
+                <!-- Map placeholder - in a real implementation, this would be an embedded map -->
+                <div class="map-placeholder">
+                    <p>Interactive Map Would Be Displayed Here</p>
+                </div>
+            </div>
+        </div>
+
+        <a href="/" class="back-button">Back to Home</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 PetSphere. All rights reserved.</p>
+        <div>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+            <a href="/cookie-policy.html">Cookie Policy</a>
+            <a href="/compliance.html">Compliance</a>
+        </div>
+    </footer>
+</body>
+</html>

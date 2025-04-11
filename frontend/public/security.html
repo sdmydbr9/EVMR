@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Security - PetSphere</title>
+    <link rel="icon" href="/assets/images/logos/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 40px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #3a4f9a;
+            font-weight: 700;
+        }
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #3a4f9a;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #3a4f9a;
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #3a4f9a;
+        }
+        p, ul, ol {
+            margin-bottom: 20px;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .security-section {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+        }
+        .security-icon {
+            font-size: 2.5rem;
+            color: #3a4f9a;
+            margin-bottom: 15px;
+        }
+        .security-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .security-item {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .security-item h3 {
+            color: #3a4f9a;
+            margin-top: 0;
+        }
+        .security-badge {
+            display: inline-block;
+            padding: 10px 15px;
+            margin: 5px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            font-weight: 500;
+            color: #333;
+        }
+        .cta-section {
+            background-color: #3a4f9a;
+            color: white;
+            padding: 50px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 60px 0;
+        }
+        .cta-section h2 {
+            color: white;
+            margin-top: 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: #3a4f9a;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .cta-button:hover {
+            background-color: #f0f0f0;
+        }
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+        }
+        footer a {
+            color: #3a4f9a;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3a4f9a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #2c3e7a;
+        }
+        @media (max-width: 768px) {
+            .security-grid {
+                grid-template-columns: 1fr;
+            }
+            .cta-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <img src="/assets/images/logos/black_transparent.png" alt="PetSphere Logo">
+            <span>PetSphere</span>
+        </a>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/features.html">Features</a>
+            <a href="/contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>Security at PetSphere</h1>
+        <p>
+            At PetSphere, we understand that your veterinary practice data is sensitive and valuable. 
+            That's why security is at the core of everything we do. We've built our platform with 
+            industry-leading security measures to ensure your data remains protected.
+        </p>
+
+        <div class="security-section">
+            <div class="security-icon">🔒</div>
+            <h2>Data Protection</h2>
+            <p>
+                Your data is encrypted both in transit and at rest, ensuring that sensitive information 
+                remains secure at all times.
+            </p>
+            <ul>
+                <li><strong>In-transit encryption:</strong> All data transmitted between your devices and our servers is protected using TLS 1.2 or higher with strong cipher suites.</li>
+                <li><strong>At-rest encryption:</strong> All data stored in our databases is encrypted using AES-256, the same encryption standard used by financial institutions and government agencies.</li>
+                <li><strong>Field-level encryption:</strong> Particularly sensitive data, such as payment information, is encrypted at the field level for additional protection.</li>
+                <li><strong>Secure backups:</strong> All backups are encrypted and stored in geographically distributed locations to ensure data durability and availability.</li>
+            </ul>
+        </div>
+
+        <div class="security-section">
+            <div class="security-icon">🔐</div>
+            <h2>Access Controls</h2>
+            <p>
+                We implement strict access controls to ensure that only authorized users can access your data.
+            </p>
+            <ul>
+                <li><strong>Role-based access control:</strong> Define precise permissions for each user role in your practice, ensuring staff members can only access the information they need to perform their jobs.</li>
+                <li><strong>Multi-factor authentication:</strong> Add an extra layer of security by requiring a second verification step beyond just a password.</li>
+                <li><strong>Session management:</strong> Automatic session timeouts and the ability to view and terminate active sessions help protect against unauthorized access.</li>
+                <li><strong>IP restrictions:</strong> Limit system access to specific IP addresses or ranges for Enterprise customers.</li>
+                <li><strong>Audit logs:</strong> Comprehensive logs track all user activities, allowing you to monitor who accessed what information and when.</li>
+            </ul>
+        </div>
+
+        <div class="security-section">
+            <div class="security-icon">🛡️</div>
+            <h2>Infrastructure Security</h2>
+            <p>
+                Our infrastructure is built on secure, enterprise-grade cloud platforms with multiple layers of protection.
+            </p>
+            <ul>
+                <li><strong>Secure data centers:</strong> We host our services in SOC 2 Type II certified data centers with 24/7 physical security, redundant power, and environmental controls.</li>
+                <li><strong>Network security:</strong> Multiple firewalls, intrusion detection systems, and DDoS protection safeguard our infrastructure from external threats.</li>
+                <li><strong>Regular security testing:</strong> We conduct regular vulnerability assessments and penetration testing to identify and address potential security issues.</li>
+                <li><strong>Continuous monitoring:</strong> Our security team monitors our systems 24/7 for suspicious activities and potential security threats.</li>
+                <li><strong>Automated patching:</strong> We maintain a rigorous patching schedule to address security vulnerabilities promptly.</li>
+            </ul>
+        </div>
+
+        <div class="security-section">
+            <div class="security-icon">📝</div>
+            <h2>Compliance</h2>
+            <p>
+                We adhere to industry standards and regulations to ensure the highest level of security and privacy.
+            </p>
+            <div style="display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 20px;">
+                <span class="security-badge">GDPR Compliant</span>
+                <span class="security-badge">HIPAA Compliant</span>
+                <span class="security-badge">SOC 2 Type II</span>
+                <span class="security-badge">ISO 27001</span>
+            </div>
+            <ul>
+                <li><strong>GDPR:</strong> We comply with the General Data Protection Regulation, respecting the privacy rights of individuals in the European Union.</li>
+                <li><strong>HIPAA:</strong> Our platform is designed to help veterinary practices maintain compliance with the Health Insurance Portability and Accountability Act.</li>
+                <li><strong>SOC 2:</strong> We maintain SOC 2 Type II certification, demonstrating our commitment to security, availability, and confidentiality.</li>
+                <li><strong>ISO 27001:</strong> Our information security management system is aligned with ISO 27001 standards.</li>
+            </ul>
+            <p>
+                For more detailed information about our compliance efforts, please visit our <a href="/compliance.html">Compliance</a> page.
+            </p>
+        </div>
+
+        <h2>Additional Security Features</h2>
+        <div class="security-grid">
+            <div class="security-item">
+                <h3>Password Policies</h3>
+                <p>Enforce strong password requirements, including minimum length, complexity, and regular password changes.</p>
+            </div>
+            <div class="security-item">
+                <h3>Secure File Sharing</h3>
+                <p>Share documents and images securely with clients and colleagues without compromising sensitive information.</p>
+            </div>
+            <div class="security-item">
+                <h3>Data Loss Prevention</h3>
+                <p>Policies and controls to prevent unauthorized access, sharing, or exfiltration of sensitive data.</p>
+            </div>
+            <div class="security-item">
+                <h3>Secure Client Portal</h3>
+                <p>Provide clients with secure access to their pets' information through an encrypted client portal.</p>
+            </div>
+            <div class="security-item">
+                <h3>Secure Messaging</h3>
+                <p>End-to-end encrypted messaging for secure communication with clients and team members.</p>
+            </div>
+            <div class="security-item">
+                <h3>Disaster Recovery</h3>
+                <p>Comprehensive disaster recovery plans ensure business continuity in the event of a system failure or natural disaster.</p>
+            </div>
+        </div>
+
+        <div class="security-section">
+            <h2>Our Security Commitment</h2>
+            <p>
+                Security is not a one-time effort but an ongoing commitment. We continuously improve our security measures to stay ahead of emerging threats. Our approach includes:
+            </p>
+            <ul>
+                <li><strong>Security-first development:</strong> Security is integrated into our development process from the beginning, not added as an afterthought.</li>
+                <li><strong>Regular security training:</strong> Our team undergoes regular security awareness training to ensure they follow best practices.</li>
+                <li><strong>Incident response plan:</strong> We have a comprehensive incident response plan to address security incidents quickly and effectively.</li>
+                <li><strong>Third-party security audits:</strong> Independent security experts regularly audit our systems and processes.</li>
+                <li><strong>Vulnerability disclosure program:</strong> We welcome reports of potential security vulnerabilities from security researchers.</li>
+            </ul>
+        </div>
+
+        <div class="cta-section">
+            <h2>Ready to secure your veterinary practice data?</h2>
+            <p>Join thousands of veterinary professionals who trust PetSphere with their sensitive information.</p>
+            <a href="/signup.html" class="cta-button">Start Your Free Trial</a>
+        </div>
+
+        <a href="/" class="back-button">Back to Home</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 PetSphere. All rights reserved.</p>
+        <div>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+            <a href="/cookie-policy.html">Cookie Policy</a>
+            <a href="/compliance.html">Compliance</a>
+        </div>
+    </footer>
+</body>
+</html>

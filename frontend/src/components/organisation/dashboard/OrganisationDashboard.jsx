@@ -66,6 +66,7 @@ import DoctorWorkload from './DoctorWorkload';
 import InventoryUsage from './InventoryUsage';
 import PatientVisits from './PatientVisits';
 import PatientManagement from '../PatientManagement';
+import { isDemoUser } from '../../../utils/auth';
 
 const COLORS = ['#00C49F', '#FF8042', '#8884d8', '#72FF7D', '#FF6B6B', '#FFBB28'];
 
@@ -117,10 +118,9 @@ const OrganisationDashboard = () => {
         setIsLoading(true);
         try {
             // Try to fetch data from API, but use mock data for demo user
-            const isDemoUser = localStorage.getItem('email') === 'demo@petsphere.com' ||
-                              localStorage.getItem('email') === 'demo@example.com';
+            const demoUser = isDemoUser();
 
-            console.log('Fetching analytics data, isDemoUser:', isDemoUser);
+            console.log('Fetching analytics data, isDemoUser:', demoUser);
 
             // Use mock data for demo user or if API calls fail
             let appointmentDataResult = [];
@@ -130,7 +130,7 @@ const OrganisationDashboard = () => {
             let patientVisitDataResult = [];
             let statsDataResult = {};
 
-            if (!isDemoUser) {
+            if (!demoUser) {
                 try {
                     // Fetch appointment trends
                     const appointmentResponse = await fetch(`/api/services/analytics/appointments?period=${period}`, {
@@ -217,7 +217,7 @@ const OrganisationDashboard = () => {
             }
 
             // If we didn't get data from the API or it's a demo user, use mock data
-            if (isDemoUser || appointmentDataResult.length === 0) {
+            if (demoUser || appointmentDataResult.length === 0) {
                 appointmentDataResult = [
                     { _id: 'Mon', count: 10 },
                     { _id: 'Tue', count: 15 },
@@ -229,7 +229,7 @@ const OrganisationDashboard = () => {
                 ];
             }
 
-            if (isDemoUser || serviceDataResult.length === 0) {
+            if (demoUser || serviceDataResult.length === 0) {
                 serviceDataResult = [
                     { _id: '1', count: 25, serviceDetails: [{ name: 'Check-ups' }] },
                     { _id: '2', count: 18, serviceDetails: [{ name: 'Vaccinations' }] },
@@ -239,7 +239,7 @@ const OrganisationDashboard = () => {
                 ];
             }
 
-            if (isDemoUser || inventoryDataResult.length === 0) {
+            if (demoUser || inventoryDataResult.length === 0) {
                 inventoryDataResult = [
                     { name: 'Vaccines', value: 35 },
                     { name: 'Medications', value: 25 },
@@ -249,7 +249,7 @@ const OrganisationDashboard = () => {
                 ];
             }
 
-            if (isDemoUser || doctorWorkloadDataResult.length === 0) {
+            if (demoUser || doctorWorkloadDataResult.length === 0) {
                 doctorWorkloadDataResult = [
                     { name: 'Dr. Johnson', appointments: 28 },
                     { name: 'Dr. Smith', appointments: 22 },
@@ -259,7 +259,7 @@ const OrganisationDashboard = () => {
                 ];
             }
 
-            if (isDemoUser || patientVisitDataResult.length === 0) {
+            if (demoUser || patientVisitDataResult.length === 0) {
                 patientVisitDataResult = [
                     { date: 'Mon', visits: 12 },
                     { date: 'Tue', visits: 19 },
@@ -271,7 +271,7 @@ const OrganisationDashboard = () => {
                 ];
             }
 
-            if (isDemoUser || Object.keys(statsDataResult).length === 0) {
+            if (demoUser || Object.keys(statsDataResult).length === 0) {
                 statsDataResult = {
                     totalAppointments: appointmentDataResult.reduce((sum, item) => sum + item.count, 0),
                     pendingAppointments: Math.floor(Math.random() * 20),
@@ -347,12 +347,11 @@ const OrganisationDashboard = () => {
     const fetchUpcomingAppointments = async () => {
         try {
             // Check if demo user
-            const isDemoUser = localStorage.getItem('email') === 'demo@petsphere.com' ||
-                              localStorage.getItem('email') === 'demo@example.com';
+            const demoUser = isDemoUser();
 
             let appointmentsData = [];
 
-            if (!isDemoUser) {
+            if (!demoUser) {
                 try {
                     const response = await fetch('/api/services/appointments/upcoming', {
                         headers: {
@@ -368,7 +367,7 @@ const OrganisationDashboard = () => {
             }
 
             // If no data from API or demo user, use mock data
-            if (isDemoUser || appointmentsData.length === 0) {
+            if (demoUser || appointmentsData.length === 0) {
                 appointmentsData = [
                     {
                         _id: '1',
@@ -425,12 +424,11 @@ const OrganisationDashboard = () => {
     const fetchAvailableDoctors = async () => {
         try {
             // Check if demo user
-            const isDemoUser = localStorage.getItem('email') === 'demo@petsphere.com' ||
-                              localStorage.getItem('email') === 'demo@example.com';
+            const demoUser = isDemoUser();
 
             let doctorsData = [];
 
-            if (!isDemoUser) {
+            if (!demoUser) {
                 try {
                     const response = await fetch('/api/users/doctors/available', {
                         headers: {
@@ -446,7 +444,7 @@ const OrganisationDashboard = () => {
             }
 
             // If no data from API or demo user, use mock data
-            if (isDemoUser || doctorsData.length === 0) {
+            if (demoUser || doctorsData.length === 0) {
                 doctorsData = [
                     {
                         _id: '1',
@@ -501,12 +499,11 @@ const OrganisationDashboard = () => {
     const fetchAppointmentRequests = async () => {
         try {
             // Check if demo user
-            const isDemoUser = localStorage.getItem('email') === 'demo@petsphere.com' ||
-                              localStorage.getItem('email') === 'demo@example.com';
+            const demoUser = isDemoUser();
 
             let requestsData = [];
 
-            if (!isDemoUser) {
+            if (!demoUser) {
                 try {
                     const response = await fetch('/api/services/appointments/requests', {
                         headers: {
@@ -522,7 +519,7 @@ const OrganisationDashboard = () => {
             }
 
             // If no data from API or demo user, use mock data
-            if (isDemoUser || requestsData.length === 0) {
+            if (demoUser || requestsData.length === 0) {
                 requestsData = [
                     {
                         _id: '1',

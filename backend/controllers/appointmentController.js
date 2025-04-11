@@ -3,11 +3,105 @@ const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
 });
 
+/**
+ * Creates sample appointments for demo users
+ * @param {number} userId - Demo user ID
+ */
+async function createSampleAppointmentsForDemo(userId) {
+  try {
+    // Get existing patients for sample data
+    const patientsResult = await pool.query(`
+      SELECT id FROM patients LIMIT 3
+    `);
+    
+    if (patientsResult.rows.length === 0) {
+      console.log('No patients found for sample appointments');
+      return;
+    }
+    
+    const patientIds = patientsResult.rows.map(p => p.id);
+    const now = new Date();
+    
+    // Sample appointment data
+    const sampleAppointments = [
+      {
+        patientId: patientIds[0] || 'DEMO001',
+        startTime: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 10, 0), // Tomorrow 10:00 AM
+        endTime: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1, 10, 30),  // Tomorrow 10:30 AM
+        type: 'check-up',
+        notes: 'Annual check-up appointment',
+        status: 'scheduled'
+      },
+      {
+        patientId: patientIds[1] || 'DEMO002',
+        startTime: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2, 14, 30), // Day after tomorrow 2:30 PM
+        endTime: new Date(now.getFullYear(), now.getMonth(), now.getDate() + 2, 15, 0),    // Day after tomorrow 3:00 PM
+        type: 'vaccination',
+        notes: 'Rabies vaccination due',
+        status: 'confirmed'
+      },
+      {
+        patientId: patientIds[0] || 'DEMO001',
+        startTime: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7, 9, 0),  // Last week 9:00 AM
+        endTime: new Date(now.getFullYear(), now.getMonth(), now.getDate() - 7, 9, 45),   // Last week 9:45 AM
+        type: 'follow-up',
+        notes: 'Post-surgery check-up',
+        status: 'completed'
+      }
+    ];
+
+    for (const appt of sampleAppointments) {
+      await pool.query(`
+        INSERT INTO appointments (
+          patient_id,
+          start_time,
+          end_time,
+          vet_id,
+          appointment_type,
+          notes,
+          status
+        ) VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+        [
+          appt.patientId,
+          appt.startTime,
+          appt.endTime,
+          userId, // Use the demo user as the vet
+          appt.type,
+          appt.notes,
+          appt.status
+        ]
+      );
+    }
+    
+    console.log(`Created ${sampleAppointments.length} sample appointments for demo user ${userId}`);
+  } catch (error) {
+    console.error('Error creating sample appointments for demo user:', error);
+  }
+}
+
 const appointmentController = {
   // Get all appointments with optional filters
   getAllAppointments: async (req, res) => {
     try {
       const { date, vetId, patientId, status } = req.query;
+      const isDemo = req.user.isDemo || false;
+      const userId = req.user.id;
+      
+      // Different handling for demo users vs real users
+      let appointments = [];
+      
+      if (isDemo) {
+        // For demo users - check if there are already appointments
+        const checkQuery = `SELECT COUNT(*) FROM appointments WHERE vet_id = $1`;
+        const checkResult = await pool.query(checkQuery, [userId]);
+        
+        if (parseInt(checkResult.rows[0].count) === 0) {
+          // Create sample appointments for demo user
+          await createSampleAppointmentsForDemo(userId);
+        }
+      }
+      
+      // Construct query with proper filters
       let query = `
         SELECT 
           a.*,
@@ -19,8 +113,16 @@ const appointmentController = {
         LEFT JOIN users u ON a.vet_id = u.id
         WHERE 1=1
       `;
+      
       const params = [];
       let paramCount = 1;
+      
+      // For real users, always filter to only show their data (data isolation)
+      if (!isDemo && req.user.role === 'veterinarian') {
+        query += ` AND a.vet_id = $${paramCount}`;
+        params.push(userId);
+        paramCount++;
+      }
 
       if (date) {
         query += ` AND DATE(a.start_time) = $${paramCount}`;

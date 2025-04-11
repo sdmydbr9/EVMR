@@ -1,13 +1,16 @@
-const baseTemplate = require('./baseTemplate');
+const newBaseTemplate = require('./newBaseTemplate');
+const fallbackTemplate = require('./fallbackTemplate');
 
 /**
  * Generate an admin notification email template for new signups
  * @param {Object} user - User data
+ * @param {string} user.theme - 'light' or 'dark' theme for the email
  * @returns {Object} - Email template with text and HTML versions
  */
 const adminNotificationTemplate = (user) => {
-  const title = 'New PetSphere Application Received';
+  const title = 'New Application Received';
   const adminUrl = process.env.ADMIN_URL || process.env.BASE_URL || 'https://petsphere.com';
+  const { theme = 'light' } = user;
 
   // Plain text version
   const text = `
@@ -60,19 +63,36 @@ const adminNotificationTemplate = (user) => {
       <p class="highlight-item">Contact the applicant if additional information is needed</p>
     </div>
 
-    <a href="${adminUrl}/applications" class="button">Review Application</a>
+    <div style="text-align: center; margin: 40px 0;">
+      <a href="${adminUrl}/applications" class="button">Review Application</a>
+    </div>
 
     <div class="quote-box">
       <p class="quote-text">"Beyond Records, Beyond Care"</p>
     </div>
   `;
 
+  // Try to use the main template, fall back to basic template if it fails
+  let html;
+  try {
+    html = newBaseTemplate({
+      title,
+      content,
+      theme
+    });
+  } catch (error) {
+    console.error('Error generating email with newBaseTemplate:', error.message);
+    // Use fallback template instead
+    html = fallbackTemplate({
+      title,
+      content,
+      theme
+    });
+  }
+
   return {
     text,
-    html: baseTemplate({
-      title,
-      content
-    })
+    html
   };
 };
 

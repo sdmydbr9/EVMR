@@ -8,81 +8,75 @@ const pool = new Pool({
 
 /**
  * Get all patients with pagination and filtering
+ * @param {Object} req - Express request object
+ * @param {Object} res - Express response object
  */
 const getAllPatients = async (req, res) => {
   try {
-    const { 
-      page = 1, 
-      limit = 10, 
-      search = '', 
-      species, 
-      sort = 'name',
-      order = 'ASC'
-    } = req.query;
+    // Extract query parameters for filtering
+    const { page = 1, limit = 10, search = '', species = '', status = '' } = req.query;
     
-    const offset = (page - 1) * limit;
+    // Base query to include only active patients
+    const baseQuery = 'WHERE p.is_active = true';
     
-    // Build WHERE clause based on filters
-    let whereClause = '';
-    const params = [];
+    // Add user-specific filtering if not an admin
+    const userFilter = req.user.role !== 'admin' 
+      ? 'AND p.user_id = $1' 
+      : '';
     
-    if (search) {
-      params.push(`%${search}%`);
-      whereClause += ` WHERE (p.name ILIKE $${params.length} OR o.name ILIKE $${params.length})`;
-    }
+    // Add search filter if provided
+    const searchFilter = search 
+      ? `AND (p.name ILIKE '%${search}%' OR o.name ILIKE '%${search}%' OR o.email ILIKE '%${search}%')` 
+      : '';
     
-    if (species) {
-      if (whereClause === '') {
-        whereClause = ' WHERE';
-      } else {
-        whereClause += ' AND';
-      }
-      params.push(species);
-      whereClause += ` p.species = $${params.length}`;
-    }
+    // Add species filter if provided
+    const speciesFilter = species 
+      ? `AND p.species = '${species}'` 
+      : '';
     
-    // Query to get paginated patients
-    const patientsQuery = `
-      SELECT 
-        p.id, 
-        p.name, 
-        p.species, 
-        p.breed, 
-        p.date_of_birth, 
-        p.gender,
-        p.color,
-        p.weight,
-        p.microchip_id,
-        o.id as owner_id,
-        o.name as owner_name,
-        o.phone as owner_phone,
-        o.email as owner_email
-      FROM patients p
-      LEFT JOIN owners o ON p.owner_id = o.id
-      ${whereClause}
-      ORDER BY p.${sort} ${order}
-      LIMIT $${params.length + 1} OFFSET $${params.length + 2}
-    `;
+    // Add status filter if provided
+    const statusFilter = status 
+      ? `AND p.status = '${status}'` 
+      : '';
     
-    // Add pagination params
-    params.push(parseInt(limit));
-    params.push(parseInt(offset));
-    
-    // Count query for total records
+    // Build the complete query with all filters
     const countQuery = `
       SELECT COUNT(*) 
       FROM patients p
       LEFT JOIN owners o ON p.owner_id = o.id
-      ${whereClause}
+      ${baseQuery} ${userFilter} ${searchFilter} ${speciesFilter} ${statusFilter}
     `;
     
-    // Execute queries
-    const [patientsResult, countResult] = await Promise.all([
-      pool.query(patientsQuery, params),
-      pool.query(countQuery, params.slice(0, params.length - 2)) // Remove pagination params
-    ]);
+    // Execute the count query with or without user ID parameter
+    const countResult = req.user.role !== 'admin'
+      ? await pool.query(countQuery, [req.user.id])
+      : await pool.query(countQuery);
     
-    // Format patient records
+    const totalPatients = parseInt(countResult.rows[0].count);
+    const totalPages = Math.ceil(totalPatients / limit);
+    const offset = (page - 1) * limit;
+    
+    // Build the query to fetch paginated patients
+    const patientsQuery = `
+      SELECT 
+        p.id, p.name, p.species, p.breed, p.date_of_birth, p.gender, 
+        p.color, p.weight, p.microchip_id, p.status, p.last_visit_date,
+        p.is_active, p.created_at, p.updated_at,
+        o.id as owner_id, o.name as owner_name, o.phone as owner_phone, 
+        o.email as owner_email, o.address as owner_address
+      FROM patients p
+      LEFT JOIN owners o ON p.owner_id = o.id
+      ${baseQuery} ${userFilter} ${searchFilter} ${speciesFilter} ${statusFilter}
+      ORDER BY p.name ASC
+      LIMIT ${limit} OFFSET ${offset}
+    `;
+    
+    // Execute the patients query with or without user ID parameter
+    const patientsResult = req.user.role !== 'admin'
+      ? await pool.query(patientsQuery, [req.user.id])
+      : await pool.query(patientsQuery);
+    
+    // Format the response
     const patients = patientsResult.rows.map(row => ({
       id: row.id,
       name: row.name,
@@ -93,33 +87,34 @@ const getAllPatients = async (req, res) => {
       color: row.color,
       weight: row.weight,
       microchipId: row.microchip_id,
+      status: row.status,
+      lastVisitDate: row.last_visit_date,
+      createdAt: row.created_at,
+      updatedAt: row.updated_at,
       owner: {
         id: row.owner_id,
         name: row.owner_name,
         phone: row.owner_phone,
-        email: row.owner_email
+        email: row.owner_email,
+        address: row.owner_address
       }
     }));
     
-    // Calculate pagination info
-    const total = parseInt(countResult.rows[0].count);
-    const totalPages = Math.ceil(total / limit);
-    
-    // Send response
     res.json({
       patients,
       pagination: {
-        total,
+        totalPatients,
         totalPages,
         currentPage: parseInt(page),
         limit: parseInt(limit)
       }
     });
-  } catch (err) {
-    console.error('Error getting patients:', err);
+  } catch (error) {
+    console.error('Error fetching patients:', error);
     res.status(500).json({ 
       error: true, 
-      message: 'An error occurred while retrieving patients' 
+      message: 'Error fetching patients', 
+      details: error.message 
     });
   }
 };

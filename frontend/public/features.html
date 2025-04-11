@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Features - PetSphere</title>
+    <link rel="icon" href="/assets/images/logos/favicon.ico" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #eee;
+            margin-bottom: 40px;
+        }
+        .logo {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+            color: #3a4f9a;
+            font-weight: 700;
+        }
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+        nav a {
+            margin-left: 20px;
+            text-decoration: none;
+            color: #3a4f9a;
+        }
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+            color: #3a4f9a;
+        }
+        h2 {
+            font-size: 1.8rem;
+            margin-top: 40px;
+            margin-bottom: 20px;
+            color: #3a4f9a;
+        }
+        p, ul, ol {
+            margin-bottom: 20px;
+        }
+        ul, ol {
+            padding-left: 20px;
+        }
+        li {
+            margin-bottom: 10px;
+        }
+        .feature-card {
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        }
+        .feature-icon {
+            font-size: 2.5rem;
+            color: #3a4f9a;
+            margin-bottom: 15px;
+        }
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .feature-item {
+            background-color: #fff;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .feature-item h3 {
+            color: #3a4f9a;
+            margin-top: 0;
+        }
+        .cta-section {
+            background-color: #3a4f9a;
+            color: white;
+            padding: 50px;
+            border-radius: 8px;
+            text-align: center;
+            margin: 60px 0;
+        }
+        .cta-section h2 {
+            color: white;
+            margin-top: 0;
+        }
+        .cta-button {
+            display: inline-block;
+            background-color: white;
+            color: #3a4f9a;
+            padding: 12px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-top: 20px;
+            transition: background-color 0.3s ease;
+        }
+        .cta-button:hover {
+            background-color: #f0f0f0;
+        }
+        footer {
+            margin-top: 60px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+            text-align: center;
+            color: #666;
+        }
+        footer a {
+            color: #3a4f9a;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        .back-button {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #3a4f9a;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .back-button:hover {
+            background-color: #2c3e7a;
+        }
+        @media (max-width: 768px) {
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+            .cta-section {
+                padding: 30px 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="/" class="logo">
+            <img src="/assets/images/logos/black_transparent.png" alt="PetSphere Logo">
+            <span>PetSphere</span>
+        </a>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/pricing.html">Pricing</a>
+            <a href="/contact.html">Contact</a>
+        </nav>
+    </header>
+
+    <main>
+        <h1>PetSphere Features</h1>
+        <p>
+            PetSphere is a comprehensive veterinary practice management system designed to streamline your operations, 
+            enhance patient care, and improve client satisfaction. Explore our powerful features below.
+        </p>
+
+        <div class="feature-card">
+            <div class="feature-icon">🐾</div>
+            <h2>Patient Management</h2>
+            <p>
+                Create comprehensive pet profiles with medical history, allergies, vaccinations, and more. 
+                Set reminders for follow-up care and track patient progress over time.
+            </p>
+            <ul>
+                <li>Complete medical histories with customizable templates</li>
+                <li>Vaccination tracking with automatic reminders</li>
+                <li>Medication management with dosage calculations</li>
+                <li>Allergy and adverse reaction tracking</li>
+                <li>Growth charts and weight tracking</li>
+                <li>Lab result integration and trending</li>
+                <li>Digital imaging storage and viewing</li>
+            </ul>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📅</div>
+            <h2>Smart Scheduling</h2>
+            <p>
+                Our intuitive calendar system makes appointment management effortless. 
+                Reduce no-shows with automated reminders and optimize doctor schedules.
+            </p>
+            <ul>
+                <li>Multi-view calendar (day, week, month, provider)</li>
+                <li>Automated appointment reminders via email and SMS</li>
+                <li>Online booking for clients</li>
+                <li>Recurring appointment scheduling</li>
+                <li>Resource allocation (exam rooms, equipment)</li>
+                <li>Color-coded appointment types</li>
+                <li>Wait list management for cancellations</li>
+            </ul>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h2>Medical Records</h2>
+            <p>
+                Maintain detailed, organized medical records that meet regulatory requirements. 
+                Our customizable templates help you document efficiently while ensuring thoroughness.
+            </p>
+            <ul>
+                <li>SOAP note templates customizable by service type</li>
+                <li>Voice-to-text dictation</li>
+                <li>Digital signature capture</li>
+                <li>Automated coding suggestions</li>
+                <li>Problem-oriented medical record system</li>
+                <li>Integrated flow sheets for hospitalized patients</li>
+                <li>Audit trails for all record changes</li>
+            </ul>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">💊</div>
+            <h2>Inventory Management</h2>
+            <p>
+                Keep track of medications, supplies, and retail products with our comprehensive inventory system. 
+                Automate reordering and track usage patterns to optimize stock levels.
+            </p>
+            <ul>
+                <li>Automated reorder points and purchase orders</li>
+                <li>Barcode scanning for quick check-in and dispensing</li>
+                <li>Expiration date tracking with alerts</li>
+                <li>Controlled substance logging and reports</li>
+                <li>Vendor management and order history</li>
+                <li>Cost tracking and margin analysis</li>
+                <li>Integration with point-of-sale system</li>
+            </ul>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">📊</div>
+            <h2>Analytics & Reporting</h2>
+            <p>
+                Gain insights into your practice's performance with powerful analytics tools. 
+                Track key metrics, identify trends, and make data-driven decisions.
+            </p>
+            <ul>
+                <li>Customizable dashboard with key performance indicators</li>
+                <li>Financial reporting (revenue, accounts receivable, profitability)</li>
+                <li>Provider productivity metrics</li>
+                <li>Client acquisition and retention analysis</li>
+                <li>Service and product sales reporting</li>
+                <li>Appointment statistics (no-shows, cancellations, utilization)</li>
+                <li>Export capabilities for further analysis</li>
+            </ul>
+        </div>
+
+        <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <h2>Security & Compliance</h2>
+            <p>
+                Rest easy knowing your data is secure and your practice is compliant with relevant regulations. 
+                Our platform includes robust security features and compliance tools.
+            </p>
+            <ul>
+                <li>Role-based access controls</li>
+                <li>Two-factor authentication</li>
+                <li>End-to-end encryption for sensitive data</li>
+                <li>Comprehensive audit logs</li>
+                <li>Automated backups</li>
+                <li>Compliance reporting tools</li>
+                <li>Secure client communication channels</li>
+            </ul>
+        </div>
+
+        <h2>Additional Features</h2>
+        <div class="feature-grid">
+            <div class="feature-item">
+                <h3>Client Portal</h3>
+                <p>Give clients 24/7 access to their pets' records, appointment scheduling, and secure messaging.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Billing & Invoicing</h3>
+                <p>Streamline your financial operations with integrated payment processing, invoicing, and accounts receivable management.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Lab Integration</h3>
+                <p>Connect directly with major laboratories for seamless test ordering and result retrieval.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Telemedicine</h3>
+                <p>Conduct virtual appointments with integrated video conferencing and digital record-keeping.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Mobile App</h3>
+                <p>Access your practice management system on the go with our mobile application for iOS and Android.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Marketing Tools</h3>
+                <p>Build client relationships with automated birthday reminders, newsletters, and targeted campaigns.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Multi-Location Support</h3>
+                <p>Manage multiple practice locations with centralized data and location-specific settings.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Customizable Workflows</h3>
+                <p>Tailor the system to match your practice's unique processes and requirements.</p>
+            </div>
+            <div class="feature-item">
+                <h3>Integration API</h3>
+                <p>Connect with other business tools and systems through our robust API.</p>
+            </div>
+        </div>
+
+        <div class="cta-section">
+            <h2>Ready to transform your veterinary practice?</h2>
+            <p>Join thousands of veterinary professionals who trust PetSphere to run their practices efficiently.</p>
+            <a href="/signup.html" class="cta-button">Start Your Free Trial</a>
+        </div>
+
+        <a href="/" class="back-button">Back to Home</a>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 PetSphere. All rights reserved.</p>
+        <div>
+            <a href="/privacy.html">Privacy Policy</a>
+            <a href="/terms.html">Terms of Service</a>
+            <a href="/cookie-policy.html">Cookie Policy</a>
+            <a href="/compliance.html">Compliance</a>
+        </div>
+    </footer>
+</body>
+</html>

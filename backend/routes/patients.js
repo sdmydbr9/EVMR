@@ -2,7 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { body, param, validationResult } = require('express-validator');
 const patientController = require('../controllers/patientController');
-const { authorize } = require('../middleware/auth');
+const { authenticate, authorizeResourceAccess } = require('../middleware/auth');
 
 // Define roles that can access different endpoints
 const ALL_STAFF = ['admin', 'vet', 'technician', 'receptionist'];
@@ -15,7 +15,7 @@ const ADMIN_VET = ['admin', 'vet'];
  * @access  All staff
  */
 router.get('/',
-  authorize(ALL_STAFF),
+  authenticate,
   patientController.getAllPatients
 );
 
@@ -25,7 +25,7 @@ router.get('/',
  * @access  All staff
  */
 router.get('/:id',
-  authorize(ALL_STAFF),
+  authenticate,
   param('id').isString().withMessage('Patient ID must be a string'),
   (req, res, next) => {
     const errors = validationResult(req);
@@ -40,24 +40,14 @@ router.get('/:id',
 /**
  * @route   POST /api/patients
  * @desc    Create a new patient
- * @access  Medical staff and receptionists
+ * @access  All staff
  */
 router.post('/',
-  authorize(ALL_STAFF),
+  authenticate,
   [
-    body('name').notEmpty().withMessage('Pet name is required'),
-    body('species').notEmpty().withMessage('Species is required'),
-    body('breed').optional(),
-    body('dateOfBirth').optional().isISO8601().withMessage('Invalid date format'),
-    body('gender').isIn(['male', 'female', 'unknown']).withMessage('Gender must be male, female, or unknown'),
-    body('color').optional(),
-    body('weight').optional().isNumeric().withMessage('Weight must be a number'),
-    body('microchipId').optional(),
-    body('owner').notEmpty().withMessage('Owner information is required'),
-    body('owner.name').notEmpty().withMessage('Owner name is required'),
-    body('owner.phone').notEmpty().withMessage('Owner phone is required'),
-    body('owner.email').optional().isEmail().withMessage('Invalid email format'),
-    body('owner.address').optional()
+    body('name').isString().withMessage('Name must be a string'),
+    body('species').isString().withMessage('Species must be a string'),
+    body('owner').isObject().withMessage('Owner must be an object')
   ],
   (req, res, next) => {
     const errors = validationResult(req);
@@ -72,26 +62,11 @@ router.post('/',
 /**
  * @route   PUT /api/patients/:id
  * @desc    Update a patient
- * @access  Medical staff and receptionists
+ * @access  All staff
  */
 router.put('/:id',
-  authorize(ALL_STAFF),
+  authenticate,
   param('id').isString().withMessage('Patient ID must be a string'),
-  [
-    body('name').optional().notEmpty().withMessage('Pet name cannot be empty'),
-    body('species').optional().notEmpty().withMessage('Species cannot be empty'),
-    body('breed').optional(),
-    body('dateOfBirth').optional().isISO8601().withMessage('Invalid date format'),
-    body('gender').optional().isIn(['male', 'female', 'unknown']).withMessage('Gender must be male, female, or unknown'),
-    body('color').optional(),
-    body('weight').optional().isNumeric().withMessage('Weight must be a number'),
-    body('microchipId').optional(),
-    body('owner').optional(),
-    body('owner.name').optional().notEmpty().withMessage('Owner name cannot be empty'),
-    body('owner.phone').optional().notEmpty().withMessage('Owner phone cannot be empty'),
-    body('owner.email').optional().isEmail().withMessage('Invalid email format'),
-    body('owner.address').optional()
-  ],
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
@@ -105,15 +80,22 @@ router.put('/:id',
 /**
  * @route   DELETE /api/patients/:id
  * @desc    Delete a patient
- * @access  Admins only
+ * @access  Admin and Vet only
  */
 router.delete('/:id',
-  authorize(['admin']),
+  authenticate,
   param('id').isString().withMessage('Patient ID must be a string'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
+    }
+    // Only allow admins and vets to delete
+    if (!['admin', 'vet'].includes(req.user.role)) {
+      return res.status(403).json({
+        error: true,
+        message: 'Access denied. Insufficient permissions.'
+      });
     }
     next();
   },
@@ -126,12 +108,19 @@ router.delete('/:id',
  * @access  Medical staff
  */
 router.get('/:id/history',
-  authorize(MEDICAL_STAFF),
+  authenticate,
   param('id').isString().withMessage('Patient ID must be a string'),
   (req, res, next) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       return res.status(400).json({ errors: errors.array() });
+    }
+    // Only allow medical staff to view history
+    if (!['admin', 'vet', 'technician'].includes(req.user.role)) {
+      return res.status(403).json({
+        error: true,
+        message: 'Access denied. Insufficient permissions.'
+      });
     }
     next();
   },

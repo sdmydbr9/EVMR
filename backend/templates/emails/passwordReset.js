@@ -1,4 +1,5 @@
-const baseTemplate = require('./baseTemplate');
+const newBaseTemplate = require('./newBaseTemplate');
+const fallbackTemplate = require('./fallbackTemplate');
 
 /**
  * Generate a password reset email template
@@ -7,10 +8,12 @@ const baseTemplate = require('./baseTemplate');
  * @param {string} data.resetToken - Password reset token
  * @param {string} data.resetUrl - Complete password reset URL
  * @param {number} data.expiryHours - Token expiry time in hours
+ * @param {string} data.theme - 'light' or 'dark' theme for the email
  * @returns {Object} - Email template with text and HTML versions
  */
 const passwordResetTemplate = (data) => {
   const title = 'Reset Your PetSphere Password';
+  const { theme = 'light' } = data;
 
   // Plain text version
   const text = `
@@ -36,15 +39,17 @@ const passwordResetTemplate = (data) => {
     <p>We received a request to reset your password for your PetSphere account.</p>
 
     <div class="highlight-box">
-      <p class="highlight-title">Security Notice</p>
-      <p class="highlight-item">To reset your password, please click the button below</p>
+      <p class="highlight-title">What happens next:</p>
+      <p class="highlight-item">Click the button below to reset your password</p>
       <p class="highlight-item">This link will expire in ${data.expiryHours} hours</p>
       <p class="highlight-item">If you didn't request this, please contact support immediately</p>
     </div>
 
-    <a href="${data.resetUrl}" class="button">Reset Password</a>
+    <div style="text-align: center;">
+      <a href="${data.resetUrl}" class="button">Reset Password</a>
+    </div>
 
-    <p style="margin-top: 20px; font-size: 13px;">Or copy and paste this URL into your browser: <br>
+    <p style="margin-top: 20px; font-size: 13px; color: #666666;">Or copy and paste this URL into your browser: <br>
     <span style="font-family: monospace; word-break: break-all;">${data.resetUrl}</span></p>
 
     <div class="quote-box">
@@ -56,13 +61,29 @@ const passwordResetTemplate = (data) => {
     <p>Best regards,<br>The PetSphere Team</p>
   `;
 
-  return {
-    text,
-    html: baseTemplate({
+  // Try to use the main template, fall back to basic template if it fails
+  let html;
+  try {
+    html = newBaseTemplate({
       title,
       content,
+      theme,
       footerText: 'This is an automated security email. Please do not reply to this message.'
-    })
+    });
+  } catch (error) {
+    console.error('Error generating email with newBaseTemplate:', error.message);
+    // Use fallback template instead
+    html = fallbackTemplate({
+      title,
+      content,
+      theme,
+      footerText: 'This is an automated security email. Please do not reply to this message.'
+    });
+  }
+
+  return {
+    text,
+    html
   };
 };
 
