@@ -3,183 +3,213 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quick Start Guide - EVMR Documentation</title>
+    <title>Quick Start Guide - PetSphere Documentation</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script defer src="../js/theme-toggle.js"></script>
 </head>
-<body>
-    <div class="docs-container">
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+    <div class="docs-container max-w-[1600px] mx-auto flex flex-col md:flex-row min-h-screen">
         <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <img src="../images/logo.svg" alt="EVMR Logo" class="logo">
-                <h1>EVMR Docs</h1>
+        <aside class="sidebar w-full md:w-72 flex-shrink-0 h-auto md:h-screen overflow-y-auto bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-200">
+            <div class="sidebar-header p-6 flex items-center space-x-3 border-b border-gray-200 dark:border-gray-700">
+                <img src="../images/logo.png" alt="PetSphere Logo" class="logo w-10 h-10">
+                <h1 class="text-xl font-bold">PetSphere Docs</h1>
             </div>
-            <div class="sidebar-search">
-                <input type="text" id="search-input" placeholder="Search documentation...">
-                <i class="fas fa-search search-icon"></i>
+            <div class="sidebar-search p-4">
+                <div class="relative">
+                    <input type="text" id="search-input" placeholder="Search documentation..." class="w-full px-4 py-2 pl-10 rounded-md bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white">
+                    <i class="fas fa-search search-icon absolute left-3 top-3 text-gray-400"></i>
+                </div>
             </div>
-            <nav class="sidebar-nav">
-                <ul>
+            <nav class="sidebar-nav p-4">
+                <ul class="space-y-6">
                     <li class="nav-section">
-                        <span class="section-title">Getting Started</span>
-                        <ul>
-                            <li><a href="../index.html">Introduction</a></li>
-                            <li><a href="quickstart.html" class="active">Quick Start Guide</a></li>
-                            <li><a href="installation.html">Installation</a></li>
+                        <span class="section-title block text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Getting Started</span>
+                        <ul class="space-y-1 border-l border-gray-200 dark:border-gray-700">
+                            <li><a href="../index.html" class="sidebar-link pl-4 -ml-px">Introduction</a></li>
+                            <li><a href="quickstart.html" class="active sidebar-link pl-4 -ml-px border-l-2 border-black dark:border-white">Quick Start Guide</a></li>
+                            <li><a href="installation.html" class="sidebar-link pl-4 -ml-px">Installation</a></li>
                         </ul>
                     </li>
                     <li class="nav-section">
-                        <span class="section-title">Architecture</span>
-                        <ul>
-                            <li><a href="architecture/overview.html">System Overview</a></li>
-                            <li><a href="architecture/microservices.html">Microservices</a></li>
-                            <li><a href="architecture/database.html">Database Schema</a></li>
-                            <li><a href="architecture/frontend.html">Frontend Structure</a></li>
-                            <li><a href="architecture/api-gateway.html">API Gateway</a></li>
+                        <span class="section-title block text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Architecture</span>
+                        <ul class="space-y-1 border-l border-gray-200 dark:border-gray-700">
+                            <li><a href="architecture/overview.html" class="sidebar-link pl-4 -ml-px">System Overview</a></li>
+                            <li><a href="architecture/microservices.html" class="sidebar-link pl-4 -ml-px">Microservices</a></li>
+                            <li><a href="architecture/database.html" class="sidebar-link pl-4 -ml-px">Database Schema</a></li>
+                            <li><a href="architecture/frontend.html" class="sidebar-link pl-4 -ml-px">Frontend Structure</a></li>
+                            <li><a href="architecture/api-gateway.html" class="sidebar-link pl-4 -ml-px">API Gateway</a></li>
                         </ul>
                     </li>
                     <li class="nav-section">
-                        <span class="section-title">Microservices</span>
-                        <ul>
-                            <li><a href="microservices/auth-service.html">Auth Service</a></li>
-                            <li><a href="microservices/patient-service.html">Patient Service</a></li>
-                            <li><a href="microservices/appointment-service.html">Appointment Service</a></li>
-                            <li><a href="microservices/inventory-service.html">Inventory Service</a></li>
-                            <li><a href="microservices/reporting-service.html">Reporting Service</a></li>
-                            <li><a href="microservices/notification-service.html">Notification Service</a></li>
+                        <span class="section-title block text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Microservices</span>
+                        <ul class="space-y-1 border-l border-gray-200 dark:border-gray-700">
+                            <li><a href="microservices/auth-service.html" class="sidebar-link pl-4 -ml-px">Auth Service</a></li>
+                            <li><a href="microservices/patient-service.html" class="sidebar-link pl-4 -ml-px">Patient Service</a></li>
+                            <li><a href="microservices/appointment-service.html" class="sidebar-link pl-4 -ml-px">Appointment Service</a></li>
+                            <li><a href="microservices/inventory-service.html" class="sidebar-link pl-4 -ml-px">Inventory Service</a></li>
+                            <li><a href="microservices/reporting-service.html" class="sidebar-link pl-4 -ml-px">Reporting Service</a></li>
+                            <li><a href="microservices/notification-service.html" class="sidebar-link pl-4 -ml-px">Notification Service</a></li>
                         </ul>
                     </li>
                     <li class="nav-section">
-                        <span class="section-title">API Reference</span>
-                        <ul>
-                            <li><a href="api/authentication.html">Authentication</a></li>
-                            <li><a href="api/patients.html">Patients</a></li>
-                            <li><a href="api/medical-records.html">Medical Records</a></li>
-                            <li><a href="api/appointments.html">Appointments</a></li>
-                            <li><a href="api/inventory.html">Inventory</a></li>
-                            <li><a href="api/reports.html">Reports</a></li>
+                        <span class="section-title block text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">API Reference</span>
+                        <ul class="space-y-1 border-l border-gray-200 dark:border-gray-700">
+                            <li><a href="api/authentication.html" class="sidebar-link pl-4 -ml-px">Authentication</a></li>
+                            <li><a href="api/patients.html" class="sidebar-link pl-4 -ml-px">Patients</a></li>
+                            <li><a href="api/medical-records.html" class="sidebar-link pl-4 -ml-px">Medical Records</a></li>
+                            <li><a href="api/appointments.html" class="sidebar-link pl-4 -ml-px">Appointments</a></li>
+                            <li><a href="api/inventory.html" class="sidebar-link pl-4 -ml-px">Inventory</a></li>
+                            <li><a href="api/reports.html" class="sidebar-link pl-4 -ml-px">Reports</a></li>
                         </ul>
                     </li>
                     <li class="nav-section">
-                        <span class="section-title">Deployment</span>
-                        <ul>
-                            <li><a href="deployment/docker.html">Docker Deployment</a></li>
-                            <li><a href="deployment/configuration.html">Configuration</a></li>
-                            <li><a href="deployment/scaling.html">Scaling</a></li>
-                            <li><a href="deployment/monitoring.html">Monitoring</a></li>
+                        <span class="section-title block text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Deployment</span>
+                        <ul class="space-y-1 border-l border-gray-200 dark:border-gray-700">
+                            <li><a href="deployment/docker.html" class="sidebar-link pl-4 -ml-px">Docker Deployment</a></li>
+                            <li><a href="deployment/configuration.html" class="sidebar-link pl-4 -ml-px">Configuration</a></li>
+                            <li><a href="deployment/scaling.html" class="sidebar-link pl-4 -ml-px">Scaling</a></li>
+                            <li><a href="deployment/monitoring.html" class="sidebar-link pl-4 -ml-px">Monitoring</a></li>
                         </ul>
                     </li>
                     <li class="nav-section">
-                        <span class="section-title">Guides</span>
-                        <ul>
-                            <li><a href="guides/user-management.html">User Management</a></li>
-                            <li><a href="guides/patient-records.html">Patient Records</a></li>
-                            <li><a href="guides/appointments.html">Appointments</a></li>
-                            <li><a href="guides/reporting.html">Reporting</a></li>
+                        <span class="section-title block text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Guides</span>
+                        <ul class="space-y-1 border-l border-gray-200 dark:border-gray-700">
+                            <li><a href="guides/user-management.html" class="sidebar-link pl-4 -ml-px">User Management</a></li>
+                            <li><a href="guides/patient-records.html" class="sidebar-link pl-4 -ml-px">Patient Records</a></li>
+                            <li><a href="guides/appointments.html" class="sidebar-link pl-4 -ml-px">Appointments</a></li>
+                            <li><a href="guides/reporting.html" class="sidebar-link pl-4 -ml-px">Reporting</a></li>
                         </ul>
                     </li>
                 </ul>
             </nav>
-            <div class="sidebar-footer">
-                <a href="https://github.com/yourusername/EVMR" target="_blank">
-                    <i class="fab fa-github"></i> GitHub
+            <div class="sidebar-footer p-4 border-t border-gray-200 dark:border-gray-700 flex justify-between">
+                <a href="https://github.com/yourusername/PetSphere" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors flex items-center space-x-2">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
                 </a>
-                <a href="contributing.html">
-                    <i class="fas fa-code-branch"></i> Contributing
+                <a href="contributing.html" class="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors flex items-center space-x-2">
+                    <i class="fas fa-code-branch"></i>
+                    <span>Contributing</span>
                 </a>
             </div>
         </aside>
 
         <!-- Main Content -->
-        <main class="content">
-            <div class="content-header">
-                <button id="sidebar-toggle" class="sidebar-toggle">
+        <main class="content flex-grow overflow-y-auto">
+            <div class="content-header sticky top-0 z-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex justify-between items-center">
+                <button id="sidebar-toggle" class="sidebar-toggle md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="header-links">
-                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                <div class="header-links flex items-center space-x-4">
+                    <a href="https://github.com/yourusername/PetSphere" target="_blank" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                         <i class="fab fa-github"></i>
                     </a>
-                    <a href="#" id="theme-toggle">
-                        <i class="fas fa-moon"></i>
-                    </a>
+                    <button id="theme-toggle" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
                 </div>
             </div>
 
-            <div class="content-body">
-                <h1>Quick Start Guide</h1>
-                <p class="lead">
-                    Get up and running with EVMR in minutes. This guide will help you set up a development environment and explore the system's core features.
+            <div class="content-body max-w-4xl mx-auto px-6 py-10">
+                <h1 class="text-4xl font-bold mb-6 tracking-tight">Quick Start Guide</h1>
+                <p class="text-xl text-gray-700 dark:text-gray-300 mb-8">
+                    Get up and running with PetSphere in minutes. This guide will help you set up a development environment and explore the system's core features.
                 </p>
 
-                <nav class="page-toc">
-                    <h3>On this page</h3>
-                    <ul>
-                        <li><a href="#prerequisites">Prerequisites</a></li>
-                        <li><a href="#installation">Installation</a></li>
-                        <li><a href="#configuration">Configuration</a></li>
-                        <li><a href="#running-the-application">Running the Application</a></li>
-                        <li><a href="#accessing-the-application">Accessing the Application</a></li>
-                        <li><a href="#demo-accounts">Demo Accounts</a></li>
-                        <li><a href="#next-steps">Next Steps</a></li>
+                <nav class="page-toc mb-10 p-6 bg-gray-50 dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-lg font-semibold mb-3">On this page</h3>
+                    <ul class="space-y-2 text-gray-700 dark:text-gray-300">
+                        <li><a href="#prerequisites" class="hover:text-black dark:hover:text-white">Prerequisites</a></li>
+                        <li><a href="#installation" class="hover:text-black dark:hover:text-white">Installation</a></li>
+                        <li><a href="#configuration" class="hover:text-black dark:hover:text-white">Configuration</a></li>
+                        <li><a href="#running-the-application" class="hover:text-black dark:hover:text-white">Running the Application</a></li>
+                        <li><a href="#accessing-the-application" class="hover:text-black dark:hover:text-white">Accessing the Application</a></li>
+                        <li><a href="#demo-accounts" class="hover:text-black dark:hover:text-white">Demo Accounts</a></li>
+                        <li><a href="#next-steps" class="hover:text-black dark:hover:text-white">Next Steps</a></li>
                     </ul>
                 </nav>
 
-                <h2 id="prerequisites">Prerequisites</h2>
-                <p>
+                <h2 id="prerequisites" class="text-3xl font-bold mt-12 mb-6 tracking-tight">Prerequisites</h2>
+                <p class="mb-6 text-gray-800 dark:text-gray-300">
                     Before you begin, ensure you have the following installed on your system:
                 </p>
 
-                <ul>
-                    <li><strong>Docker</strong> (version 20.10.0 or higher)</li>
-                    <li><strong>Docker Compose</strong> (version 2.0.0 or higher)</li>
-                    <li><strong>Git</strong> (version 2.30.0 or higher)</li>
-                    <li><strong>Node.js</strong> (version 16.0.0 or higher) - for development only</li>
-                    <li><strong>npm</strong> (version 8.0.0 or higher) - for development only</li>
+                <ul class="space-y-2 mb-8 pl-6 list-disc text-gray-800 dark:text-gray-300">
+                    <li><strong class="font-semibold">Docker</strong> (version 20.10.0 or higher)</li>
+                    <li><strong class="font-semibold">Docker Compose</strong> (version 2.0.0 or higher)</li>
+                    <li><strong class="font-semibold">Git</strong> (version 2.30.0 or higher)</li>
+                    <li><strong class="font-semibold">Node.js</strong> (version 16.0.0 or higher) - for development only</li>
+                    <li><strong class="font-semibold">npm</strong> (version 8.0.0 or higher) - for development only</li>
                 </ul>
 
-                <div class="info-box">
-                    <h3>System Requirements</h3>
-                    <p>Recommended system specifications for running EVMR:</p>
-                    <ul>
-                        <li><strong>CPU:</strong> 4 cores or more</li>
-                        <li><strong>RAM:</strong> 8GB or more</li>
-                        <li><strong>Disk Space:</strong> 10GB free space</li>
-                        <li><strong>Operating System:</strong> Linux, macOS, or Windows with WSL2</li>
+                <div class="info-box bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-10">
+                    <h3 class="text-xl font-semibold mb-3">System Requirements</h3>
+                    <p class="mb-4 text-gray-800 dark:text-gray-300">Recommended system specifications for running PetSphere:</p>
+                    <ul class="space-y-2 pl-6 list-disc text-gray-800 dark:text-gray-300">
+                        <li><strong class="font-semibold">CPU:</strong> 4 cores or more</li>
+                        <li><strong class="font-semibold">RAM:</strong> 8GB or more</li>
+                        <li><strong class="font-semibold">Disk Space:</strong> 10GB free space</li>
+                        <li><strong class="font-semibold">Operating System:</strong> Linux, macOS, or Windows with WSL2</li>
                     </ul>
                 </div>
 
-                <h2 id="installation">Installation</h2>
-                <p>
-                    Follow these steps to install EVMR:
+                <h2 id="installation" class="text-3xl font-bold mt-16 mb-6 tracking-tight">Installation</h2>
+                <p class="mb-6 text-gray-800 dark:text-gray-300">
+                    Follow these steps to install PetSphere:
                 </p>
 
-                <h3>1. Clone the Repository</h3>
-                <div class="code-block">
-                    <pre><code>git clone https://github.com/yourusername/EVMR.git
-cd EVMR</code></pre>
+                <h3 class="text-2xl font-semibold mt-8 mb-4">1. Clone the Repository</h3>
+                <div class="code-block mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
+                    <div class="flex items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="ml-4 text-xs font-semibold text-gray-600 dark:text-gray-400">Terminal</span>
+                    </div>
+                    <pre class="p-4 overflow-x-auto"><code class="text-sm">git clone https://github.com/yourusername/PetSphere.git
+cd PetSphere</code></pre>
                 </div>
 
-                <h3>2. Set Up Environment Variables</h3>
-                <p>
-                    Create a <code>.env</code> file in the root directory by copying the example file:
+                <h3 class="text-2xl font-semibold mt-8 mb-4">2. Set Up Environment Variables</h3>
+                <p class="mb-4 text-gray-800 dark:text-gray-300">
+                    Create a <code class="font-mono text-sm bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">.env</code> file in the root directory by copying the example file:
                 </p>
-                <div class="code-block">
-                    <pre><code>cp .env.example .env</code></pre>
+                <div class="code-block mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
+                    <div class="flex items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="ml-4 text-xs font-semibold text-gray-600 dark:text-gray-400">Terminal</span>
+                    </div>
+                    <pre class="p-4 overflow-x-auto"><code class="text-sm">cp .env.example .env</code></pre>
                 </div>
 
-                <p>
-                    Open the <code>.env</code> file and update the variables as needed. The most important variables to configure are:
+                <p class="mb-4 text-gray-800 dark:text-gray-300">
+                    Open the <code class="font-mono text-sm bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">.env</code> file and update the variables as needed. The most important variables to configure are:
                 </p>
 
-                <div class="code-block">
-                    <pre><code># Database Configuration
-MONGODB_URI=mongodb://mongodb:27017/evmr
-POSTGRES_URI=postgresql://postgres:postgres@postgres:5432/evmr_legacy
+                <div class="code-block mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
+                    <div class="flex items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="ml-4 text-xs font-semibold text-gray-600 dark:text-gray-400">.env</span>
+                    </div>
+                    <pre class="p-4 overflow-x-auto"><code class="text-sm"># Database Configuration
+MONGODB_URI=mongodb://mongodb:27017/petsphere
+POSTGRES_URI=postgresql://postgres:postgres@postgres:5432/petsphere_legacy
 
 # JWT Secret
 JWT_SECRET=your_jwt_secret_key
@@ -197,9 +227,9 @@ SMTP_USER=your_email@example.com
 SMTP_PASS=your_email_password</code></pre>
                 </div>
 
-                <h2 id="configuration">Configuration</h2>
+                <h2 id="configuration" class="text-3xl font-bold mt-16 mb-6 tracking-tight">Configuration</h2>
                 <p>
-                    EVMR uses Docker Compose for container orchestration. The default configuration should work for most development environments, but you can customize it by editing the <code>docker-compose.yml</code> file.
+                    PetSphere uses Docker Compose for container orchestration. The default configuration should work for most development environments, but you can customize it by editing the <code>docker-compose.yml</code> file.
                 </p>
 
                 <h3>Default Ports</h3>
@@ -261,73 +291,105 @@ SMTP_PASS=your_email_password</code></pre>
                     </table>
                 </div>
 
-                <h2 id="running-the-application">Running the Application</h2>
-                <p>
+                <h2 id="running-the-application" class="text-3xl font-bold mt-16 mb-6 tracking-tight">Running the Application</h2>
+                <p class="mb-6 text-gray-800 dark:text-gray-300">
                     Start the application using Docker Compose:
                 </p>
 
-                <div class="code-block">
-                    <pre><code>docker-compose up -d</code></pre>
+                <div class="code-block mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
+                    <div class="flex items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="ml-4 text-xs font-semibold text-gray-600 dark:text-gray-400">Terminal</span>
+                    </div>
+                    <pre class="p-4 overflow-x-auto"><code class="text-sm">docker-compose up -d</code></pre>
                 </div>
 
-                <p>
+                <p class="mb-4 text-gray-800 dark:text-gray-300">
                     This command will:
                 </p>
-                <ol>
+                <ol class="list-decimal pl-6 mb-8 text-gray-800 dark:text-gray-300">
                     <li>Build or pull all required Docker images</li>
                     <li>Create and start containers for all services</li>
                     <li>Set up the network between containers</li>
                     <li>Initialize the databases with sample data</li>
                 </ol>
 
-                <div class="info-box">
-                    <h3>First-Time Startup</h3>
-                    <p>The first time you start the application, it may take several minutes to download images and initialize the databases. Subsequent startups will be much faster.</p>
+                <div class="info-box bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-10">
+                    <h3 class="text-xl font-semibold mb-3">First-Time Startup</h3>
+                    <p class="mb-4 text-gray-800 dark:text-gray-300">The first time you start the application, it may take several minutes to download images and initialize the databases. Subsequent startups will be much faster.</p>
                 </div>
 
-                <h3>Checking Service Status</h3>
-                <p>
+                <h3 class="text-2xl font-semibold mt-8 mb-4">Checking Service Status</h3>
+                <p class="mb-4 text-gray-800 dark:text-gray-300">
                     Verify that all services are running:
                 </p>
 
-                <div class="code-block">
-                    <pre><code>docker-compose ps</code></pre>
+                <div class="code-block mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
+                    <div class="flex items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="ml-4 text-xs font-semibold text-gray-600 dark:text-gray-400">Terminal</span>
+                    </div>
+                    <pre class="p-4 overflow-x-auto"><code class="text-sm">docker-compose ps</code></pre>
                 </div>
 
-                <p>
+                <p class="mb-4 text-gray-800 dark:text-gray-300">
                     You should see all services with a status of "Up".
                 </p>
 
-                <h3>Viewing Logs</h3>
-                <p>
+                <h3 class="text-2xl font-semibold mt-8 mb-4">Viewing Logs</h3>
+                <p class="mb-4 text-gray-800 dark:text-gray-300">
                     To view logs from all services:
                 </p>
 
-                <div class="code-block">
-                    <pre><code>docker-compose logs -f</code></pre>
+                <div class="code-block mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
+                    <div class="flex items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="ml-4 text-xs font-semibold text-gray-600 dark:text-gray-400">Terminal</span>
+                    </div>
+                    <pre class="p-4 overflow-x-auto"><code class="text-sm">docker-compose logs -f</code></pre>
                 </div>
 
-                <p>
+                <p class="mb-4 text-gray-800 dark:text-gray-300">
                     To view logs from a specific service:
                 </p>
 
-                <div class="code-block">
-                    <pre><code>docker-compose logs -f [service-name]</code></pre>
+                <div class="code-block mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
+                    <div class="flex items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="ml-4 text-xs font-semibold text-gray-600 dark:text-gray-400">Terminal</span>
+                    </div>
+                    <pre class="p-4 overflow-x-auto"><code class="text-sm">docker-compose logs -f [service-name]</code></pre>
                 </div>
 
-                <h2 id="accessing-the-application">Accessing the Application</h2>
-                <p>
+                <h2 id="accessing-the-application" class="text-3xl font-bold mt-16 mb-6 tracking-tight">Accessing the Application</h2>
+                <p class="mb-6 text-gray-800 dark:text-gray-300">
                     Once all services are running, you can access the application:
                 </p>
 
-                <ul>
-                    <li><strong>Frontend:</strong> <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
-                    <li><strong>API Gateway:</strong> <a href="http://localhost:5000" target="_blank">http://localhost:5000</a></li>
-                    <li><strong>API Documentation:</strong> <a href="http://localhost:5000/api-docs" target="_blank">http://localhost:5000/api-docs</a></li>
+                <ul class="space-y-2 mb-8 pl-6 list-disc text-gray-800 dark:text-gray-300">
+                    <li><strong class="font-semibold">Frontend:</strong> <a href="http://localhost:3000" target="_blank" class="text-blue-500 hover:text-blue-700">http://localhost:3000</a></li>
+                    <li><strong class="font-semibold">API Gateway:</strong> <a href="http://localhost:5000" target="_blank" class="text-blue-500 hover:text-blue-700">http://localhost:5000</a></li>
+                    <li><strong class="font-semibold">API Documentation:</strong> <a href="http://localhost:5000/api-docs" target="_blank" class="text-blue-500 hover:text-blue-700">http://localhost:5000/api-docs</a></li>
                 </ul>
 
-                <h2 id="demo-accounts">Demo Accounts</h2>
-                <p>
+                <h2 id="demo-accounts" class="text-3xl font-bold mt-16 mb-6 tracking-tight">Demo Accounts</h2>
+                <p class="mb-6 text-gray-800 dark:text-gray-300">
                     The system includes built-in demo accounts that are dynamically created during system initialization:
                 </p>
 
@@ -364,31 +426,47 @@ SMTP_PASS=your_email_password</code></pre>
                     </div>
                 </div>
 
-                <h2 id="stopping-the-application">Stopping the Application</h2>
-                <p>
+                <h2 id="stopping-the-application" class="text-3xl font-bold mt-16 mb-6 tracking-tight">Stopping the Application</h2>
+                <p class="mb-6 text-gray-800 dark:text-gray-300">
                     To stop the application:
                 </p>
 
-                <div class="code-block">
-                    <pre><code>docker-compose down</code></pre>
+                <div class="code-block mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
+                    <div class="flex items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="ml-4 text-xs font-semibold text-gray-600 dark:text-gray-400">Terminal</span>
+                    </div>
+                    <pre class="p-4 overflow-x-auto"><code class="text-sm">docker-compose down</code></pre>
                 </div>
 
-                <p>
+                <p class="mb-4 text-gray-800 dark:text-gray-300">
                     To stop the application and remove all data (including databases):
                 </p>
 
-                <div class="code-block">
-                    <pre><code>docker-compose down -v</code></pre>
+                <div class="code-block mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
+                    <div class="flex items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="ml-4 text-xs font-semibold text-gray-600 dark:text-gray-400">Terminal</span>
+                    </div>
+                    <pre class="p-4 overflow-x-auto"><code class="text-sm">docker-compose down -v</code></pre>
                 </div>
 
-                <div class="warning-box">
-                    <h3>Warning</h3>
-                    <p>The <code>-v</code> flag will remove all volumes, including database data. Use with caution in production environments.</p>
+                <div class="warning-box bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg p-6 mb-10">
+                    <h3 class="text-xl font-semibold mb-3">Warning</h3>
+                    <p class="mb-4 text-gray-800 dark:text-gray-300">The <code class="font-mono text-sm bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded">-v</code> flag will remove all volumes, including database data. Use with caution in production environments.</p>
                 </div>
 
-                <h2 id="next-steps">Next Steps</h2>
-                <p>
-                    Now that you have EVMR up and running, you can:
+                <h2 id="next-steps" class="text-3xl font-bold mt-16 mb-6 tracking-tight">Next Steps</h2>
+                <p class="mb-6 text-gray-800 dark:text-gray-300">
+                    Now that you have PetSphere up and running, you can:
                 </p>
 
                 <div class="next-steps-grid">
@@ -410,17 +488,28 @@ SMTP_PASS=your_email_password</code></pre>
                 </div>
             </div>
 
-            <footer class="content-footer">
-                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
-                <p>
-                    <a href="privacy.html">Privacy Policy</a> |
-                    <a href="terms.html">Terms of Service</a> |
-                    <a href="contact.html">Contact</a>
-                </p>
+            <footer class="border-t border-gray-200 dark:border-gray-700 mt-12 py-8 px-6">
+                <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">© 2023 PetSphere. All rights reserved.</p>
+                    </div>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">Privacy Policy</a>
+                        <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">Terms of Service</a>
+                        <a href="https://github.com/yourusername/PetSphere" class="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">GitHub</a>
+                    </div>
+                </div>
             </footer>
         </main>
     </div>
 
-    <script src="../js/main.js"></script>
+    <script>
+        // Toggle sidebar
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+    </script>
 </body>
 </html>

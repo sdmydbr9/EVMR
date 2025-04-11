@@ -1,0 +1,79 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply font-sans text-gray-900 bg-white dark:bg-gray-900 dark:text-white transition-colors duration-200;
+  }
+  
+  h1 {
+    @apply text-4xl font-bold mb-6 text-black dark:text-white;
+  }
+  
+  h2 {
+    @apply text-3xl font-semibold mt-10 mb-5 pb-2 border-b border-gray-200 dark:border-gray-700;
+  }
+  
+  h3 {
+    @apply text-2xl font-semibold mt-8 mb-4 text-gray-900 dark:text-gray-100;
+  }
+  
+  h4 {
+    @apply text-xl font-semibold mt-6 mb-3 text-gray-800 dark:text-gray-200;
+  }
+  
+  p {
+    @apply mb-6 text-gray-800 dark:text-gray-300 leading-relaxed;
+  }
+  
+  a {
+    @apply text-gray-900 hover:text-black dark:text-gray-300 dark:hover:text-white underline-offset-2 decoration-1 transition-colors;
+  }
+  
+  code {
+    @apply font-mono text-sm bg-gray-100 dark:bg-gray-800 px-1.5 py-0.5 rounded;
+  }
+  
+  pre {
+    @apply bg-gray-100 dark:bg-gray-800 p-4 rounded-lg overflow-x-auto mb-6 shadow-sm;
+  }
+  
+  pre code {
+    @apply bg-transparent p-0;
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex items-center justify-center px-4 py-2 rounded-md font-medium transition-colors;
+  }
+  
+  .btn-primary {
+    @apply bg-black text-white hover:bg-gray-800 dark:bg-white dark:text-black dark:hover:bg-gray-200;
+  }
+  
+  .btn-outline {
+    @apply border border-gray-300 dark:border-gray-700 hover:bg-gray-100 dark:hover:bg-gray-800;
+  }
+  
+  .card {
+    @apply bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-lg border border-gray-100 dark:border-gray-700 transition-all;
+  }
+  
+  .card-hover {
+    @apply hover:shadow-lg dark:hover:shadow-xl hover:-translate-y-1;
+  }
+  
+  .sidebar-link {
+    @apply block py-2 px-4 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-800 rounded-md transition-colors;
+  }
+  
+  .sidebar-link.active {
+    @apply bg-gray-100 dark:bg-gray-800 text-black dark:text-white font-medium border-l-2 border-black dark:border-white;
+  }
+  
+  .feature-icon {
+    @apply text-3xl text-black dark:text-white mb-4;
+  }
+}

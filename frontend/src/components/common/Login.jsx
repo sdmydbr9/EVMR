@@ -36,7 +36,8 @@ import {
   Security as SecurityIcon,
   Circle as CircleIcon,
   ArrowBack as ArrowBackIcon,
-  ArrowForward as ArrowForwardIcon
+  ArrowForward as ArrowForwardIcon,
+  Refresh as RefreshIcon
 } from '@mui/icons-material';
 import { keyframes } from '@mui/system';
 import { authService } from '../../services/api';
@@ -82,6 +83,7 @@ const Login = ({ onLogin }) => {
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [loadingCredentials, setLoadingCredentials] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
@@ -138,43 +140,75 @@ const Login = ({ onLogin }) => {
     veterinarian: { email: '', password: '', id: '' },
     organisation: { email: '', password: '', organisationId: '' }
   });
-  
+
+  // Update showDemoCredentials when userType changes and fetch credentials
+  useEffect(() => {
+    if (userType) {
+      // Show loading indicator while fetching credentials
+      setShowDemoCredentials(true);
+
+      // Fetch credentials from API
+      fetchDemoCredentials();
+    } else {
+      setShowDemoCredentials(false);
+    }
+  }, [userType]);
+
   // Fetch demo credentials
   const fetchDemoCredentials = async () => {
     try {
+      setLoadingCredentials(true);
+      console.log('Fetching demo credentials from API...');
+
+      // Log the API base URL being used
+      const apiBaseUrl = window.location.origin.includes('localhost')
+        ? 'http://localhost:3786/api'
+        : `${window.location.origin}/api`;
+      console.log('Current API base URL:', apiBaseUrl);
+
       const { success, demoCredentials } = await authService.getDemoCredentials();
       if (success && demoCredentials) {
         setDemoAccounts(demoCredentials);
+        console.log('Loaded dynamic demo credentials:', demoCredentials);
+      } else {
+        console.error('Failed to load demo credentials, API returned unsuccessful response');
       }
     } catch (err) {
       console.error('Error fetching demo credentials:', err);
+      // More detailed error logging
+      if (err.response) {
+        // The request was made and the server responded with a status code
+        // that falls out of the range of 2xx
+        console.error('Error response data:', err.response.data);
+        console.error('Error response status:', err.response.status);
+        console.error('Error response headers:', err.response.headers);
+      } else if (err.request) {
+        // The request was made but no response was received
+        console.error('Error request:', err.request);
+      } else {
+        // Something happened in setting up the request that triggered an Error
+        console.error('Error message:', err.message);
+      }
+      console.error('Error config:', err.config);
+    } finally {
+      setLoadingCredentials(false);
     }
   };
 
   // Autofill demo credentials
   const fillDemoCredentials = () => {
     if (!userType || !demoAccounts[userType]) return;
-    
+
     const demoAccount = demoAccounts[userType];
     setEmail(demoAccount.email);
     setPassword(demoAccount.password);
-    
+
     if (userType === 'veterinarian') {
       setId(demoAccount.id);
     } else if (userType === 'organisation') {
       setOrganisationId(demoAccount.organisationId);
     }
   };
-  
-  // Update showDemoCredentials when userType changes and fetch credentials
-  useEffect(() => {
-    if (userType) {
-      setShowDemoCredentials(true);
-      fetchDemoCredentials();
-    } else {
-      setShowDemoCredentials(false);
-    }
-  }, [userType]);
 
   // Cycle through features automatically
   useEffect(() => {
@@ -250,26 +284,30 @@ const Login = ({ onLogin }) => {
       return;
     }
 
+    // Set loading state and attempt login
     setLoading(true);
 
     try {
-      // Send authentication request to API with user type
+      // Prepare login payload based on user type
       const loginData = {
         email,
         password,
-        rememberMe,
         userType
       };
 
-      // Add conditional fields based on user type
+      // Add ID or organisationId based on user type
       if (userType === 'veterinarian') {
         loginData.id = id;
       } else if (userType === 'organisation') {
         loginData.organisationId = organisationId;
       }
 
+      console.log('Login attempt with:', loginData);
+
+      // Make API call to login
       const response = await authService.login(loginData);
 
+      // Handle successful login
       if (response && response.token) {
         // Check if user is system admin (should use system admin app)
         if (response.user && response.user.role === 'admin' && userType !== 'organisation') {
@@ -305,12 +343,13 @@ const Login = ({ onLogin }) => {
         setError('Invalid login response from server');
       }
     } catch (err) {
+      console.error('Login error:', err);
       if (err.response?.status === 401) {
         setError('Invalid credentials. Please try again.');
       } else if (err.response?.status === 404) {
         setError('Authentication service not available. Please try again later.');
       } else {
-      setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
+        setError(err.response?.data?.message || 'Login failed. Please check your credentials.');
       }
     } finally {
       setLoading(false);
@@ -459,42 +498,71 @@ const Login = ({ onLogin }) => {
       )}
 
       {showDemoCredentials && (
-        <Box sx={{ 
-          mb: 3, 
-          p: 2, 
-          bgcolor: 'info.light', 
+        <Box sx={{
+          mb: 3,
+          p: 2,
+          bgcolor: 'info.light',
           borderRadius: 2,
           color: 'info.contrastText',
           animation: `${slideUp} 0.3s ease-out`
         }}>
-          <Typography variant="subtitle2" sx={{ mb: 1, fontWeight: 500 }}>
-            Demo Account Credentials:
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 0.5 }}>
-            Email: {demoAccounts[userType].email}
-          </Typography>
-          <Typography variant="body2" sx={{ mb: 0.5 }}>
-            Password: {demoAccounts[userType].password}
-          </Typography>
-          {userType === 'veterinarian' && (
-            <Typography variant="body2" sx={{ mb: 0.5 }}>
-              Vet ID: {demoAccounts[userType].id}
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
+            <Typography variant="subtitle2" sx={{ fontWeight: 500 }}>
+              Demo Account Credentials:
             </Typography>
+            <IconButton
+              size="small"
+              onClick={fetchDemoCredentials}
+              disabled={loadingCredentials}
+              sx={{ color: 'info.contrastText', p: 0.5 }}
+              aria-label="Refresh demo credentials"
+            >
+              <RefreshIcon fontSize="small" />
+            </IconButton>
+          </Box>
+
+          {loadingCredentials ? (
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', py: 2 }}>
+              <CircularProgress size={24} sx={{ mb: 1 }} />
+              <Typography variant="body2">Loading demo credentials...</Typography>
+            </Box>
+          ) : (
+            <>
+              {demoAccounts[userType]?.email ? (
+                <>
+                  <Typography variant="body2" sx={{ mb: 0.5 }}>
+                    Email: {demoAccounts[userType].email}
+                  </Typography>
+                  <Typography variant="body2" sx={{ mb: 0.5 }}>
+                    Password: {demoAccounts[userType].password}
+                  </Typography>
+                  {userType === 'veterinarian' && demoAccounts[userType]?.id && (
+                    <Typography variant="body2" sx={{ mb: 0.5 }}>
+                      Vet ID: {demoAccounts[userType].id}
+                    </Typography>
+                  )}
+                  {userType === 'organisation' && demoAccounts[userType]?.organisationId && (
+                    <Typography variant="body2" sx={{ mb: 0.5 }}>
+                      Organisation ID: {demoAccounts[userType].organisationId}
+                    </Typography>
+                  )}
+                  <Button
+                    size="small"
+                    variant="contained"
+                    color="primary"
+                    onClick={fillDemoCredentials}
+                    sx={{ mt: 1, borderRadius: 1.5, textTransform: 'none' }}
+                  >
+                    Autofill Demo Credentials
+                  </Button>
+                </>
+              ) : (
+                <Typography variant="body2" color="error">
+                  Could not load demo credentials. Please refresh or try again later.
+                </Typography>
+              )}
+            </>
           )}
-          {userType === 'organisation' && (
-            <Typography variant="body2" sx={{ mb: 0.5 }}>
-              Organisation ID: {demoAccounts[userType].organisationId}
-            </Typography>
-          )}
-          <Button
-            size="small"
-            variant="contained"
-            color="primary"
-            onClick={fillDemoCredentials}
-            sx={{ mt: 1, borderRadius: 1.5, textTransform: 'none' }}
-          >
-            Autofill Demo Credentials
-          </Button>
         </Box>
       )}
 

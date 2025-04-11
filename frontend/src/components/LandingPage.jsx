@@ -1000,18 +1000,20 @@ const LandingPage = () => {
                 Resources
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Button
-                  color="inherit"
+                <Button 
+                  component="a" 
+                  href="/docs/website/index.html" 
+                  target="_blank" 
+                  color="inherit" 
                   sx={{ justifyContent: 'flex-start', p: 0 }}
-                  onClick={() => window.open('/docs/website/index.html', '_self')}
                 >
                   Documentation
                 </Button>
                 <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
-                  Knowledge Base
+                  Blog
                 </Button>
                 <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
-                  Blog
+                  Support
                 </Button>
                 <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
                   FAQs

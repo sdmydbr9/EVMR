@@ -1,7 +1,23 @@
 import axios from 'axios';
 
-// Get the base URL from environment or default to localhost
-const baseURL = process.env.REACT_APP_API_URL || 'http://localhost:3786/api';
+// Get the base URL from environment, window location, or default to localhost
+const getApiBaseUrl = () => {
+  // First try environment variable
+  if (process.env.REACT_APP_API_URL) {
+    return process.env.REACT_APP_API_URL;
+  }
+
+  // If not available, construct from current window location
+  const windowUrl = window.location.origin;
+  if (windowUrl && !windowUrl.includes('localhost')) {
+    return `${windowUrl}/api`;
+  }
+
+  // Fallback to localhost
+  return 'http://localhost:3786/api';
+};
+
+const baseURL = getApiBaseUrl();
 
 // Configure axios instance
 const api = axios.create({
@@ -44,7 +60,19 @@ api.interceptors.response.use(
 
 // Get the backend base URL for accessing uploaded images
 export const getBackendUrl = () => {
-  return process.env.REACT_APP_BACKEND_URL || 'http://localhost:3786';
+  // First try environment variable
+  if (process.env.REACT_APP_BACKEND_URL) {
+    return process.env.REACT_APP_BACKEND_URL;
+  }
+
+  // If not available, use window location origin
+  const windowUrl = window.location.origin;
+  if (windowUrl && !windowUrl.includes('localhost')) {
+    return windowUrl;
+  }
+
+  // Fallback to localhost
+  return 'http://localhost:3786';
 };
 
 // Auth service
@@ -53,12 +81,12 @@ export const authService = {
     const response = await api.post('/auth/login', credentials);
     return response.data;
   },
-  
+
   verifyToken: async () => {
     const response = await api.get('/auth/verify');
     return response.data;
   },
-  
+
   getDemoCredentials: async () => {
     const response = await api.get('/auth/demo-credentials');
     return response.data;
@@ -66,4 +94,4 @@ export const authService = {
 };
 
 // Export the api instance
-export default api; 
+export default api;

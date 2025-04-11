@@ -3,200 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EVMR Documentation - Electronic Veterinary Medical Records System</title>
+    <title>PetSphere Documentation - Beyond Records, Beyond Care</title>
     <link rel="stylesheet" href="css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <script defer src="js/theme-toggle.js"></script>
 </head>
-<body>
-    <div class="docs-container">
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white">
+    <div class="docs-container max-w-[1600px] mx-auto flex flex-col md:flex-row min-h-screen">
         <!-- Sidebar Navigation -->
-        <aside class="sidebar">
-            <div class="sidebar-header">
-                <img src="../website/images/logo.svg" alt="EVMR Logo" class="logo">
-                <h1>EVMR Docs</h1>
+        <aside class="sidebar w-full md:w-72 flex-shrink-0 h-auto md:h-screen overflow-y-auto bg-gray-50 dark:bg-gray-800 border-r border-gray-200 dark:border-gray-700 transition-all duration-200">
+            <div class="sidebar-header p-6 flex items-center space-x-3 border-b border-gray-200 dark:border-gray-700">
+                <img src="images/logo.png" alt="PetSphere Logo" class="logo w-10 h-10">
+                <h1 class="text-xl font-bold">PetSphere Docs</h1>
             </div>
-            <div class="sidebar-search">
-                <input type="text" id="search-input" placeholder="Search documentation...">
-                <i class="fas fa-search search-icon"></i>
+            <div class="sidebar-search p-4">
+                <div class="relative">
+                    <input type="text" id="search-input" placeholder="Search documentation..." class="w-full px-4 py-2 pl-10 rounded-md bg-white dark:bg-gray-700 border border-gray-300 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-black dark:focus:ring-white">
+                    <i class="fas fa-search search-icon absolute left-3 top-3 text-gray-400"></i>
+                </div>
             </div>
-            <nav class="sidebar-nav">
-                <ul>
+            <nav class="sidebar-nav p-4">
+                <ul class="space-y-6">
                     <li class="nav-section">
-                        <span class="section-title">Getting Started</span>
-                        <ul>
-                            <li><a href="index.html" class="active">Introduction</a></li>
-                            <li><a href="pages/quickstart.html">Quick Start Guide</a></li>
-                            <li><a href="pages/installation.html">Installation</a></li>
+                        <span class="section-title block text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Getting Started</span>
+                        <ul class="space-y-1 border-l border-gray-200 dark:border-gray-700">
+                            <li><a href="index.html" class="active sidebar-link pl-4 -ml-px border-l-2 border-black dark:border-white">Introduction</a></li>
+                            <li><a href="pages/quickstart.html" class="sidebar-link pl-4 -ml-px">Quick Start Guide</a></li>
+                            <li><a href="pages/installation.html" class="sidebar-link pl-4 -ml-px">Installation</a></li>
                         </ul>
                     </li>
                     <li class="nav-section">
-                        <span class="section-title">Architecture</span>
-                        <ul>
-                            <li><a href="pages/architecture/overview.html">System Overview</a></li>
-                            <li><a href="pages/architecture/microservices.html">Microservices</a></li>
-                            <li><a href="pages/architecture/database.html">Database Schema</a></li>
-                            <li><a href="pages/architecture/frontend.html">Frontend Structure</a></li>
-                            <li><a href="pages/architecture/api-gateway.html">API Gateway</a></li>
+                        <span class="section-title block text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Architecture</span>
+                        <ul class="space-y-1 border-l border-gray-200 dark:border-gray-700">
+                            <li><a href="pages/architecture/overview.html" class="sidebar-link pl-4 -ml-px">System Overview</a></li>
+                            <li><a href="pages/architecture/microservices.html" class="sidebar-link pl-4 -ml-px">Microservices</a></li>
+                            <li><a href="pages/architecture/database.html" class="sidebar-link pl-4 -ml-px">Database Schema</a></li>
+                            <li><a href="pages/architecture/frontend.html" class="sidebar-link pl-4 -ml-px">Frontend Structure</a></li>
+                            <li><a href="pages/architecture/api-gateway.html" class="sidebar-link pl-4 -ml-px">API Gateway</a></li>
                         </ul>
                     </li>
                     <li class="nav-section">
-                        <span class="section-title">Microservices</span>
-                        <ul>
-                            <li><a href="pages/microservices/auth-service.html">Auth Service</a></li>
-                            <li><a href="pages/microservices/patient-service.html">Patient Service</a></li>
-                            <li><a href="pages/microservices/appointment-service.html">Appointment Service</a></li>
-                            <li><a href="pages/microservices/inventory-service.html">Inventory Service</a></li>
-                            <li><a href="pages/microservices/reporting-service.html">Reporting Service</a></li>
-                            <li><a href="pages/microservices/notification-service.html">Notification Service</a></li>
+                        <span class="section-title block text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Microservices</span>
+                        <ul class="space-y-1 border-l border-gray-200 dark:border-gray-700">
+                            <li><a href="pages/microservices/auth-service.html" class="sidebar-link pl-4 -ml-px">Auth Service</a></li>
+                            <li><a href="pages/microservices/patient-service.html" class="sidebar-link pl-4 -ml-px">Patient Service</a></li>
+                            <li><a href="pages/microservices/appointment-service.html" class="sidebar-link pl-4 -ml-px">Appointment Service</a></li>
+                            <li><a href="pages/microservices/inventory-service.html" class="sidebar-link pl-4 -ml-px">Inventory Service</a></li>
+                            <li><a href="pages/microservices/reporting-service.html" class="sidebar-link pl-4 -ml-px">Reporting Service</a></li>
+                            <li><a href="pages/microservices/notification-service.html" class="sidebar-link pl-4 -ml-px">Notification Service</a></li>
                         </ul>
                     </li>
                     <li class="nav-section">
-                        <span class="section-title">API Reference</span>
-                        <ul>
-                            <li><a href="pages/api/authentication.html">Authentication</a></li>
-                            <li><a href="pages/api/patients.html">Patients</a></li>
-                            <li><a href="pages/api/medical-records.html">Medical Records</a></li>
-                            <li><a href="pages/api/appointments.html">Appointments</a></li>
-                            <li><a href="pages/api/inventory.html">Inventory</a></li>
-                            <li><a href="pages/api/reports.html">Reports</a></li>
+                        <span class="section-title block text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">API Reference</span>
+                        <ul class="space-y-1 border-l border-gray-200 dark:border-gray-700">
+                            <li><a href="pages/api/authentication.html" class="sidebar-link pl-4 -ml-px">Authentication</a></li>
+                            <li><a href="pages/api/patients.html" class="sidebar-link pl-4 -ml-px">Patients</a></li>
+                            <li><a href="pages/api/medical-records.html" class="sidebar-link pl-4 -ml-px">Medical Records</a></li>
+                            <li><a href="pages/api/appointments.html" class="sidebar-link pl-4 -ml-px">Appointments</a></li>
+                            <li><a href="pages/api/inventory.html" class="sidebar-link pl-4 -ml-px">Inventory</a></li>
+                            <li><a href="pages/api/reports.html" class="sidebar-link pl-4 -ml-px">Reports</a></li>
                         </ul>
                     </li>
                     <li class="nav-section">
-                        <span class="section-title">Deployment</span>
-                        <ul>
-                            <li><a href="pages/deployment/docker.html">Docker Deployment</a></li>
-                            <li><a href="pages/deployment/configuration.html">Configuration</a></li>
-                            <li><a href="pages/deployment/scaling.html">Scaling</a></li>
-                            <li><a href="pages/deployment/monitoring.html">Monitoring</a></li>
+                        <span class="section-title block text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Deployment</span>
+                        <ul class="space-y-1 border-l border-gray-200 dark:border-gray-700">
+                            <li><a href="pages/deployment/docker.html" class="sidebar-link pl-4 -ml-px">Docker Deployment</a></li>
+                            <li><a href="pages/deployment/configuration.html" class="sidebar-link pl-4 -ml-px">Configuration</a></li>
+                            <li><a href="pages/deployment/scaling.html" class="sidebar-link pl-4 -ml-px">Scaling</a></li>
+                            <li><a href="pages/deployment/monitoring.html" class="sidebar-link pl-4 -ml-px">Monitoring</a></li>
                         </ul>
                     </li>
                     <li class="nav-section">
-                        <span class="section-title">Guides</span>
-                        <ul>
-                            <li><a href="pages/guides/user-management.html">User Management</a></li>
-                            <li><a href="pages/guides/patient-records.html">Patient Records</a></li>
-                            <li><a href="pages/guides/appointments.html">Appointments</a></li>
-                            <li><a href="pages/guides/reporting.html">Reporting</a></li>
+                        <span class="section-title block text-sm font-semibold uppercase tracking-wider text-gray-500 dark:text-gray-400 mb-2">Guides</span>
+                        <ul class="space-y-1 border-l border-gray-200 dark:border-gray-700">
+                            <li><a href="pages/guides/user-management.html" class="sidebar-link pl-4 -ml-px">User Management</a></li>
+                            <li><a href="pages/guides/patient-records.html" class="sidebar-link pl-4 -ml-px">Patient Records</a></li>
+                            <li><a href="pages/guides/appointments.html" class="sidebar-link pl-4 -ml-px">Appointments</a></li>
+                            <li><a href="pages/guides/reporting.html" class="sidebar-link pl-4 -ml-px">Reporting</a></li>
                         </ul>
                     </li>
                 </ul>
             </nav>
-            <div class="sidebar-footer">
-                <a href="https://github.com/yourusername/EVMR" target="_blank">
-                    <i class="fab fa-github"></i> GitHub
+            <div class="sidebar-footer p-4 border-t border-gray-200 dark:border-gray-700 flex justify-between">
+                <a href="https://github.com/yourusername/PetSphere" target="_blank" class="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors flex items-center space-x-2">
+                    <i class="fab fa-github"></i>
+                    <span>GitHub</span>
                 </a>
-                <a href="pages/contributing.html">
-                    <i class="fas fa-code-branch"></i> Contributing
+                <a href="pages/contributing.html" class="text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors flex items-center space-x-2">
+                    <i class="fas fa-code-branch"></i>
+                    <span>Contributing</span>
                 </a>
             </div>
         </aside>
 
         <!-- Main Content -->
-        <main class="content">
-            <div class="content-header">
-                <button id="sidebar-toggle" class="sidebar-toggle">
+        <main class="content flex-grow overflow-y-auto">
+            <div class="content-header sticky top-0 z-10 bg-white/90 dark:bg-gray-900/90 backdrop-blur-md border-b border-gray-200 dark:border-gray-700 px-6 py-4 flex justify-between items-center">
+                <button id="sidebar-toggle" class="sidebar-toggle md:hidden p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                     <i class="fas fa-bars"></i>
                 </button>
-                <div class="header-links">
-                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                <div class="header-links flex items-center space-x-4">
+                    <a href="https://github.com/yourusername/PetSphere" target="_blank" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
                         <i class="fab fa-github"></i>
                     </a>
-                    <a href="#" id="theme-toggle">
-                        <i class="fas fa-moon"></i>
-                    </a>
+                    <button id="theme-toggle" class="p-2 rounded-md hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors">
+                        <i class="fas fa-moon dark:hidden"></i>
+                        <i class="fas fa-sun hidden dark:block"></i>
+                    </button>
                 </div>
             </div>
 
-            <div class="content-body">
-                <h1>EVMR: Electronic Veterinary Medical Records System</h1>
-                <p class="lead">
-                    A comprehensive microservice-based application for managing veterinary practices, medical records, appointments, inventory, and clinic operations.
-                </p>
-
-                <div class="hero-image">
-                    <img src="images/system-architecture.png" alt="EVMR System Architecture">
+            <div class="content-body max-w-4xl mx-auto px-6 py-10">
+                <div class="mb-16">
+                    <h1 class="text-5xl font-bold mb-6 tracking-tight">PetSphere</h1>
+                    <p class="text-xl text-gray-700 dark:text-gray-300 max-w-3xl">
+                        A comprehensive microservice-based application for managing veterinary practices, medical records, appointments, inventory, and clinic operations.
+                    </p>
                 </div>
 
-                <h2>System Overview</h2>
-                <p>
-                    EVMR is designed to streamline veterinary practice management with the following modules:
+                <div class="hero-image mb-16 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-lg">
+                    <img src="images/system-architecture.png" alt="PetSphere System Architecture" class="w-full">
+                </div>
+
+                <h2 class="text-3xl font-bold mt-12 mb-6 tracking-tight">System Overview</h2>
+                <p class="mb-8">
+                    PetSphere is designed to streamline veterinary practice management with the following modules:
                 </p>
 
-                <div class="feature-grid">
-                    <div class="feature-card">
+                <div class="feature-grid grid grid-cols-1 md:grid-cols-2 gap-8 mb-16">
+                    <div class="feature-card card p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
                         <div class="feature-icon">
                             <i class="fas fa-user-md"></i>
                         </div>
-                        <h3>Patient Management</h3>
-                        <p>Store and retrieve complete patient records with comprehensive medical history.</p>
+                        <h3 class="text-xl font-semibold mb-3">Patient Management</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-0">Store and retrieve complete patient records with comprehensive medical history.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card card p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
                         <div class="feature-icon">
                             <i class="fas fa-notes-medical"></i>
                         </div>
-                        <h3>Electronic Medical Records</h3>
-                        <p>SOAP format medical documentation with support for attachments and lab results.</p>
+                        <h3 class="text-xl font-semibold mb-3">Electronic Medical Records</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-0">SOAP format medical documentation with support for attachments and lab results.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card card p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
                         <div class="feature-icon">
                             <i class="fas fa-calendar-alt"></i>
                         </div>
-                        <h3>Appointment Scheduling</h3>
-                        <p>Schedule and manage appointments with automated reminders and confirmations.</p>
+                        <h3 class="text-xl font-semibold mb-3">Appointment Scheduling</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-0">Schedule and manage appointments with automated reminders and confirmations.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card card p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
                         <div class="feature-icon">
                             <i class="fas fa-pills"></i>
                         </div>
-                        <h3>Inventory Management</h3>
-                        <p>Track medications and supplies with automatic reordering and expiration alerts.</p>
+                        <h3 class="text-xl font-semibold mb-3">Inventory Management</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-0">Track medications and supplies with automatic reordering and expiration alerts.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card card p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
                         <div class="feature-icon">
                             <i class="fas fa-chart-bar"></i>
                         </div>
-                        <h3>Reporting & Analytics</h3>
-                        <p>Generate insights from practice data with customizable reports and dashboards.</p>
+                        <h3 class="text-xl font-semibold mb-3">Reporting & Analytics</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-0">Generate insights from practice data with customizable reports and dashboards.</p>
                     </div>
-                    <div class="feature-card">
+                    <div class="feature-card card p-6 hover:shadow-lg transition-all duration-200 hover:-translate-y-1">
                         <div class="feature-icon">
                             <i class="fas fa-building"></i>
                         </div>
-                        <h3>Multi-Location Management</h3>
-                        <p>Support for multiple clinics and staff roles with centralized administration.</p>
+                        <h3 class="text-xl font-semibold mb-3">Multi-Location Management</h3>
+                        <p class="text-gray-600 dark:text-gray-400 mb-0">Support for multiple clinics and staff roles with centralized administration.</p>
                     </div>
                 </div>
 
-                <h2>Architecture</h2>
-                <p>
-                    EVMR follows a microservice architecture pattern, with separate services for authentication, patient management, appointments, inventory, and more. This architecture provides scalability, resilience, and flexibility.
+                <h2 class="text-3xl font-bold mt-16 mb-6 tracking-tight">Architecture</h2>
+                <p class="mb-8">
+                    PetSphere follows a microservice architecture pattern, with separate services for authentication, patient management, appointments, inventory, and more. This architecture provides scalability, resilience, and flexibility.
                 </p>
 
-                <div class="architecture-diagram">
-                    <img src="images/architecture-diagram.png" alt="EVMR Architecture Diagram">
+                <div class="architecture-diagram mb-8 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-700 shadow-lg">
+                    <img src="images/architecture-diagram.png" alt="PetSphere Architecture Diagram" class="w-full">
                 </div>
 
-                <h3>Tech Stack</h3>
-                <ul class="tech-stack">
-                    <li><strong>Frontend:</strong> React.js with Material UI</li>
-                    <li><strong>Backend:</strong> Node.js with Express</li>
-                    <li><strong>Databases:</strong> MongoDB (microservices) and PostgreSQL (legacy system)</li>
-                    <li><strong>Authentication:</strong> JWT-based authentication with Redis caching</li>
-                    <li><strong>Containerization:</strong> Docker and Docker Compose</li>
+                <h3 class="text-2xl font-bold mt-12 mb-6">Tech Stack</h3>
+                <ul class="tech-stack space-y-3 mb-12 pl-6 border-l-2 border-gray-300 dark:border-gray-600">
+                    <li class="text-gray-800 dark:text-gray-300"><span class="font-semibold">Frontend:</span> React.js with Material UI</li>
+                    <li class="text-gray-800 dark:text-gray-300"><span class="font-semibold">Backend:</span> Node.js with Express</li>
+                    <li class="text-gray-800 dark:text-gray-300"><span class="font-semibold">Databases:</span> MongoDB (microservices) and PostgreSQL (legacy system)</li>
+                    <li class="text-gray-800 dark:text-gray-300"><span class="font-semibold">Authentication:</span> JWT-based authentication with Redis caching</li>
+                    <li class="text-gray-800 dark:text-gray-300"><span class="font-semibold">Containerization:</span> Docker and Docker Compose</li>
                 </ul>
 
-                <h2>Getting Started</h2>
-                <p>
-                    To get started with EVMR, follow these steps:
+                <h2 class="text-3xl font-bold mt-16 mb-6 tracking-tight">Getting Started</h2>
+                <p class="mb-6">
+                    To get started with PetSphere, follow these steps:
                 </p>
 
-                <div class="code-block">
-                    <pre><code># Clone the repository
+                <div class="code-block mb-8 bg-gray-100 dark:bg-gray-800 rounded-lg overflow-hidden shadow-sm">
+                    <div class="flex items-center px-4 py-2 border-b border-gray-200 dark:border-gray-700 bg-gray-200 dark:bg-gray-700">
+                        <div class="flex space-x-2">
+                            <div class="w-3 h-3 rounded-full bg-red-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-yellow-500"></div>
+                            <div class="w-3 h-3 rounded-full bg-green-500"></div>
+                        </div>
+                        <span class="ml-4 text-xs font-semibold text-gray-600 dark:text-gray-400">Terminal</span>
+                    </div>
+                    <pre class="p-4 overflow-x-auto"><code class="text-sm">
+# Clone the repository
 git clone &lt;repository-url&gt;
-cd EVMR
+cd PetSphere
 
 # Set up environment variables
 cp .env.example .env
@@ -205,81 +222,110 @@ cp .env.example .env
 docker-compose up -d</code></pre>
                 </div>
 
-                <p>
-                    For more detailed instructions, see the <a href="pages/quickstart.html">Quick Start Guide</a>.
+                <p class="mb-16">
+                    For more detailed instructions, see the <a href="pages/quickstart.html" class="underline decoration-1 underline-offset-2 font-medium">Quick Start Guide</a>.
                 </p>
 
-                <h2>Demo Environment</h2>
-                <p>
+                <h2 class="text-3xl font-bold mt-16 mb-6 tracking-tight">Demo Environment</h2>
+                <p class="mb-8">
                     The system includes built-in demo users that are dynamically created during system initialization:
                 </p>
 
-                <div class="demo-users">
-                    <div class="demo-user">
-                        <div class="user-icon">
-                            <i class="fas fa-user"></i>
+                <div class="demo-users grid grid-cols-1 md:grid-cols-3 gap-6 mb-16">
+                    <div class="demo-user card p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="user-icon mb-4 bg-gray-100 dark:bg-gray-800 w-12 h-12 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user text-gray-800 dark:text-gray-200"></i>
                         </div>
                         <div class="user-details">
-                            <h4>Pet Parent</h4>
-                            <p><strong>Email:</strong> petparent_demo@vetsphere.com</p>
-                            <p><strong>Password:</strong> demodemo</p>
+                            <h4 class="text-lg font-semibold mb-2">Pet Parent</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1"><span class="font-semibold">Email:</span> petparent_demo@vetsphere.com</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-semibold">Password:</span> demodemo</p>
                         </div>
                     </div>
-                    <div class="demo-user">
-                        <div class="user-icon">
-                            <i class="fas fa-user-md"></i>
+                    <div class="demo-user card p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="user-icon mb-4 bg-gray-100 dark:bg-gray-800 w-12 h-12 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-md text-gray-800 dark:text-gray-200"></i>
                         </div>
                         <div class="user-details">
-                            <h4>Veterinarian</h4>
-                            <p><strong>Email:</strong> vet_demo@vetsphere.com</p>
-                            <p><strong>Password:</strong> demodemo</p>
+                            <h4 class="text-lg font-semibold mb-2">Veterinarian</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1"><span class="font-semibold">Email:</span> vet_demo@vetsphere.com</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-semibold">Password:</span> demodemo</p>
                         </div>
                     </div>
-                    <div class="demo-user">
-                        <div class="user-icon">
-                            <i class="fas fa-user-tie"></i>
+                    <div class="demo-user card p-6 border border-gray-200 dark:border-gray-700">
+                        <div class="user-icon mb-4 bg-gray-100 dark:bg-gray-800 w-12 h-12 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-tie text-gray-800 dark:text-gray-200"></i>
                         </div>
                         <div class="user-details">
-                            <h4>Organization Admin</h4>
-                            <p><strong>Email:</strong> org_demo@vetsphere.com</p>
-                            <p><strong>Password:</strong> demodemo</p>
+                            <h4 class="text-lg font-semibold mb-2">Organization Admin</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-1"><span class="font-semibold">Email:</span> org_demo@vetsphere.com</p>
+                            <p class="text-sm text-gray-600 dark:text-gray-400"><span class="font-semibold">Password:</span> demodemo</p>
                         </div>
                     </div>
                 </div>
 
-                <div class="next-steps">
-                    <h2>Next Steps</h2>
-                    <div class="next-steps-grid">
-                        <a href="pages/architecture/overview.html" class="next-step-card">
-                            <h3>Explore the Architecture</h3>
-                            <p>Learn about the system's microservice architecture and how components interact.</p>
-                            <span class="next-link">Read more <i class="fas fa-arrow-right"></i></span>
+                <div class="next-steps mb-16 bg-gray-50 dark:bg-gray-800 p-8 rounded-xl border border-gray-200 dark:border-gray-700">
+                    <h3 class="text-2xl font-bold mb-4">Next Steps</h3>
+                    <p class="mb-6">Ready to dive deeper? Check out these resources:</p>
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <a href="pages/quickstart.html" class="btn-primary py-3 px-4 rounded-lg flex items-center justify-between hover:shadow-md transition-all duration-200">
+                            <span>Quick Start Guide</span>
+                            <i class="fas fa-arrow-right"></i>
                         </a>
-                        <a href="pages/api/authentication.html" class="next-step-card">
-                            <h3>API Reference</h3>
-                            <p>Explore the API endpoints and learn how to interact with the system.</p>
-                            <span class="next-link">Read more <i class="fas fa-arrow-right"></i></span>
+                        <a href="pages/guides/user-management.html" class="btn-outline py-3 px-4 rounded-lg flex items-center justify-between hover:shadow-md transition-all duration-200">
+                            <span>User Management</span>
+                            <i class="fas fa-arrow-right"></i>
                         </a>
-                        <a href="pages/deployment/docker.html" class="next-step-card">
-                            <h3>Deployment Guide</h3>
-                            <p>Learn how to deploy EVMR in production environments.</p>
-                            <span class="next-link">Read more <i class="fas fa-arrow-right"></i></span>
+                        <a href="pages/api/authentication.html" class="btn-outline py-3 px-4 rounded-lg flex items-center justify-between hover:shadow-md transition-all duration-200">
+                            <span>API Reference</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                        <a href="pages/architecture/overview.html" class="btn-outline py-3 px-4 rounded-lg flex items-center justify-between hover:shadow-md transition-all duration-200">
+                            <span>System Architecture</span>
+                            <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
             </div>
 
-            <footer class="content-footer">
-                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
-                <p>
-                    <a href="pages/privacy.html">Privacy Policy</a> |
-                    <a href="pages/terms.html">Terms of Service</a> |
-                    <a href="pages/contact.html">Contact</a>
-                </p>
+            <footer class="border-t border-gray-200 dark:border-gray-700 mt-12 py-8 px-6">
+                <div class="max-w-4xl mx-auto flex flex-col md:flex-row justify-between items-center">
+                    <div class="mb-4 md:mb-0">
+                        <p class="text-sm text-gray-500 dark:text-gray-400">© 2023 PetSphere. All rights reserved.</p>
+                    </div>
+                    <div class="flex space-x-6">
+                        <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">Privacy Policy</a>
+                        <a href="#" class="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">Terms of Service</a>
+                        <a href="https://github.com/yourusername/PetSphere" class="text-sm text-gray-600 dark:text-gray-400 hover:text-black dark:hover:text-white transition-colors">GitHub</a>
+                    </div>
+                </div>
             </footer>
         </main>
     </div>
 
-    <script src="js/main.js"></script>
+    <script>
+        // Toggle sidebar
+        const sidebarToggle = document.getElementById('sidebar-toggle');
+        const sidebar = document.querySelector('.sidebar');
+        sidebarToggle.addEventListener('click', () => {
+            sidebar.classList.toggle('hidden');
+        });
+
+        // Toggle theme
+        const themeToggle = document.getElementById('theme-toggle');
+        const html = document.documentElement;
+        
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme === 'dark' || (!savedTheme && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
+            html.classList.add('dark');
+        }
+        
+        themeToggle.addEventListener('click', () => {
+            html.classList.toggle('dark');
+            const isDark = html.classList.contains('dark');
+            localStorage.setItem('theme', isDark ? 'dark' : 'light');
+        });
+    </script>
 </body>
 </html>

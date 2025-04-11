@@ -40,6 +40,9 @@ RUN mkdir -p ./public
 # Copy built frontend assets from the frontend-build stage
 COPY --from=frontend-build /app/frontend/build ./public
 
+# Copy documentation files to public directory
+COPY docs/website ./public/docs/website
+
 # Set environment variables
 ENV NODE_ENV=production
 ENV PORT=3786
