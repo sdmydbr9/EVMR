@@ -44,7 +44,8 @@ import {
   AppointmentScheduling,
   Settings,
   StaffManagement,
-  MedicalReports
+  MedicalReports,
+  SchedulingDashboard
 } from './components/organisation';
 
 // Create a placeholder component for routes that don't have dedicated components yet
@@ -468,6 +469,7 @@ const App = () => {
             {/* Appointment Routes */}
             <Route path="appointments/scheduling" element={isOrganisation() ? <AppointmentScheduling /> : <PlaceholderComponent title="Appointment Scheduling" />} />
             <Route path="appointments/management" element={isOrganisation() ? <AppointmentManagement /> : <PlaceholderComponent title="Appointment Management" />} />
+            <Route path="appointments/dashboard" element={isOrganisation() ? <SchedulingDashboard /> : <PlaceholderComponent title="Scheduling Dashboard" />} />
             
             {/* Service Routes */}
             <Route path="services/management" element={isOrganisation() ? <ServiceManagement /> : <PlaceholderComponent title="Service Management" />} />
@@ -491,7 +493,7 @@ const App = () => {
 
             {/* Additional Organisation Routes (backward compatibility) */}
             <Route path="doctors" element={<Navigate to="/app/staff/doctors" replace />} />
-            <Route path="schedule" element={<Navigate to="/app/staff/schedule" replace />} />
+            <Route path="schedule" element={<Navigate to="/app/appointments/dashboard" replace />} />
             <Route path="inventory" element={isOrganisation() ? <InventoryDashboard /> : <PlaceholderComponent title="Inventory Dashboard" />} />
             <Route path="reports" element={<Navigate to="/app/analytics/reports" replace />} />
             <Route path="services" element={<Navigate to="/app/services/management" replace />} />

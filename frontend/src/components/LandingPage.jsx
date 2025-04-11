@@ -1,11 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { 
-  Box, 
-  Button, 
-  Container, 
-  Typography, 
-  Grid, 
+import {
+  Box,
+  Button,
+  Container,
+  Typography,
+  Grid,
   Paper,
   Card,
   CardContent,
@@ -41,47 +41,47 @@ const LandingPage = () => {
   const navigate = useNavigate();
   const isMobile = useMediaQuery(theme.breakpoints.down('md'));
   const isTablet = useMediaQuery(theme.breakpoints.down('lg'));
-  
+
   const [scrolled, setScrolled] = useState(false);
   const [activeFeature, setActiveFeature] = useState(0);
   const [navOpen, setNavOpen] = useState(false);
-  
+
   const heroRef = useRef(null);
   const featuresRef = useRef(null);
   const testimonialsRef = useRef(null);
   const pricingRef = useRef(null);
-  
+
   // Handle scroll events
   useEffect(() => {
     const handleScroll = () => {
       setScrolled(window.scrollY > 50);
     };
-    
+
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
-  
+
   // Auto-cycle through features
   useEffect(() => {
     const interval = setInterval(() => {
       setActiveFeature(prev => (prev + 1) % features.length);
     }, 5000);
-    
+
     return () => clearInterval(interval);
   }, []);
-  
+
   const scrollTo = (ref) => {
     ref.current?.scrollIntoView({ behavior: 'smooth' });
   };
-  
+
   const handleLogin = () => {
     navigate('/login');
   };
-  
+
   const handleSignup = () => {
     navigate('/login', { state: { showSignup: true } });
   };
-  
+
   // Features content
   const features = [
     {
@@ -121,7 +121,7 @@ const LandingPage = () => {
       image: "https://images.unsplash.com/photo-1517694712202-14dd9538aa97?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
     }
   ];
-  
+
   // Testimonials
   const testimonials = [
     {
@@ -143,7 +143,7 @@ const LandingPage = () => {
       quote: "The analytics tools have helped us optimize our operations and grow our practice by 30% in just one year."
     }
   ];
-  
+
   // Pricing plans
   const plans = [
     {
@@ -191,15 +191,15 @@ const LandingPage = () => {
       highlighted: false
     }
   ];
-  
+
   return (
     <Box sx={{ position: 'relative' }}>
       {/* Navigation */}
-      <AppBar 
-        position="fixed" 
-        color="transparent" 
+      <AppBar
+        position="fixed"
+        color="transparent"
         elevation={0}
-        sx={{ 
+        sx={{
           transition: 'all 0.3s ease',
           backgroundColor: scrolled ? 'rgba(255, 255, 255, 0.95)' : 'transparent',
           boxShadow: scrolled ? '0 4px 20px rgba(0,0,0,0.05)' : 'none',
@@ -221,19 +221,19 @@ const LandingPage = () => {
                 alignItems: 'center'
               }}
             >
-              <Box 
-                component="img" 
-                src="/assets/images/logos/black_transparent.png" 
-                alt="PetSphere logo" 
-                sx={{ 
-                  height: 40, 
-                  width: 'auto', 
-                  mr: 1 
-                }} 
+              <Box
+                component="img"
+                src="/assets/images/logos/black_transparent.png"
+                alt="PetSphere logo"
+                sx={{
+                  height: 40,
+                  width: 'auto',
+                  mr: 1
+                }}
               />
               PetSphere
             </Typography>
-            
+
             {isMobile ? (
               <IconButton
                 color="inherit"
@@ -255,17 +255,17 @@ const LandingPage = () => {
                 <Button color="inherit" onClick={() => scrollTo(pricingRef)}>
                   Pricing
                 </Button>
-                <Button 
-                  variant="outlined" 
-                  color="primary" 
+                <Button
+                  variant="outlined"
+                  color="primary"
                   startIcon={<LoginIcon />}
                   onClick={handleLogin}
                   sx={{ ml: 2 }}
                 >
                   Login
                 </Button>
-                <Button 
-                  variant="contained" 
+                <Button
+                  variant="contained"
                   color="primary"
                   startIcon={<PersonAddIcon />}
                   onClick={handleSignup}
@@ -277,7 +277,7 @@ const LandingPage = () => {
           </Toolbar>
         </Container>
       </AppBar>
-      
+
       {/* Mobile menu */}
       {isMobile && navOpen && (
         <Box sx={{
@@ -313,18 +313,18 @@ const LandingPage = () => {
             Pricing
           </Button>
           <Divider sx={{ my: 1 }} />
-          <Button 
+          <Button
             fullWidth
-            variant="outlined" 
-            color="primary" 
+            variant="outlined"
+            color="primary"
             startIcon={<LoginIcon />}
             onClick={handleLogin}
           >
             Login
           </Button>
-          <Button 
+          <Button
             fullWidth
-            variant="contained" 
+            variant="contained"
             color="primary"
             startIcon={<PersonAddIcon />}
             onClick={handleSignup}
@@ -333,7 +333,7 @@ const LandingPage = () => {
           </Button>
         </Box>
       )}
-      
+
       {/* Hero Section */}
       <Box
         ref={heroRef}
@@ -350,11 +350,11 @@ const LandingPage = () => {
             <Grid item xs={12} md={6}>
               <Fade in={true} timeout={1000}>
                 <Box>
-                  <Typography 
-                    variant="h2" 
-                    component="h1" 
+                  <Typography
+                    variant="h2"
+                    component="h1"
                     gutterBottom
-                    sx={{ 
+                    sx={{
                       fontWeight: 800,
                       fontSize: { xs: '2.5rem', md: '3.5rem' },
                       lineHeight: 1.2
@@ -362,18 +362,18 @@ const LandingPage = () => {
                   >
                     Modern Veterinary Management Solution
                   </Typography>
-                  <Typography 
-                    variant="h5" 
-                    color="textSecondary" 
+                  <Typography
+                    variant="h5"
+                    color="textSecondary"
                     paragraph
                     sx={{ mb: 4, maxWidth: 500 }}
                   >
                     Beyond Records, Beyond Care. Streamline your veterinary practice with our comprehensive management system designed for vets, by vets.
                   </Typography>
                   <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap' }}>
-                    <Button 
-                      variant="contained" 
-                      color="primary" 
+                    <Button
+                      variant="contained"
+                      color="primary"
                       size="large"
                       endIcon={<ArrowForwardIcon />}
                       onClick={handleSignup}
@@ -392,9 +392,9 @@ const LandingPage = () => {
                     >
                       Get Started Free
                     </Button>
-                    <Button 
-                      variant="outlined" 
-                      color="primary" 
+                    <Button
+                      variant="outlined"
+                      color="primary"
                       size="large"
                       onClick={() => scrollTo(featuresRef)}
                       sx={{
@@ -431,18 +431,18 @@ const LandingPage = () => {
               </Zoom>
             </Grid>
           </Grid>
-          
-          <Box 
-            sx={{ 
-              display: 'flex', 
-              justifyContent: 'center', 
+
+          <Box
+            sx={{
+              display: 'flex',
+              justifyContent: 'center',
               mt: { xs: 8, md: 15 },
               opacity: 0.7
             }}
           >
-            <IconButton 
+            <IconButton
               onClick={() => scrollTo(featuresRef)}
-              sx={{ 
+              sx={{
                 animation: 'bounce 2s infinite',
                 '@keyframes bounce': {
                   '0%, 20%, 50%, 80%, 100%': {
@@ -462,9 +462,9 @@ const LandingPage = () => {
           </Box>
         </Container>
       </Box>
-      
+
       {/* Features Section */}
-      <Box 
+      <Box
         ref={featuresRef}
         sx={{ py: { xs: 8, md: 15 } }}
       >
@@ -495,12 +495,12 @@ const LandingPage = () => {
               Our comprehensive platform offers tools designed specifically for veterinary practices.
             </Typography>
           </Box>
-          
+
           <Grid container spacing={5}>
             <Grid item xs={12} md={6}>
-              <Card 
-                sx={{ 
-                  height: '100%', 
+              <Card
+                sx={{
+                  height: '100%',
                   p: 2,
                   border: `1px solid ${theme.palette.divider}`,
                   boxShadow: 'none',
@@ -531,45 +531,45 @@ const LandingPage = () => {
                 </CardContent>
               </Card>
             </Grid>
-            
+
             <Grid item xs={12} md={6}>
               <Grid container spacing={3}>
                 {features.map((feature, index) => (
                   <Grid item xs={12} sm={6} key={index}>
-                    <Card 
+                    <Card
                       onClick={() => setActiveFeature(index)}
-                      sx={{ 
+                      sx={{
                         cursor: 'pointer',
                         height: '100%',
                         p: 3,
                         borderRadius: 2,
                         backgroundColor: activeFeature === index ? `${theme.palette.primary.main}11` : 'transparent',
-                        border: activeFeature === index 
-                          ? `2px solid ${theme.palette.primary.main}` 
+                        border: activeFeature === index
+                          ? `2px solid ${theme.palette.primary.main}`
                           : `1px solid ${theme.palette.divider}`,
                         transition: 'all 0.2s ease',
                         boxShadow: 'none',
                         '&:hover': {
-                          backgroundColor: activeFeature === index 
-                            ? `${theme.palette.primary.main}11` 
+                          backgroundColor: activeFeature === index
+                            ? `${theme.palette.primary.main}11`
                             : `${theme.palette.background.default}`,
                           borderColor: theme.palette.primary.main
                         }
                       }}
                     >
                       <Box sx={{ display: 'flex', alignItems: 'center', mb: 1 }}>
-                        <Box sx={{ 
-                          mr: 1.5, 
+                        <Box sx={{
+                          mr: 1.5,
                           color: activeFeature === index ? theme.palette.primary.main : 'inherit',
                           transition: 'transform 0.2s ease',
                           transform: activeFeature === index ? 'scale(1.2)' : 'scale(1)'
                         }}>
                           {React.cloneElement(feature.icon, { sx: { fontSize: 36 } })}
                         </Box>
-                        <Typography 
-                          variant="h6" 
+                        <Typography
+                          variant="h6"
                           component="h3"
-                          sx={{ 
+                          sx={{
                             fontWeight: activeFeature === index ? 700 : 600,
                             color: activeFeature === index ? theme.palette.primary.main : 'inherit'
                           }}
@@ -585,7 +585,7 @@ const LandingPage = () => {
           </Grid>
         </Container>
       </Box>
-      
+
       {/* Testimonials Section */}
       <Box
         ref={testimonialsRef}
@@ -621,7 +621,7 @@ const LandingPage = () => {
               Hear from the professionals and pet parents who use our platform every day.
             </Typography>
           </Box>
-          
+
           <Grid container spacing={4}>
             {testimonials.map((testimonial, index) => (
               <Grid item xs={12} md={4} key={index}>
@@ -642,11 +642,11 @@ const LandingPage = () => {
                       }
                     }}
                   >
-                    <Typography 
-                      variant="body1" 
+                    <Typography
+                      variant="body1"
                       paragraph
-                      sx={{ 
-                        mb: 3, 
+                      sx={{
+                        mb: 3,
                         fontStyle: 'italic',
                         fontSize: '1.1rem',
                         flex: 1
@@ -655,7 +655,7 @@ const LandingPage = () => {
                       "{testimonial.quote}"
                     </Typography>
                     <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <Avatar 
+                      <Avatar
                         src={testimonial.avatar}
                         alt={testimonial.name}
                         sx={{ width: 56, height: 56, mr: 2 }}
@@ -676,7 +676,7 @@ const LandingPage = () => {
           </Grid>
         </Container>
       </Box>
-      
+
       {/* Pricing Section */}
       <Box
         ref={pricingRef}
@@ -709,7 +709,7 @@ const LandingPage = () => {
               Flexible pricing options designed to scale with your practice. All plans include a 14-day free trial.
             </Typography>
           </Box>
-          
+
           <Grid container spacing={4} justifyContent="center">
             {plans.map((plan, index) => (
               <Grid item xs={12} sm={6} md={4} key={index}>
@@ -724,16 +724,16 @@ const LandingPage = () => {
                       borderRadius: 3,
                       position: 'relative',
                       overflow: 'hidden',
-                      border: plan.highlighted 
-                        ? 'none' 
+                      border: plan.highlighted
+                        ? 'none'
                         : `1px solid ${theme.palette.divider}`,
                       transform: plan.highlighted ? 'scale(1.05)' : 'scale(1)',
                       zIndex: plan.highlighted ? 2 : 1,
                       transition: 'all 0.3s ease',
                       '&:hover': {
                         transform: plan.highlighted ? 'scale(1.08)' : 'scale(1.03)',
-                        boxShadow: plan.highlighted 
-                          ? '0 15px 35px rgba(0,0,0,0.1)' 
+                        boxShadow: plan.highlighted
+                          ? '0 15px 35px rgba(0,0,0,0.1)'
                           : '0 10px 25px rgba(0,0,0,0.05)'
                       }
                     }}
@@ -757,57 +757,57 @@ const LandingPage = () => {
                         POPULAR
                       </Box>
                     )}
-                    
-                    <Typography 
-                      variant="h5" 
-                      component="h3" 
+
+                    <Typography
+                      variant="h5"
+                      component="h3"
                       gutterBottom
                       sx={{ fontWeight: 700 }}
                     >
                       {plan.title}
                     </Typography>
-                    
+
                     <Box sx={{ mb: 3 }}>
-                      <Typography 
-                        variant="h3" 
-                        component="p" 
-                        sx={{ 
+                      <Typography
+                        variant="h3"
+                        component="p"
+                        sx={{
                           fontWeight: 800,
                           display: 'inline-block'
                         }}
                       >
                         {plan.price}
                       </Typography>
-                      <Typography 
-                        variant="subtitle1" 
-                        component="span" 
+                      <Typography
+                        variant="subtitle1"
+                        component="span"
                         color="textSecondary"
                       >
                         /{plan.period}
                       </Typography>
                     </Box>
-                    
+
                     <Divider sx={{ mb: 3 }} />
-                    
+
                     <Box sx={{ mb: 4, flex: 1 }}>
                       {plan.features.map((feature, i) => (
-                        <Box 
-                          key={i} 
-                          sx={{ 
-                            display: 'flex', 
+                        <Box
+                          key={i}
+                          sx={{
+                            display: 'flex',
                             alignItems: 'center',
-                            mb: 1.5 
+                            mb: 1.5
                           }}
                         >
-                          <Box 
-                            sx={{ 
-                              width: 10, 
-                              height: 10, 
-                              borderRadius: '50%', 
-                              backgroundColor: plan.highlighted 
-                                ? theme.palette.primary.main 
+                          <Box
+                            sx={{
+                              width: 10,
+                              height: 10,
+                              borderRadius: '50%',
+                              backgroundColor: plan.highlighted
+                                ? theme.palette.primary.main
                                 : theme.palette.success.main,
-                              mr: 2 
+                              mr: 2
                             }}
                           />
                           <Typography variant="body1">
@@ -816,7 +816,7 @@ const LandingPage = () => {
                         </Box>
                       ))}
                     </Box>
-                    
+
                     <Button
                       variant={plan.highlighted ? "contained" : "outlined"}
                       color={plan.highlighted ? "primary" : "primary"}
@@ -838,7 +838,7 @@ const LandingPage = () => {
           </Grid>
         </Container>
       </Box>
-      
+
       {/* CTA Section */}
       <Box
         sx={{
@@ -872,7 +872,7 @@ const LandingPage = () => {
             right: '10%'
           }}
         />
-        
+
         <Container maxWidth="md" sx={{ position: 'relative', zIndex: 1 }}>
           <Box sx={{ textAlign: 'center' }}>
             <Typography
@@ -935,7 +935,7 @@ const LandingPage = () => {
           </Box>
         </Container>
       </Box>
-      
+
       {/* Footer */}
       <Box
         sx={{
@@ -1000,7 +1000,11 @@ const LandingPage = () => {
                 Resources
               </Typography>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 1 }}>
-                <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
+                <Button
+                  color="inherit"
+                  sx={{ justifyContent: 'flex-start', p: 0 }}
+                  onClick={() => window.open('/docs/website/index.html', '_self')}
+                >
                   Documentation
                 </Button>
                 <Button color="inherit" sx={{ justifyContent: 'flex-start', p: 0 }}>
@@ -1059,4 +1063,4 @@ const LandingPage = () => {
   );
 };
 
-export default LandingPage; 
+export default LandingPage;

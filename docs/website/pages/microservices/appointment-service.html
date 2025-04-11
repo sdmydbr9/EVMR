@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Appointment Service - EVMR Documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="../../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quick Start Guide</a></li>
+                            <li><a href="../installation.html">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="../architecture/overview.html">System Overview</a></li>
+                            <li><a href="../architecture/microservices.html">Microservices</a></li>
+                            <li><a href="../architecture/database.html">Database Schema</a></li>
+                            <li><a href="../architecture/frontend.html">Frontend Structure</a></li>
+                            <li><a href="../architecture/api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="auth-service.html">Auth Service</a></li>
+                            <li><a href="patient-service.html">Patient Service</a></li>
+                            <li><a href="appointment-service.html" class="active">Appointment Service</a></li>
+                            <li><a href="inventory-service.html">Inventory Service</a></li>
+                            <li><a href="reporting-service.html">Reporting Service</a></li>
+                            <li><a href="notification-service.html">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="../api/authentication.html">Authentication</a></li>
+                            <li><a href="../api/patients.html">Patients</a></li>
+                            <li><a href="../api/medical-records.html">Medical Records</a></li>
+                            <li><a href="../api/appointments.html">Appointments</a></li>
+                            <li><a href="../api/inventory.html">Inventory</a></li>
+                            <li><a href="../api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="../deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="../deployment/configuration.html">Configuration</a></li>
+                            <li><a href="../deployment/scaling.html">Scaling</a></li>
+                            <li><a href="../deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="../guides/user-management.html">User Management</a></li>
+                            <li><a href="../guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="../guides/appointments.html">Appointments</a></li>
+                            <li><a href="../guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="../contributing.html">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>Appointment Service</h1>
+                <p class="lead">
+                    The Appointment Service handles scheduling, calendar management, and appointment tracking for the EVMR system.
+                </p>
+
+                <nav class="page-toc">
+                    <h3>On this page</h3>
+                    <ul>
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#key-features">Key Features</a></li>
+                        <li><a href="#api-endpoints">API Endpoints</a></li>
+                        <li><a href="#data-model">Data Model</a></li>
+                        <li><a href="#configuration">Configuration</a></li>
+                        <li><a href="#scheduling-logic">Scheduling Logic</a></li>
+                        <li><a href="#integration">Integration with Other Services</a></li>
+                        <li><a href="#deployment">Deployment</a></li>
+                    </ul>
+                </nav>
+
+                <h2 id="overview">Overview</h2>
+                <p>
+                    The Appointment Service manages all aspects of scheduling and appointment management in the veterinary practice. It handles appointment creation, updates, cancellations, and provides calendar views for staff.
+                </p>
+
+                <div class="info-box">
+                    <h3>Service Details</h3>
+                    <ul>
+                        <li><strong>Port:</strong> 5103</li>
+                        <li><strong>Base URL:</strong> <code>http://appointment-service:5103</code></li>
+                        <li><strong>Technologies:</strong> Node.js, Express, MongoDB</li>
+                        <li><strong>Dependencies:</strong> Auth Service, Patient Service</li>
+                    </ul>
+                </div>
+
+                <h2 id="architecture">Architecture</h2>
+                <p>
+                    The Appointment Service follows a layered architecture pattern:
+                </p>
+
+                <div class="architecture-diagram">
+                    <img src="../../images/appointment-service-architecture.png" alt="Appointment Service Architecture">
+                    <p class="diagram-caption">Figure 1: Appointment Service internal architecture</p>
+                </div>
+
+                <h3>Components</h3>
+                <ul>
+                    <li><strong>API Layer:</strong> Express.js routes and controllers</li>
+                    <li><strong>Service Layer:</strong> Business logic for appointment management</li>
+                    <li><strong>Scheduling Engine:</strong> Handles time slot management and conflict resolution</li>
+                    <li><strong>Data Access Layer:</strong> MongoDB models and repositories</li>
+                    <li><strong>Integration Layer:</strong> Communication with other services</li>
+                </ul>
+
+                <h2 id="key-features">Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-plus"></i>
+                        </div>
+                        <h3>Appointment Scheduling</h3>
+                        <p>Create and manage appointments</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>Calendar Management</h3>
+                        <p>View and organize appointments in calendar</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Availability Tracking</h3>
+                        <p>Track staff availability and time slots</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h3>Reminders</h3>
+                        <p>Generate appointment reminders</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tasks"></i>
+                        </div>
+                        <h3>Status Management</h3>
+                        <p>Track appointment status changes</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-filter"></i>
+                        </div>
+                        <h3>Filtering & Sorting</h3>
+                        <p>Advanced appointment filtering options</p>
+                    </div>
+                </div>
+
+                <h2 id="api-endpoints">API Endpoints</h2>
+                <p>
+                    The Appointment Service exposes the following RESTful API endpoints:
+                </p>
+
+                <h3>Appointment Management</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/appointments</div>
+                        <div class="endpoint-description">List all appointments (with filtering and pagination)</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/appointments/:id</div>
+                        <div class="endpoint-description">Get appointment details by ID</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/appointments</div>
+                        <div class="endpoint-description">Create a new appointment</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">PUT</div>
+                        <div class="endpoint-path">/api/appointments/:id</div>
+                        <div class="endpoint-description">Update appointment details</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">DELETE</div>
+                        <div class="endpoint-path">/api/appointments/:id</div>
+                        <div class="endpoint-description">Cancel appointment</div>
+                    </div>
+                </div>
+
+                <h3>Calendar and Availability</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/appointments/calendar</div>
+                        <div class="endpoint-description">Get calendar view of appointments</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/appointments/veterinarian/:id</div>
+                        <div class="endpoint-description">Get appointments for a specific veterinarian</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/appointments/patient/:id</div>
+                        <div class="endpoint-description">Get appointments for a specific patient</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/appointments/availability</div>
+                        <div class="endpoint-description">Check available time slots</div>
+                    </div>
+                </div>
+
+                <h3>Status Management</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">PUT</div>
+                        <div class="endpoint-path">/api/appointments/:id/status</div>
+                        <div class="endpoint-description">Update appointment status</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">PUT</div>
+                        <div class="endpoint-path">/api/appointments/:id/confirm</div>
+                        <div class="endpoint-description">Confirm appointment</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">PUT</div>
+                        <div class="endpoint-path">/api/appointments/:id/complete</div>
+                        <div class="endpoint-description">Mark appointment as completed</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">PUT</div>
+                        <div class="endpoint-path">/api/appointments/:id/no-show</div>
+                        <div class="endpoint-description">Mark appointment as no-show</div>
+                    </div>
+                </div>
+
+                <h2 id="data-model">Data Model</h2>
+                <p>
+                    The Appointment Service uses MongoDB to store appointment data.
+                </p>
+
+                <h3>Appointment Schema</h3>
+                <div class="code-block">
+                    <pre><code>{
+  _id: ObjectId,
+  patientId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  veterinarianId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  dateTime: {
+    type: Date,
+    required: true
+  },
+  duration: {
+    type: Number,
+    required: true,
+    min: 15,   // minimum 15 minutes
+    max: 240   // maximum 4 hours
+  },
+  status: {
+    type: String,
+    enum: ['scheduled', 'confirmed', 'completed', 'cancelled', 'no-show'],
+    default: 'scheduled'
+  },
+  type: {
+    type: String,
+    enum: ['check-up', 'vaccination', 'surgery', 'follow-up', 'emergency', 'consultation'],
+    required: true
+  },
+  notes: {
+    type: String
+  },
+  reason: {
+    type: String,
+    required: true
+  },
+  isActive: {
+    type: Boolean,
+    default: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+}</code></pre>
+                </div>
+
+                <h3>Availability Schema</h3>
+                <div class="code-block">
+                    <pre><code>{
+  _id: ObjectId,
+  veterinarianId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  dayOfWeek: {
+    type: Number,
+    required: true,
+    min: 0,  // Sunday
+    max: 6   // Saturday
+  },
+  startTime: {
+    type: String,
+    required: true,
+    match: /^([01]\d|2[0-3]):([0-5]\d)$/  // HH:MM format
+  },
+  endTime: {
+    type: String,
+    required: true,
+    match: /^([01]\d|2[0-3]):([0-5]\d)$/  // HH:MM format
+  },
+  isAvailable: {
+    type: Boolean,
+    default: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+}</code></pre>
+                </div>
+
+                <h2 id="configuration">Configuration</h2>
+                <p>
+                    The Appointment Service is configured using environment variables:
+                </p>
+
+                <div class="code-block">
+                    <pre><code># Server Configuration
+PORT=5103
+NODE_ENV=development
+
+# MongoDB Configuration
+MONGODB_URI=mongodb://mongodb:27017/appointment-service
+
+# Service Dependencies
+AUTH_SERVICE_URL=http://auth-service:5101
+PATIENT_SERVICE_URL=http://patient-service:5102
+
+# Scheduling Configuration
+MIN_APPOINTMENT_DURATION=15
+MAX_APPOINTMENT_DURATION=240
+DEFAULT_APPOINTMENT_DURATION=30
+
+# Logging
+LOG_LEVEL=info</code></pre>
+                </div>
+
+                <h2 id="scheduling-logic">Scheduling Logic</h2>
+                <p>
+                    The Appointment Service implements sophisticated scheduling logic to manage appointments efficiently:
+                </p>
+
+                <h3>Time Slot Management</h3>
+                <p>
+                    The service divides the working day into time slots based on the minimum appointment duration (default: 15 minutes). When scheduling an appointment, the system checks for available slots based on:
+                </p>
+                <ul>
+                    <li>Veterinarian availability</li>
+                    <li>Existing appointments</li>
+                    <li>Working hours</li>
+                    <li>Appointment type and duration</li>
+                </ul>
+
+                <h3>Conflict Resolution</h3>
+                <p>
+                    The service prevents double-booking by checking for conflicts when creating or updating appointments. If a conflict is detected, the API returns an error with available alternative time slots.
+                </p>
+
+                <div class="code-block">
+                    <pre><code>// Example conflict checking logic
+const checkForConflicts = async (veterinarianId, dateTime, duration) => {
+  const appointmentEndTime = new Date(dateTime);
+  appointmentEndTime.setMinutes(appointmentEndTime.getMinutes() + duration);
+  
+  const conflictingAppointments = await Appointment.find({
+    veterinarianId,
+    status: { $nin: ['cancelled', 'no-show'] },
+    dateTime: { $lt: appointmentEndTime },
+    $expr: {
+      $gt: [
+        { $add: ['$dateTime', { $multiply: ['$duration', 60000] }] },
+        dateTime
+      ]
+    }
+  });
+  
+  return conflictingAppointments.length > 0;
+};</code></pre>
+                </div>
+
+                <h2 id="integration">Integration with Other Services</h2>
+                <p>
+                    The Appointment Service integrates with other microservices in the following ways:
+                </p>
+
+                <h3>Auth Service Integration</h3>
+                <p>
+                    The Appointment Service relies on the Auth Service for authentication and authorization. It validates JWT tokens and retrieves user information.
+                </p>
+
+                <h3>Patient Service Integration</h3>
+                <p>
+                    The Appointment Service retrieves patient information from the Patient Service when creating or updating appointments. It validates that the patient exists and is active.
+                </p>
+
+                <div class="code-block">
+                    <pre><code>// Example patient validation
+const validatePatient = async (patientId) => {
+  try {
+    const response = await axios.get(`${process.env.PATIENT_SERVICE_URL}/api/patients/${patientId}`);
+    return response.data;
+  } catch (error) {
+    if (error.response && error.response.status === 404) {
+      throw new Error('Patient not found');
+    }
+    throw new Error('Error validating patient');
+  }
+};</code></pre>
+                </div>
+
+                <h3>Notification Service Integration</h3>
+                <p>
+                    The Appointment Service triggers notifications for appointment reminders, confirmations, and status changes through the Notification Service.
+                </p>
+
+                <h2 id="deployment">Deployment</h2>
+                <p>
+                    The Appointment Service is deployed as a Docker container as part of the EVMR microservices architecture.
+                </p>
+
+                <h3>Docker Configuration</h3>
+                <div class="code-block">
+                    <pre><code># From docker-compose.yml
+appointment-service:
+  build:
+    context: ./services/appointment-service
+    dockerfile: Dockerfile
+  container_name: petsphere-appointment-service
+  restart: unless-stopped
+  ports:
+    - "5103:5103"
+  depends_on:
+    mongodb:
+      condition: service_healthy
+    auth-service:
+      condition: service_healthy
+    patient-service:
+      condition: service_healthy
+  environment:
+    - NODE_ENV=${NODE_ENV}
+    - PORT=5103
+    - MONGODB_URI=mongodb://mongodb:27017/appointment-service
+    - AUTH_SERVICE_URL=http://auth-service:5101
+    - PATIENT_SERVICE_URL=http://patient-service:5102
+    - LOG_LEVEL=info
+  env_file:
+    - .env
+  networks:
+    - petsphere-network
+  healthcheck:
+    test: ["CMD", "wget", "-qO-", "http://localhost:5103/health"]
+    interval: 30s
+    timeout: 5s
+    retries: 3
+    start_period: 30s</code></pre>
+                </div>
+
+                <div class="next-section">
+                    <h3>Next Steps</h3>
+                    <p>Now that you understand the Appointment Service, you can explore:</p>
+                    <ul>
+                        <li><a href="../api/appointments.html">Appointments API Reference</a></li>
+                        <li><a href="../guides/appointments.html">Appointments Guide</a></li>
+                        <li><a href="inventory-service.html">Inventory Service Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="../privacy.html">Privacy Policy</a> |
+                    <a href="../terms.html">Terms of Service</a> |
+                    <a href="../contact.html">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

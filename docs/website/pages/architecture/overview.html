@@ -1,0 +1,429 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>System Architecture Overview - EVMR Documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="../../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quick Start Guide</a></li>
+                            <li><a href="../installation.html">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="overview.html" class="active">System Overview</a></li>
+                            <li><a href="microservices.html">Microservices</a></li>
+                            <li><a href="database.html">Database Schema</a></li>
+                            <li><a href="frontend.html">Frontend Structure</a></li>
+                            <li><a href="api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="../microservices/auth-service.html">Auth Service</a></li>
+                            <li><a href="../microservices/patient-service.html">Patient Service</a></li>
+                            <li><a href="../microservices/appointment-service.html">Appointment Service</a></li>
+                            <li><a href="../microservices/inventory-service.html">Inventory Service</a></li>
+                            <li><a href="../microservices/reporting-service.html">Reporting Service</a></li>
+                            <li><a href="../microservices/notification-service.html">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="../api/authentication.html">Authentication</a></li>
+                            <li><a href="../api/patients.html">Patients</a></li>
+                            <li><a href="../api/medical-records.html">Medical Records</a></li>
+                            <li><a href="../api/appointments.html">Appointments</a></li>
+                            <li><a href="../api/inventory.html">Inventory</a></li>
+                            <li><a href="../api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="../deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="../deployment/configuration.html">Configuration</a></li>
+                            <li><a href="../deployment/scaling.html">Scaling</a></li>
+                            <li><a href="../deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="../guides/user-management.html">User Management</a></li>
+                            <li><a href="../guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="../guides/appointments.html">Appointments</a></li>
+                            <li><a href="../guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="../contributing.html">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>System Architecture Overview</h1>
+                <p class="lead">
+                    EVMR follows a hybrid architecture combining microservices for new components with a monolithic structure for legacy components, providing scalability, resilience, and flexibility.
+                </p>
+
+                <nav class="page-toc">
+                    <h3>On this page</h3>
+                    <ul>
+                        <li><a href="#architecture-overview">Architecture Overview</a></li>
+                        <li><a href="#high-level-architecture">High-Level Architecture</a></li>
+                        <li><a href="#tech-stack">Tech Stack</a></li>
+                        <li><a href="#microservices">Microservices</a></li>
+                        <li><a href="#api-gateway">API Gateway</a></li>
+                        <li><a href="#database-architecture">Database Architecture</a></li>
+                        <li><a href="#containerization">Containerization</a></li>
+                        <li><a href="#data-flow">Data Flow</a></li>
+                        <li><a href="#security-architecture">Security Architecture</a></li>
+                    </ul>
+                </nav>
+
+                <h2 id="architecture-overview">Architecture Overview</h2>
+                <p>
+                    The EVMR system is designed as a hybrid architecture that combines the benefits of microservices for new components with a monolithic structure for legacy components. This approach allows for incremental modernization while maintaining compatibility with existing systems.
+                </p>
+
+                <div class="info-box">
+                    <h3>Key Architectural Principles</h3>
+                    <ul>
+                        <li><strong>Service Independence</strong>: Each microservice operates independently with its own database</li>
+                        <li><strong>API-First Design</strong>: All services expose well-defined APIs</li>
+                        <li><strong>Containerization</strong>: Services are packaged as Docker containers for consistent deployment</li>
+                        <li><strong>Database Isolation</strong>: Each microservice manages its own data domain</li>
+                        <li><strong>Centralized Authentication</strong>: Authentication is handled by a dedicated service</li>
+                    </ul>
+                </div>
+
+                <h2 id="high-level-architecture">High-Level Architecture</h2>
+                <p>
+                    The system follows a layered architecture with clear separation of concerns:
+                </p>
+
+                <div class="architecture-diagram">
+                    <img src="../../images/high-level-architecture.png" alt="EVMR High-Level Architecture">
+                    <p class="diagram-caption">Figure 1: High-level architecture diagram showing the main components of the EVMR system</p>
+                </div>
+
+                <p>
+                    The architecture consists of the following main components:
+                </p>
+
+                <ol>
+                    <li><strong>Frontend Layer</strong>: React.js application that provides the user interface</li>
+                    <li><strong>API Gateway</strong>: Main backend Express server that routes requests to appropriate microservices</li>
+                    <li><strong>Microservices Layer</strong>: Collection of specialized services for different business domains</li>
+                    <li><strong>Database Layer</strong>: MongoDB for microservices and PostgreSQL for legacy components</li>
+                    <li><strong>Infrastructure Services</strong>: Redis for caching and session management</li>
+                </ol>
+
+                <h2 id="tech-stack">Tech Stack</h2>
+                <p>
+                    EVMR is built using modern technologies that enable rapid development, scalability, and maintainability:
+                </p>
+
+                <div class="tech-stack-grid">
+                    <div class="tech-item">
+                        <h3>Frontend</h3>
+                        <ul>
+                            <li>React.js for component-based UI development</li>
+                            <li>Material UI for consistent design language</li>
+                            <li>React Router for client-side routing</li>
+                            <li>Context API for state management</li>
+                        </ul>
+                    </div>
+                    <div class="tech-item">
+                        <h3>Backend</h3>
+                        <ul>
+                            <li>Node.js runtime environment</li>
+                            <li>Express.js for API development</li>
+                            <li>JWT for authentication</li>
+                            <li>Winston for logging</li>
+                        </ul>
+                    </div>
+                    <div class="tech-item">
+                        <h3>Databases</h3>
+                        <ul>
+                            <li>MongoDB for microservices data</li>
+                            <li>PostgreSQL for legacy system data</li>
+                            <li>Redis for caching and session storage</li>
+                        </ul>
+                    </div>
+                    <div class="tech-item">
+                        <h3>DevOps</h3>
+                        <ul>
+                            <li>Docker for containerization</li>
+                            <li>Docker Compose for container orchestration</li>
+                            <li>Git for version control</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h2 id="microservices">Microservices</h2>
+                <p>
+                    The system is composed of several microservices, each responsible for a specific business domain:
+                </p>
+
+                <div class="microservices-diagram">
+                    <img src="../../images/microservices-architecture.png" alt="EVMR Microservices Architecture">
+                    <p class="diagram-caption">Figure 2: Microservices architecture showing service boundaries and interactions</p>
+                </div>
+
+                <div class="services-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Purpose</th>
+                                <th>Database</th>
+                                <th>Port</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Auth Service</td>
+                                <td>User authentication, authorization, and user management</td>
+                                <td>MongoDB</td>
+                                <td>5101</td>
+                            </tr>
+                            <tr>
+                                <td>Patient Service</td>
+                                <td>Patient records and medical history management</td>
+                                <td>MongoDB</td>
+                                <td>5102</td>
+                            </tr>
+                            <tr>
+                                <td>Appointment Service</td>
+                                <td>Appointment scheduling and management</td>
+                                <td>MongoDB</td>
+                                <td>5103</td>
+                            </tr>
+                            <tr>
+                                <td>Inventory Service</td>
+                                <td>Inventory and supply tracking</td>
+                                <td>MongoDB</td>
+                                <td>5104</td>
+                            </tr>
+                            <tr>
+                                <td>Reporting Service</td>
+                                <td>Report generation and analytics</td>
+                                <td>MongoDB</td>
+                                <td>5105</td>
+                            </tr>
+                            <tr>
+                                <td>Notification Service</td>
+                                <td>Notification and alert management</td>
+                                <td>MongoDB</td>
+                                <td>5106</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="api-gateway">API Gateway</h2>
+                <p>
+                    The API Gateway serves as the entry point for all client requests and handles routing to the appropriate microservices. It also provides cross-cutting concerns such as authentication, logging, and error handling.
+                </p>
+
+                <div class="api-gateway-diagram">
+                    <img src="../../images/api-gateway.png" alt="EVMR API Gateway">
+                    <p class="diagram-caption">Figure 3: API Gateway architecture showing request routing and cross-cutting concerns</p>
+                </div>
+
+                <p>
+                    Key responsibilities of the API Gateway include:
+                </p>
+
+                <ul>
+                    <li>Request routing to appropriate microservices</li>
+                    <li>Authentication and authorization</li>
+                    <li>Request/response transformation</li>
+                    <li>Rate limiting and throttling</li>
+                    <li>Logging and monitoring</li>
+                    <li>Error handling and response normalization</li>
+                </ul>
+
+                <h2 id="database-architecture">Database Architecture</h2>
+                <p>
+                    EVMR uses a hybrid database approach with MongoDB for microservices and PostgreSQL for legacy components:
+                </p>
+
+                <div class="database-diagram">
+                    <img src="../../images/database-architecture.png" alt="EVMR Database Architecture">
+                    <p class="diagram-caption">Figure 4: Database architecture showing MongoDB collections and PostgreSQL tables</p>
+                </div>
+
+                <h3>MongoDB Collections (Microservices)</h3>
+                <ul>
+                    <li><strong>users</strong>: User accounts and authentication information</li>
+                    <li><strong>patients</strong>: Patient records and medical history</li>
+                    <li><strong>appointments</strong>: Appointment scheduling information</li>
+                    <li><strong>inventory</strong>: Inventory and supply tracking</li>
+                </ul>
+
+                <h3>PostgreSQL Tables (Legacy)</h3>
+                <ul>
+                    <li><strong>clinics</strong>: Clinic location information</li>
+                    <li><strong>owners</strong>: Pet owner details</li>
+                    <li><strong>users</strong>: Staff accounts with role-based permissions</li>
+                    <li><strong>patients</strong>: Pet/patient information</li>
+                    <li><strong>medical_records</strong>: SOAP format visit records</li>
+                    <li><strong>appointments</strong>: Scheduling information</li>
+                    <li><strong>inventory_items</strong>: Clinic supplies and medications</li>
+                </ul>
+
+                <h2 id="containerization">Containerization</h2>
+                <p>
+                    The system is containerized using Docker and Docker Compose, with each service running in its own container:
+                </p>
+
+                <div class="container-diagram">
+                    <img src="../../images/containerization.png" alt="EVMR Containerization">
+                    <p class="diagram-caption">Figure 5: Containerization architecture showing Docker containers and volumes</p>
+                </div>
+
+                <p>
+                    The containerization architecture includes:
+                </p>
+
+                <ul>
+                    <li><strong>petsphere-app</strong>: Main application container (API Gateway)</li>
+                    <li><strong>petsphere-admin</strong>: Admin service container</li>
+                    <li><strong>petsphere-db</strong>: PostgreSQL database container</li>
+                    <li><strong>mongodb</strong>: MongoDB database container</li>
+                    <li><strong>redis</strong>: Redis cache container</li>
+                    <li><strong>auth-service</strong>: Authentication microservice</li>
+                    <li><strong>patient-service</strong>: Patient management microservice</li>
+                    <li><strong>appointment-service</strong>: Appointment scheduling microservice</li>
+                </ul>
+
+                <h2 id="data-flow">Data Flow</h2>
+                <p>
+                    Understanding the data flow through the system is crucial for development and troubleshooting:
+                </p>
+
+                <div class="data-flow-diagram">
+                    <img src="../../images/data-flow.png" alt="EVMR Data Flow">
+                    <p class="diagram-caption">Figure 6: Data flow diagram showing how requests are processed through the system</p>
+                </div>
+
+                <h3>Authentication Flow</h3>
+                <ol>
+                    <li>User submits credentials to the Auth Service</li>
+                    <li>Auth Service validates credentials and issues JWT token</li>
+                    <li>Token is stored in client and sent with subsequent requests</li>
+                    <li>API Gateway validates token for protected routes</li>
+                </ol>
+
+                <h3>Patient Management Flow</h3>
+                <ol>
+                    <li>Requests go through API Gateway to Patient Service</li>
+                    <li>Patient Service handles CRUD operations on patient records</li>
+                    <li>Medical records are stored and retrieved from MongoDB</li>
+                </ol>
+
+                <h3>Appointment Flow</h3>
+                <ol>
+                    <li>Appointment requests go through API Gateway to Appointment Service</li>
+                    <li>Appointment Service manages scheduling and status updates</li>
+                    <li>Notifications can be triggered for appointment reminders</li>
+                </ol>
+
+                <h2 id="security-architecture">Security Architecture</h2>
+                <p>
+                    Security is a critical aspect of the EVMR system, with multiple layers of protection:
+                </p>
+
+                <div class="security-diagram">
+                    <img src="../../images/security-architecture.png" alt="EVMR Security Architecture">
+                    <p class="diagram-caption">Figure 7: Security architecture showing authentication, authorization, and data protection</p>
+                </div>
+
+                <h3>Security Features</h3>
+                <ul>
+                    <li><strong>JWT-based authentication</strong> with token refresh</li>
+                    <li><strong>Password hashing</strong> with bcrypt</li>
+                    <li><strong>Role-based access control</strong> for different user types</li>
+                    <li><strong>Helmet.js</strong> for HTTP headers security</li>
+                    <li><strong>CORS configuration</strong> to prevent unauthorized access</li>
+                    <li><strong>Rate limiting</strong> to prevent brute force attacks</li>
+                    <li><strong>Redis</strong> for token blacklisting and session management</li>
+                </ul>
+
+                <div class="next-section">
+                    <h3>Next Steps</h3>
+                    <p>Now that you understand the overall architecture, you can explore specific components in more detail:</p>
+                    <ul>
+                        <li><a href="microservices.html">Learn about the Microservices Architecture</a></li>
+                        <li><a href="database.html">Explore the Database Schema</a></li>
+                        <li><a href="frontend.html">Understand the Frontend Structure</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="../privacy.html">Privacy Policy</a> |
+                    <a href="../terms.html">Terms of Service</a> |
+                    <a href="../contact.html">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

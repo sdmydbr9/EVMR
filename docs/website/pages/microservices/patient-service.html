@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Patient Service - EVMR Documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="../../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quick Start Guide</a></li>
+                            <li><a href="../installation.html">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="../architecture/overview.html">System Overview</a></li>
+                            <li><a href="../architecture/microservices.html">Microservices</a></li>
+                            <li><a href="../architecture/database.html">Database Schema</a></li>
+                            <li><a href="../architecture/frontend.html">Frontend Structure</a></li>
+                            <li><a href="../architecture/api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="auth-service.html">Auth Service</a></li>
+                            <li><a href="patient-service.html" class="active">Patient Service</a></li>
+                            <li><a href="appointment-service.html">Appointment Service</a></li>
+                            <li><a href="inventory-service.html">Inventory Service</a></li>
+                            <li><a href="reporting-service.html">Reporting Service</a></li>
+                            <li><a href="notification-service.html">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="../api/authentication.html">Authentication</a></li>
+                            <li><a href="../api/patients.html">Patients</a></li>
+                            <li><a href="../api/medical-records.html">Medical Records</a></li>
+                            <li><a href="../api/appointments.html">Appointments</a></li>
+                            <li><a href="../api/inventory.html">Inventory</a></li>
+                            <li><a href="../api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="../deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="../deployment/configuration.html">Configuration</a></li>
+                            <li><a href="../deployment/scaling.html">Scaling</a></li>
+                            <li><a href="../deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="../guides/user-management.html">User Management</a></li>
+                            <li><a href="../guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="../guides/appointments.html">Appointments</a></li>
+                            <li><a href="../guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="../contributing.html">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>Patient Service</h1>
+                <p class="lead">
+                    The Patient Service is the core of the EVMR system, responsible for managing patient records, medical history, and related information.
+                </p>
+
+                <nav class="page-toc">
+                    <h3>On this page</h3>
+                    <ul>
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#key-features">Key Features</a></li>
+                        <li><a href="#api-endpoints">API Endpoints</a></li>
+                        <li><a href="#data-model">Data Model</a></li>
+                        <li><a href="#configuration">Configuration</a></li>
+                        <li><a href="#integration">Integration with Other Services</a></li>
+                        <li><a href="#deployment">Deployment</a></li>
+                    </ul>
+                </nav>
+
+                <h2 id="overview">Overview</h2>
+                <p>
+                    The Patient Service manages all patient-related data, including personal information, medical history, vaccinations, allergies, and medications. It provides a comprehensive API for creating, retrieving, updating, and deleting patient records.
+                </p>
+
+                <div class="info-box">
+                    <h3>Service Details</h3>
+                    <ul>
+                        <li><strong>Port:</strong> 5102</li>
+                        <li><strong>Base URL:</strong> <code>http://patient-service:5102</code></li>
+                        <li><strong>Technologies:</strong> Node.js, Express, MongoDB</li>
+                        <li><strong>Dependencies:</strong> Auth Service (for authentication)</li>
+                    </ul>
+                </div>
+
+                <h2 id="architecture">Architecture</h2>
+                <p>
+                    The Patient Service follows a layered architecture pattern:
+                </p>
+
+                <div class="architecture-diagram">
+                    <img src="../../images/patient-service-architecture.png" alt="Patient Service Architecture">
+                    <p class="diagram-caption">Figure 1: Patient Service internal architecture</p>
+                </div>
+
+                <h3>Components</h3>
+                <ul>
+                    <li><strong>API Layer:</strong> Express.js routes and controllers</li>
+                    <li><strong>Service Layer:</strong> Business logic for patient management</li>
+                    <li><strong>Data Access Layer:</strong> MongoDB models and repositories</li>
+                    <li><strong>Auth Middleware:</strong> JWT validation and authorization</li>
+                </ul>
+
+                <h2 id="key-features">Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h3>Patient Registration</h3>
+                        <p>Create and manage patient profiles</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-notes-medical"></i>
+                        </div>
+                        <h3>Medical Records</h3>
+                        <p>Comprehensive medical history tracking</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-syringe"></i>
+                        </div>
+                        <h3>Vaccination Records</h3>
+                        <p>Track vaccinations and schedules</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-allergies"></i>
+                        </div>
+                        <h3>Allergy Management</h3>
+                        <p>Record and track patient allergies</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <h3>Medication Tracking</h3>
+                        <p>Monitor patient medications and prescriptions</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-search"></i>
+                        </div>
+                        <h3>Advanced Search</h3>
+                        <p>Find patients by various criteria</p>
+                    </div>
+                </div>
+
+                <h2 id="api-endpoints">API Endpoints</h2>
+                <p>
+                    The Patient Service exposes the following RESTful API endpoints:
+                </p>
+
+                <h3>Patient Management</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/patients</div>
+                        <div class="endpoint-description">List all patients (with pagination and filtering)</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/patients/:id</div>
+                        <div class="endpoint-description">Get patient details by ID</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/patients</div>
+                        <div class="endpoint-description">Create a new patient record</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">PUT</div>
+                        <div class="endpoint-path">/api/patients/:id</div>
+                        <div class="endpoint-description">Update patient information</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">DELETE</div>
+                        <div class="endpoint-path">/api/patients/:id</div>
+                        <div class="endpoint-description">Delete patient (soft delete)</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/patients/search</div>
+                        <div class="endpoint-description">Search patients by name, species, breed, etc.</div>
+                    </div>
+                </div>
+
+                <h3>Medical Records</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/medical-records/patient/:patientId</div>
+                        <div class="endpoint-description">Get all medical records for a patient</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/medical-records/:id</div>
+                        <div class="endpoint-description">Get medical record by ID</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/medical-records</div>
+                        <div class="endpoint-description">Create a new medical record</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">PUT</div>
+                        <div class="endpoint-path">/api/medical-records/:id</div>
+                        <div class="endpoint-description">Update medical record</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">DELETE</div>
+                        <div class="endpoint-path">/api/medical-records/:id</div>
+                        <div class="endpoint-description">Delete medical record</div>
+                    </div>
+                </div>
+
+                <h3>Vaccinations</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/patients/:id/vaccinations</div>
+                        <div class="endpoint-description">Add vaccination record</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/patients/:id/vaccinations</div>
+                        <div class="endpoint-description">Get vaccination history</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">PUT</div>
+                        <div class="endpoint-path">/api/patients/:patientId/vaccinations/:id</div>
+                        <div class="endpoint-description">Update vaccination record</div>
+                    </div>
+                </div>
+
+                <h2 id="data-model">Data Model</h2>
+                <p>
+                    The Patient Service uses MongoDB to store patient data and medical records.
+                </p>
+
+                <h3>Patient Schema</h3>
+                <div class="code-block">
+                    <pre><code>{
+  _id: ObjectId,
+  name: String,
+  species: String,
+  breed: String,
+  age: Number,
+  weight: Number,
+  birthDate: Date,
+  gender: String,
+  microchipId: String,
+  owner: {
+    name: String,
+    email: String,
+    phone: String,
+    address: {
+      street: String,
+      city: String,
+      state: String,
+      zipCode: String
+    }
+  },
+  allergies: [{
+    name: String,
+    severity: String,
+    notes: String
+  }],
+  isActive: Boolean,
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                </div>
+
+                <h3>Medical Record Schema</h3>
+                <div class="code-block">
+                    <pre><code>{
+  _id: ObjectId,
+  patientId: ObjectId,
+  veterinarianId: ObjectId,
+  date: Date,
+  type: String,
+  diagnosis: String,
+  treatment: String,
+  notes: String,
+  followUpDate: Date,
+  attachments: [{
+    name: String,
+    fileType: String,
+    url: String
+  }],
+  medications: [{
+    name: String,
+    dosage: String,
+    frequency: String,
+    startDate: Date,
+    endDate: Date,
+    notes: String
+  }],
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                </div>
+
+                <h3>Vaccination Schema</h3>
+                <div class="code-block">
+                    <pre><code>{
+  _id: ObjectId,
+  patientId: ObjectId,
+  name: String,
+  date: Date,
+  expirationDate: Date,
+  manufacturer: String,
+  lotNumber: String,
+  administeredBy: String,
+  notes: String,
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                </div>
+
+                <h2 id="configuration">Configuration</h2>
+                <p>
+                    The Patient Service is configured using environment variables:
+                </p>
+
+                <div class="code-block">
+                    <pre><code># Server Configuration
+PORT=5102
+NODE_ENV=development
+
+# MongoDB Configuration
+MONGODB_URI=mongodb://mongodb:27017/patient-service
+
+# Auth Service Configuration
+AUTH_SERVICE_URL=http://auth-service:5101
+
+# Logging
+LOG_LEVEL=info</code></pre>
+                </div>
+
+                <h2 id="integration">Integration with Other Services</h2>
+                <p>
+                    The Patient Service integrates with other microservices in the following ways:
+                </p>
+
+                <h3>Auth Service Integration</h3>
+                <p>
+                    The Patient Service relies on the Auth Service for authentication and authorization. It validates JWT tokens and retrieves user information.
+                </p>
+
+                <div class="code-block">
+                    <pre><code>// Example authentication middleware
+const authenticateJWT = async (req, res, next) => {
+  try {
+    const token = req.header('Authorization')?.replace('Bearer ', '');
+    
+    if (!token) {
+      return res.status(401).json({ error: 'Authentication required' });
+    }
+    
+    // Validate token with Auth Service
+    const response = await axios.get(`${process.env.AUTH_SERVICE_URL}/api/auth/verify`, {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    
+    req.user = response.data.user;
+    next();
+  } catch (error) {
+    res.status(401).json({ error: 'Invalid token' });
+  }
+};</code></pre>
+                </div>
+
+                <h3>Appointment Service Integration</h3>
+                <p>
+                    The Appointment Service retrieves patient information from the Patient Service when scheduling appointments.
+                </p>
+
+                <h2 id="deployment">Deployment</h2>
+                <p>
+                    The Patient Service is deployed as a Docker container as part of the EVMR microservices architecture.
+                </p>
+
+                <h3>Docker Configuration</h3>
+                <div class="code-block">
+                    <pre><code># From docker-compose.yml
+patient-service:
+  build:
+    context: ./services/patient-service
+    dockerfile: Dockerfile
+  container_name: petsphere-patient-service
+  restart: unless-stopped
+  ports:
+    - "5102:5102"
+  depends_on:
+    mongodb:
+      condition: service_healthy
+    auth-service:
+      condition: service_healthy
+  environment:
+    - NODE_ENV=${NODE_ENV}
+    - PORT=5102
+    - MONGODB_URI=mongodb://mongodb:27017/patient-service
+    - AUTH_SERVICE_URL=http://auth-service:5101
+    - LOG_LEVEL=info
+  env_file:
+    - .env
+  networks:
+    - petsphere-network
+  healthcheck:
+    test: ["CMD", "wget", "-qO-", "http://localhost:5102/health"]
+    interval: 30s
+    timeout: 5s
+    retries: 3
+    start_period: 30s</code></pre>
+                </div>
+
+                <div class="next-section">
+                    <h3>Next Steps</h3>
+                    <p>Now that you understand the Patient Service, you can explore:</p>
+                    <ul>
+                        <li><a href="../api/patients.html">Patients API Reference</a></li>
+                        <li><a href="../api/medical-records.html">Medical Records API Reference</a></li>
+                        <li><a href="../guides/patient-records.html">Patient Records Guide</a></li>
+                        <li><a href="appointment-service.html">Appointment Service Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="../privacy.html">Privacy Policy</a> |
+                    <a href="../terms.html">Terms of Service</a> |
+                    <a href="../contact.html">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

@@ -82,6 +82,9 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'public')));
 
+// Serve documentation website
+app.use('/docs/website', express.static(path.join(__dirname, '..', 'docs', 'website')));
+
 // Health check endpoint
 app.get('/health', (req, res) => {
   res.status(200).json({ status: 'UP', timestamp: new Date().toISOString() });
@@ -119,4 +122,4 @@ app.listen(PORT, '0.0.0.0', () => {
   console.log(`PetSphere Server running on port ${PORT} in ${NODE_ENV} mode`);
 });
 
-module.exports = app; 
+module.exports = app;

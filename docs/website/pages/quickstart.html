@@ -1,0 +1,426 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Quick Start Guide - EVMR Documentation</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="quickstart.html" class="active">Quick Start Guide</a></li>
+                            <li><a href="installation.html">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="architecture/overview.html">System Overview</a></li>
+                            <li><a href="architecture/microservices.html">Microservices</a></li>
+                            <li><a href="architecture/database.html">Database Schema</a></li>
+                            <li><a href="architecture/frontend.html">Frontend Structure</a></li>
+                            <li><a href="architecture/api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="microservices/auth-service.html">Auth Service</a></li>
+                            <li><a href="microservices/patient-service.html">Patient Service</a></li>
+                            <li><a href="microservices/appointment-service.html">Appointment Service</a></li>
+                            <li><a href="microservices/inventory-service.html">Inventory Service</a></li>
+                            <li><a href="microservices/reporting-service.html">Reporting Service</a></li>
+                            <li><a href="microservices/notification-service.html">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="api/authentication.html">Authentication</a></li>
+                            <li><a href="api/patients.html">Patients</a></li>
+                            <li><a href="api/medical-records.html">Medical Records</a></li>
+                            <li><a href="api/appointments.html">Appointments</a></li>
+                            <li><a href="api/inventory.html">Inventory</a></li>
+                            <li><a href="api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="deployment/configuration.html">Configuration</a></li>
+                            <li><a href="deployment/scaling.html">Scaling</a></li>
+                            <li><a href="deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="guides/user-management.html">User Management</a></li>
+                            <li><a href="guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="guides/appointments.html">Appointments</a></li>
+                            <li><a href="guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="contributing.html">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>Quick Start Guide</h1>
+                <p class="lead">
+                    Get up and running with EVMR in minutes. This guide will help you set up a development environment and explore the system's core features.
+                </p>
+
+                <nav class="page-toc">
+                    <h3>On this page</h3>
+                    <ul>
+                        <li><a href="#prerequisites">Prerequisites</a></li>
+                        <li><a href="#installation">Installation</a></li>
+                        <li><a href="#configuration">Configuration</a></li>
+                        <li><a href="#running-the-application">Running the Application</a></li>
+                        <li><a href="#accessing-the-application">Accessing the Application</a></li>
+                        <li><a href="#demo-accounts">Demo Accounts</a></li>
+                        <li><a href="#next-steps">Next Steps</a></li>
+                    </ul>
+                </nav>
+
+                <h2 id="prerequisites">Prerequisites</h2>
+                <p>
+                    Before you begin, ensure you have the following installed on your system:
+                </p>
+
+                <ul>
+                    <li><strong>Docker</strong> (version 20.10.0 or higher)</li>
+                    <li><strong>Docker Compose</strong> (version 2.0.0 or higher)</li>
+                    <li><strong>Git</strong> (version 2.30.0 or higher)</li>
+                    <li><strong>Node.js</strong> (version 16.0.0 or higher) - for development only</li>
+                    <li><strong>npm</strong> (version 8.0.0 or higher) - for development only</li>
+                </ul>
+
+                <div class="info-box">
+                    <h3>System Requirements</h3>
+                    <p>Recommended system specifications for running EVMR:</p>
+                    <ul>
+                        <li><strong>CPU:</strong> 4 cores or more</li>
+                        <li><strong>RAM:</strong> 8GB or more</li>
+                        <li><strong>Disk Space:</strong> 10GB free space</li>
+                        <li><strong>Operating System:</strong> Linux, macOS, or Windows with WSL2</li>
+                    </ul>
+                </div>
+
+                <h2 id="installation">Installation</h2>
+                <p>
+                    Follow these steps to install EVMR:
+                </p>
+
+                <h3>1. Clone the Repository</h3>
+                <div class="code-block">
+                    <pre><code>git clone https://github.com/yourusername/EVMR.git
+cd EVMR</code></pre>
+                </div>
+
+                <h3>2. Set Up Environment Variables</h3>
+                <p>
+                    Create a <code>.env</code> file in the root directory by copying the example file:
+                </p>
+                <div class="code-block">
+                    <pre><code>cp .env.example .env</code></pre>
+                </div>
+
+                <p>
+                    Open the <code>.env</code> file and update the variables as needed. The most important variables to configure are:
+                </p>
+
+                <div class="code-block">
+                    <pre><code># Database Configuration
+MONGODB_URI=mongodb://mongodb:27017/evmr
+POSTGRES_URI=postgresql://postgres:postgres@postgres:5432/evmr_legacy
+
+# JWT Secret
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRATION=1d
+JWT_REFRESH_EXPIRATION=7d
+
+# API Configuration
+API_PORT=5000
+NODE_ENV=development
+
+# Email Configuration (for notifications)
+SMTP_HOST=smtp.example.com
+SMTP_PORT=587
+SMTP_USER=your_email@example.com
+SMTP_PASS=your_email_password</code></pre>
+                </div>
+
+                <h2 id="configuration">Configuration</h2>
+                <p>
+                    EVMR uses Docker Compose for container orchestration. The default configuration should work for most development environments, but you can customize it by editing the <code>docker-compose.yml</code> file.
+                </p>
+
+                <h3>Default Ports</h3>
+                <p>
+                    The following ports are used by default:
+                </p>
+
+                <div class="services-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Service</th>
+                                <th>Port</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Frontend</td>
+                                <td>3000</td>
+                                <td>React application</td>
+                            </tr>
+                            <tr>
+                                <td>API Gateway</td>
+                                <td>5000</td>
+                                <td>Main API entry point</td>
+                            </tr>
+                            <tr>
+                                <td>Auth Service</td>
+                                <td>5101</td>
+                                <td>Authentication service</td>
+                            </tr>
+                            <tr>
+                                <td>Patient Service</td>
+                                <td>5102</td>
+                                <td>Patient management service</td>
+                            </tr>
+                            <tr>
+                                <td>Appointment Service</td>
+                                <td>5103</td>
+                                <td>Appointment scheduling service</td>
+                            </tr>
+                            <tr>
+                                <td>MongoDB</td>
+                                <td>27017</td>
+                                <td>MongoDB database (internal)</td>
+                            </tr>
+                            <tr>
+                                <td>PostgreSQL</td>
+                                <td>5432</td>
+                                <td>PostgreSQL database (internal)</td>
+                            </tr>
+                            <tr>
+                                <td>Redis</td>
+                                <td>6379</td>
+                                <td>Redis cache (internal)</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="running-the-application">Running the Application</h2>
+                <p>
+                    Start the application using Docker Compose:
+                </p>
+
+                <div class="code-block">
+                    <pre><code>docker-compose up -d</code></pre>
+                </div>
+
+                <p>
+                    This command will:
+                </p>
+                <ol>
+                    <li>Build or pull all required Docker images</li>
+                    <li>Create and start containers for all services</li>
+                    <li>Set up the network between containers</li>
+                    <li>Initialize the databases with sample data</li>
+                </ol>
+
+                <div class="info-box">
+                    <h3>First-Time Startup</h3>
+                    <p>The first time you start the application, it may take several minutes to download images and initialize the databases. Subsequent startups will be much faster.</p>
+                </div>
+
+                <h3>Checking Service Status</h3>
+                <p>
+                    Verify that all services are running:
+                </p>
+
+                <div class="code-block">
+                    <pre><code>docker-compose ps</code></pre>
+                </div>
+
+                <p>
+                    You should see all services with a status of "Up".
+                </p>
+
+                <h3>Viewing Logs</h3>
+                <p>
+                    To view logs from all services:
+                </p>
+
+                <div class="code-block">
+                    <pre><code>docker-compose logs -f</code></pre>
+                </div>
+
+                <p>
+                    To view logs from a specific service:
+                </p>
+
+                <div class="code-block">
+                    <pre><code>docker-compose logs -f [service-name]</code></pre>
+                </div>
+
+                <h2 id="accessing-the-application">Accessing the Application</h2>
+                <p>
+                    Once all services are running, you can access the application:
+                </p>
+
+                <ul>
+                    <li><strong>Frontend:</strong> <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
+                    <li><strong>API Gateway:</strong> <a href="http://localhost:5000" target="_blank">http://localhost:5000</a></li>
+                    <li><strong>API Documentation:</strong> <a href="http://localhost:5000/api-docs" target="_blank">http://localhost:5000/api-docs</a></li>
+                </ul>
+
+                <h2 id="demo-accounts">Demo Accounts</h2>
+                <p>
+                    The system includes built-in demo accounts that are dynamically created during system initialization:
+                </p>
+
+                <div class="demo-users">
+                    <div class="demo-user">
+                        <div class="user-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-details">
+                            <h4>Pet Parent</h4>
+                            <p><strong>Email:</strong> petparent_demo@vetsphere.com</p>
+                            <p><strong>Password:</strong> demodemo</p>
+                        </div>
+                    </div>
+                    <div class="demo-user">
+                        <div class="user-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="user-details">
+                            <h4>Veterinarian</h4>
+                            <p><strong>Email:</strong> vet_demo@vetsphere.com</p>
+                            <p><strong>Password:</strong> demodemo</p>
+                        </div>
+                    </div>
+                    <div class="demo-user">
+                        <div class="user-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="user-details">
+                            <h4>Organization Admin</h4>
+                            <p><strong>Email:</strong> org_demo@vetsphere.com</p>
+                            <p><strong>Password:</strong> demodemo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <h2 id="stopping-the-application">Stopping the Application</h2>
+                <p>
+                    To stop the application:
+                </p>
+
+                <div class="code-block">
+                    <pre><code>docker-compose down</code></pre>
+                </div>
+
+                <p>
+                    To stop the application and remove all data (including databases):
+                </p>
+
+                <div class="code-block">
+                    <pre><code>docker-compose down -v</code></pre>
+                </div>
+
+                <div class="warning-box">
+                    <h3>Warning</h3>
+                    <p>The <code>-v</code> flag will remove all volumes, including database data. Use with caution in production environments.</p>
+                </div>
+
+                <h2 id="next-steps">Next Steps</h2>
+                <p>
+                    Now that you have EVMR up and running, you can:
+                </p>
+
+                <div class="next-steps-grid">
+                    <a href="installation.html" class="next-step-card">
+                        <h3>Detailed Installation</h3>
+                        <p>Learn about advanced installation options and configurations.</p>
+                        <span class="next-link">Read more <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                    <a href="architecture/overview.html" class="next-step-card">
+                        <h3>System Architecture</h3>
+                        <p>Understand the system's architecture and how components interact.</p>
+                        <span class="next-link">Read more <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                    <a href="guides/user-management.html" class="next-step-card">
+                        <h3>User Management</h3>
+                        <p>Learn how to manage users, roles, and permissions.</p>
+                        <span class="next-link">Read more <i class="fas fa-arrow-right"></i></span>
+                    </a>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="privacy.html">Privacy Policy</a> |
+                    <a href="terms.html">Terms of Service</a> |
+                    <a href="contact.html">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

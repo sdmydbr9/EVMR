@@ -17,4 +17,5 @@ export { default as MedicalRecords } from './MedicalRecords';
 export { default as AppointmentScheduling } from './AppointmentScheduling';
 export { default as Settings } from './Settings';
 export { default as StaffManagement } from './StaffManagement';
-export { default as MedicalReports } from './MedicalReports'; 
+export { default as MedicalReports } from './MedicalReports';
+export { default as SchedulingDashboard } from './dashboard/SchedulingDashboard'; 

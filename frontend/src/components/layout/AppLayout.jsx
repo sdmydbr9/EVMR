@@ -48,6 +48,7 @@ import {
   Settings as SettingsIcon,
   BarChart as AnalyticsIcon,
   MedicalServices as ServicesIcon,
+  Description as DescriptionIcon,
   Notifications as NotificationsIcon,
   Person as PersonIcon,
   Accessibility as PatientRecordsIcon,
@@ -399,11 +400,15 @@ const AppLayout = ({ onLogout, userInfo, userType }) => {
       } else if (item.name === 'Doctors') {
         return '/app/doctors';
       } else if (item.name === 'Schedules') {
-        return '/app/schedule';
+        return '/app/appointments/dashboard';
       } else if (item.name === 'Inventory') {
         return '/app/inventory';
       } else if (item.name === 'Reports') {
         return '/app/reports';
+      } else if (item.name === 'Appointment Scheduling') {
+        return '/app/appointments/dashboard';
+      } else if (item.name === 'Calendar') {
+        return '/app/appointments/dashboard';
       }
     }
 
@@ -564,6 +569,30 @@ const AppLayout = ({ onLogout, userInfo, userType }) => {
       <Divider sx={{ mx: 2, my: 1 }} />
 
       <List sx={{ px: 1 }}>
+        <ListItem disablePadding>
+          <ListItemButton
+            onClick={() => window.open('/docs/website/index.html', '_self')}
+            sx={{
+              borderRadius: 2,
+              '&:hover': {
+                bgcolor: 'rgba(0, 122, 255, 0.05)'
+              }
+            }}
+          >
+            <ListItemIcon sx={{ minWidth: 40, color: theme.palette.primary.main }}>
+              <DescriptionIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary="Documentation"
+              sx={{
+                '& .MuiTypography-root': {
+                  fontWeight: 500,
+                  color: theme.palette.primary.main
+                }
+              }}
+            />
+          </ListItemButton>
+        </ListItem>
         <ListItem disablePadding>
           <ListItemButton
             onClick={handleLogout}

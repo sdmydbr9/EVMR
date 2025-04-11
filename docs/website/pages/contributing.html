@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contributing - EVMR Documentation</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="quickstart.html">Quick Start Guide</a></li>
+                            <li><a href="installation.html">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="architecture/overview.html">System Overview</a></li>
+                            <li><a href="architecture/microservices.html">Microservices</a></li>
+                            <li><a href="architecture/database.html">Database Schema</a></li>
+                            <li><a href="architecture/frontend.html">Frontend Structure</a></li>
+                            <li><a href="architecture/api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="microservices/auth-service.html">Auth Service</a></li>
+                            <li><a href="microservices/patient-service.html">Patient Service</a></li>
+                            <li><a href="microservices/appointment-service.html">Appointment Service</a></li>
+                            <li><a href="microservices/inventory-service.html">Inventory Service</a></li>
+                            <li><a href="microservices/reporting-service.html">Reporting Service</a></li>
+                            <li><a href="microservices/notification-service.html">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="api/authentication.html">Authentication</a></li>
+                            <li><a href="api/patients.html">Patients</a></li>
+                            <li><a href="api/medical-records.html">Medical Records</a></li>
+                            <li><a href="api/appointments.html">Appointments</a></li>
+                            <li><a href="api/inventory.html">Inventory</a></li>
+                            <li><a href="api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="deployment/configuration.html">Configuration</a></li>
+                            <li><a href="deployment/scaling.html">Scaling</a></li>
+                            <li><a href="deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="guides/user-management.html">User Management</a></li>
+                            <li><a href="guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="guides/appointments.html">Appointments</a></li>
+                            <li><a href="guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="contributing.html" class="active">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>Contributing to EVMR</h1>
+                <p class="lead">
+                    Thank you for your interest in contributing to the EVMR project! This guide will help you get started with contributing to both the codebase and documentation.
+                </p>
+
+                <nav class="page-toc">
+                    <h3>On this page</h3>
+                    <ul>
+                        <li><a href="#code-of-conduct">Code of Conduct</a></li>
+                        <li><a href="#getting-started">Getting Started</a></li>
+                        <li><a href="#development-workflow">Development Workflow</a></li>
+                        <li><a href="#pull-requests">Pull Requests</a></li>
+                        <li><a href="#coding-standards">Coding Standards</a></li>
+                        <li><a href="#documentation">Documentation</a></li>
+                        <li><a href="#testing">Testing</a></li>
+                        <li><a href="#issue-reporting">Issue Reporting</a></li>
+                        <li><a href="#community">Community</a></li>
+                    </ul>
+                </nav>
+
+                <h2 id="code-of-conduct">Code of Conduct</h2>
+                <p>
+                    The EVMR project is committed to fostering an open and welcoming environment. By participating, you are expected to uphold our Code of Conduct, which includes:
+                </p>
+                <ul>
+                    <li>Using welcoming and inclusive language</li>
+                    <li>Being respectful of differing viewpoints and experiences</li>
+                    <li>Gracefully accepting constructive criticism</li>
+                    <li>Focusing on what is best for the community</li>
+                    <li>Showing empathy towards other community members</li>
+                </ul>
+
+                <h2 id="getting-started">Getting Started</h2>
+                <p>
+                    To get started with contributing to EVMR, follow these steps:
+                </p>
+                <ol>
+                    <li>
+                        <p><strong>Fork the Repository</strong></p>
+                        <p>Visit the <a href="https://github.com/yourusername/EVMR" target="_blank">EVMR GitHub repository</a> and click the "Fork" button in the top-right corner.</p>
+                    </li>
+                    <li>
+                        <p><strong>Clone Your Fork</strong></p>
+                        <div class="code-block">
+                            <pre><code>git clone https://github.com/your-username/EVMR.git
+cd EVMR</code></pre>
+                        </div>
+                    </li>
+                    <li>
+                        <p><strong>Add the Upstream Remote</strong></p>
+                        <div class="code-block">
+                            <pre><code>git remote add upstream https://github.com/yourusername/EVMR.git</code></pre>
+                        </div>
+                    </li>
+                    <li>
+                        <p><strong>Create a Branch</strong></p>
+                        <div class="code-block">
+                            <pre><code>git checkout -b feature/your-feature-name</code></pre>
+                        </div>
+                    </li>
+                </ol>
+
+                <h2 id="development-workflow">Development Workflow</h2>
+                <p>
+                    The EVMR project follows a feature branch workflow:
+                </p>
+                <ol>
+                    <li>Create a new branch for each feature or bugfix</li>
+                    <li>Make your changes in the branch</li>
+                    <li>Write tests for your changes</li>
+                    <li>Run the test suite to ensure all tests pass</li>
+                    <li>Submit a pull request</li>
+                </ol>
+
+                <p>
+                    To keep your fork up to date with the main repository:
+                </p>
+                <div class="code-block">
+                    <pre><code>git fetch upstream
+git checkout main
+git merge upstream/main
+git push origin main</code></pre>
+                </div>
+
+                <h2 id="pull-requests">Pull Requests</h2>
+                <p>
+                    When submitting a pull request, please:
+                </p>
+                <ul>
+                    <li>Provide a clear and descriptive title</li>
+                    <li>Reference any related issues using the GitHub issue number (e.g., "Fixes #123")</li>
+                    <li>Include a detailed description of the changes</li>
+                    <li>Update documentation if necessary</li>
+                    <li>Add tests for new features or bug fixes</li>
+                    <li>Ensure all tests pass</li>
+                </ul>
+
+                <p>
+                    Pull request template:
+                </p>
+                <div class="code-block">
+                    <pre><code>## Description
+[Provide a brief description of the changes]
+
+## Related Issues
+[Reference any related issues, e.g., "Fixes #123"]
+
+## Type of Change
+- [ ] Bug fix
+- [ ] New feature
+- [ ] Documentation update
+- [ ] Performance improvement
+- [ ] Code refactoring
+- [ ] Other (please describe)
+
+## Checklist
+- [ ] My code follows the project's coding standards
+- [ ] I have added tests for my changes
+- [ ] All tests pass locally
+- [ ] I have updated the documentation accordingly
+- [ ] My changes don't introduce new warnings or errors</code></pre>
+                </div>
+
+                <h2 id="coding-standards">Coding Standards</h2>
+                <p>
+                    The EVMR project follows these coding standards:
+                </p>
+                <ul>
+                    <li><strong>JavaScript/Node.js:</strong> ESLint with Airbnb style guide</li>
+                    <li><strong>React:</strong> ESLint with React-specific rules</li>
+                    <li><strong>CSS:</strong> Stylelint with standard configuration</li>
+                    <li><strong>Commit Messages:</strong> Conventional Commits format</li>
+                </ul>
+
+                <p>
+                    To check your code against our standards:
+                </p>
+                <div class="code-block">
+                    <pre><code># Install dependencies
+npm install
+
+# Run linting
+npm run lint
+
+# Run linting with auto-fix
+npm run lint:fix</code></pre>
+                </div>
+
+                <h2 id="documentation">Documentation</h2>
+                <p>
+                    Documentation is a crucial part of the EVMR project. We welcome contributions to improve our documentation:
+                </p>
+                <ul>
+                    <li>Fix typos or clarify existing documentation</li>
+                    <li>Add examples or tutorials</li>
+                    <li>Create diagrams or visual aids</li>
+                    <li>Translate documentation to other languages</li>
+                </ul>
+
+                <p>
+                    The documentation is located in the <code>docs/</code> directory and is built using HTML, CSS, and JavaScript. To contribute to the documentation:
+                </p>
+                <ol>
+                    <li>Make your changes to the relevant files</li>
+                    <li>Preview the changes locally by opening the HTML files in your browser</li>
+                    <li>Submit a pull request with your changes</li>
+                </ol>
+
+                <h2 id="testing">Testing</h2>
+                <p>
+                    The EVMR project uses the following testing frameworks:
+                </p>
+                <ul>
+                    <li><strong>Backend:</strong> Jest for unit and integration tests</li>
+                    <li><strong>Frontend:</strong> React Testing Library and Jest</li>
+                    <li><strong>End-to-End:</strong> Cypress</li>
+                </ul>
+
+                <p>
+                    To run the tests:
+                </p>
+                <div class="code-block">
+                    <pre><code># Run all tests
+npm test
+
+# Run backend tests
+npm run test:backend
+
+# Run frontend tests
+npm run test:frontend
+
+# Run end-to-end tests
+npm run test:e2e</code></pre>
+                </div>
+
+                <p>
+                    When contributing new features or fixing bugs, please include tests that cover your changes.
+                </p>
+
+                <h2 id="issue-reporting">Issue Reporting</h2>
+                <p>
+                    If you find a bug or have a feature request, please create an issue on the <a href="https://github.com/yourusername/EVMR/issues" target="_blank">GitHub issue tracker</a>.
+                </p>
+
+                <p>
+                    When reporting a bug, please include:
+                </p>
+                <ul>
+                    <li>A clear and descriptive title</li>
+                    <li>Steps to reproduce the issue</li>
+                    <li>Expected behavior</li>
+                    <li>Actual behavior</li>
+                    <li>Screenshots or error messages (if applicable)</li>
+                    <li>Environment information (browser, OS, etc.)</li>
+                </ul>
+
+                <h2 id="community">Community</h2>
+                <p>
+                    Join our community to get help, share ideas, and collaborate:
+                </p>
+                <ul>
+                    <li><a href="https://discord.gg/evmr" target="_blank">Discord</a></li>
+                    <li><a href="https://community.evmr.example.com" target="_blank">Community Forum</a></li>
+                    <li><a href="https://twitter.com/evmr" target="_blank">Twitter</a></li>
+                </ul>
+
+                <p>
+                    Thank you for contributing to EVMR! Your help makes this project better for everyone.
+                </p>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="privacy.html">Privacy Policy</a> |
+                    <a href="terms.html">Terms of Service</a> |
+                    <a href="contact.html">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

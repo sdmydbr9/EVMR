@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Microservices Architecture - EVMR Documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="../../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quick Start Guide</a></li>
+                            <li><a href="../installation.html">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="overview.html">System Overview</a></li>
+                            <li><a href="microservices.html" class="active">Microservices</a></li>
+                            <li><a href="database.html">Database Schema</a></li>
+                            <li><a href="frontend.html">Frontend Structure</a></li>
+                            <li><a href="api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="../microservices/auth-service.html">Auth Service</a></li>
+                            <li><a href="../microservices/patient-service.html">Patient Service</a></li>
+                            <li><a href="../microservices/appointment-service.html">Appointment Service</a></li>
+                            <li><a href="../microservices/inventory-service.html">Inventory Service</a></li>
+                            <li><a href="../microservices/reporting-service.html">Reporting Service</a></li>
+                            <li><a href="../microservices/notification-service.html">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="../api/authentication.html">Authentication</a></li>
+                            <li><a href="../api/patients.html">Patients</a></li>
+                            <li><a href="../api/medical-records.html">Medical Records</a></li>
+                            <li><a href="../api/appointments.html">Appointments</a></li>
+                            <li><a href="../api/inventory.html">Inventory</a></li>
+                            <li><a href="../api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="../deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="../deployment/configuration.html">Configuration</a></li>
+                            <li><a href="../deployment/scaling.html">Scaling</a></li>
+                            <li><a href="../deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="../guides/user-management.html">User Management</a></li>
+                            <li><a href="../guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="../guides/appointments.html">Appointments</a></li>
+                            <li><a href="../guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="../contributing.html">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>Microservices Architecture</h1>
+                <p class="lead">
+                    EVMR is built on a microservices architecture that divides the application into specialized, independently deployable services, each focused on a specific business domain.
+                </p>
+
+                <nav class="page-toc">
+                    <h3>On this page</h3>
+                    <ul>
+                        <li><a href="#microservices-overview">Microservices Overview</a></li>
+                        <li><a href="#service-boundaries">Service Boundaries</a></li>
+                        <li><a href="#auth-service">Auth Service</a></li>
+                        <li><a href="#patient-service">Patient Service</a></li>
+                        <li><a href="#appointment-service">Appointment Service</a></li>
+                        <li><a href="#inventory-service">Inventory Service</a></li>
+                        <li><a href="#reporting-service">Reporting Service</a></li>
+                        <li><a href="#notification-service">Notification Service</a></li>
+                        <li><a href="#service-communication">Service Communication</a></li>
+                        <li><a href="#service-discovery">Service Discovery</a></li>
+                        <li><a href="#resilience-patterns">Resilience Patterns</a></li>
+                    </ul>
+                </nav>
+
+                <h2 id="microservices-overview">Microservices Overview</h2>
+                <p>
+                    The EVMR system is composed of several microservices, each responsible for a specific business domain. This architecture provides numerous benefits:
+                </p>
+
+                <div class="benefits-grid">
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-cubes"></i>
+                        </div>
+                        <h3>Scalability</h3>
+                        <p>Services can be scaled independently based on demand</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-code-branch"></i>
+                        </div>
+                        <h3>Flexibility</h3>
+                        <p>Different services can use different technologies as needed</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Resilience</h3>
+                        <p>Failure in one service doesn't bring down the entire system</p>
+                    </div>
+                    <div class="benefit-card">
+                        <div class="benefit-icon">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <h3>Team Organization</h3>
+                        <p>Teams can work independently on different services</p>
+                    </div>
+                </div>
+
+                <div class="microservices-diagram">
+                    <img src="../../images/microservices-detailed.png" alt="EVMR Microservices Detailed Architecture">
+                    <p class="diagram-caption">Figure 1: Detailed microservices architecture showing service interactions and data flow</p>
+                </div>
+
+                <h2 id="service-boundaries">Service Boundaries</h2>
+                <p>
+                    Each microservice in EVMR has well-defined boundaries based on business domains:
+                </p>
+
+                <div class="service-boundaries-diagram">
+                    <img src="../../images/service-boundaries.png" alt="EVMR Service Boundaries">
+                    <p class="diagram-caption">Figure 2: Service boundaries showing domain responsibilities</p>
+                </div>
+
+                <p>
+                    The service boundaries are designed to minimize dependencies between services while ensuring that each service has complete ownership of its domain data and business logic.
+                </p>
+
+                <h2 id="auth-service">Auth Service</h2>
+                <p>
+                    The Auth Service is responsible for user authentication, authorization, and user management.
+                </p>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon">
+                            <i class="fas fa-lock"></i>
+                        </div>
+                        <div class="service-title">
+                            <h3>Auth Service</h3>
+                            <span class="service-port">Port: 5101</span>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <h4>Responsibilities</h4>
+                        <ul>
+                            <li>User authentication and login</li>
+                            <li>User registration and account management</li>
+                            <li>JWT token generation and validation</li>
+                            <li>Role-based access control</li>
+                            <li>Password management (reset, change)</li>
+                        </ul>
+
+                        <h4>Key Components</h4>
+                        <ul>
+                            <li><strong>User Model</strong>: Defines user schema with roles and permissions</li>
+                            <li><strong>Authentication Controller</strong>: Handles login, registration, and token management</li>
+                            <li><strong>JWT Middleware</strong>: Validates tokens for protected routes</li>
+                            <li><strong>Redis Integration</strong>: For token blacklisting and session management</li>
+                        </ul>
+
+                        <h4>API Endpoints</h4>
+                        <ul>
+                            <li><code>POST /api/auth/login</code>: Authenticate user and get JWT token</li>
+                            <li><code>POST /api/auth/register</code>: Register new user</li>
+                            <li><code>POST /api/auth/refresh</code>: Refresh access token</li>
+                            <li><code>GET /api/auth/verify</code>: Verify token validity</li>
+                            <li><code>POST /api/auth/password-reset</code>: Request password reset</li>
+                        </ul>
+
+                        <h4>Database Collections</h4>
+                        <ul>
+                            <li><strong>users</strong>: User accounts with authentication information</li>
+                            <li><strong>tokens</strong>: Refresh tokens and password reset tokens</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h2 id="patient-service">Patient Service</h2>
+                <p>
+                    The Patient Service manages patient records and medical history.
+                </p>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="service-title">
+                            <h3>Patient Service</h3>
+                            <span class="service-port">Port: 5102</span>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <h4>Responsibilities</h4>
+                        <ul>
+                            <li>Patient record management</li>
+                            <li>Medical history tracking</li>
+                            <li>Vaccination records</li>
+                            <li>Allergy information</li>
+                            <li>Medication tracking</li>
+                        </ul>
+
+                        <h4>Key Components</h4>
+                        <ul>
+                            <li><strong>Patient Model</strong>: Defines patient schema with medical history</li>
+                            <li><strong>Medical Record Model</strong>: Defines medical record schema</li>
+                            <li><strong>Patient Controller</strong>: Handles CRUD operations for patients</li>
+                            <li><strong>Medical Record Controller</strong>: Manages medical records</li>
+                        </ul>
+
+                        <h4>API Endpoints</h4>
+                        <ul>
+                            <li><code>GET /api/patients</code>: List all patients</li>
+                            <li><code>GET /api/patients/:id</code>: Get patient details</li>
+                            <li><code>POST /api/patients</code>: Create new patient</li>
+                            <li><code>PUT /api/patients/:id</code>: Update patient</li>
+                            <li><code>DELETE /api/patients/:id</code>: Delete patient (soft delete)</li>
+                            <li><code>POST /api/patients/:id/medical-history</code>: Add medical history entry</li>
+                            <li><code>POST /api/patients/:id/vaccinations</code>: Add vaccination record</li>
+                            <li><code>POST /api/patients/:id/allergies</code>: Add allergy information</li>
+                            <li><code>POST /api/patients/:id/medications</code>: Add medication information</li>
+                        </ul>
+
+                        <h4>Database Collections</h4>
+                        <ul>
+                            <li><strong>patients</strong>: Patient records with owner information</li>
+                            <li><strong>medicalRecords</strong>: Detailed medical records</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h2 id="appointment-service">Appointment Service</h2>
+                <p>
+                    The Appointment Service handles scheduling and appointment management.
+                </p>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <div class="service-title">
+                            <h3>Appointment Service</h3>
+                            <span class="service-port">Port: 5103</span>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <h4>Responsibilities</h4>
+                        <ul>
+                            <li>Appointment scheduling</li>
+                            <li>Appointment status management</li>
+                            <li>Calendar management</li>
+                            <li>Availability checking</li>
+                            <li>Appointment reminders</li>
+                        </ul>
+
+                        <h4>Key Components</h4>
+                        <ul>
+                            <li><strong>Appointment Model</strong>: Defines appointment schema</li>
+                            <li><strong>Appointment Controller</strong>: Handles CRUD operations for appointments</li>
+                            <li><strong>Scheduling Logic</strong>: Manages time slots and availability</li>
+                        </ul>
+
+                        <h4>API Endpoints</h4>
+                        <ul>
+                            <li><code>GET /api/appointments</code>: List appointments</li>
+                            <li><code>GET /api/appointments/:id</code>: Get appointment details</li>
+                            <li><code>POST /api/appointments</code>: Schedule new appointment</li>
+                            <li><code>PUT /api/appointments/:id</code>: Update appointment</li>
+                            <li><code>DELETE /api/appointments/:id</code>: Cancel appointment</li>
+                            <li><code>GET /api/appointments/doctor/:id</code>: Get doctor's appointments</li>
+                            <li><code>GET /api/appointments/patient/:id</code>: Get patient's appointments</li>
+                        </ul>
+
+                        <h4>Database Collections</h4>
+                        <ul>
+                            <li><strong>appointments</strong>: Appointment records with status information</li>
+                            <li><strong>availability</strong>: Doctor availability schedules</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h2 id="inventory-service">Inventory Service</h2>
+                <p>
+                    The Inventory Service tracks medications, supplies, and inventory management.
+                </p>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <div class="service-title">
+                            <h3>Inventory Service</h3>
+                            <span class="service-port">Port: 5104</span>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <h4>Responsibilities</h4>
+                        <ul>
+                            <li>Inventory item management</li>
+                            <li>Stock level tracking</li>
+                            <li>Expiration date monitoring</li>
+                            <li>Reorder management</li>
+                            <li>Usage tracking</li>
+                        </ul>
+
+                        <h4>Key Components</h4>
+                        <ul>
+                            <li><strong>Inventory Model</strong>: Defines inventory item schema</li>
+                            <li><strong>Inventory Controller</strong>: Handles CRUD operations for inventory</li>
+                            <li><strong>Stock Alert System</strong>: Monitors low stock levels</li>
+                        </ul>
+
+                        <h4>API Endpoints</h4>
+                        <ul>
+                            <li><code>GET /api/inventory</code>: List inventory items</li>
+                            <li><code>POST /api/inventory</code>: Add inventory item</li>
+                            <li><code>PUT /api/inventory/:id</code>: Update inventory item</li>
+                            <li><code>DELETE /api/inventory/:id</code>: Remove inventory item</li>
+                            <li><code>GET /api/inventory/low-stock</code>: Get low stock items</li>
+                            <li><code>POST /api/inventory/:id/restock</code>: Restock inventory item</li>
+                        </ul>
+
+                        <h4>Database Collections</h4>
+                        <ul>
+                            <li><strong>inventory</strong>: Inventory items with stock information</li>
+                            <li><strong>transactions</strong>: Inventory transactions (usage, restocking)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h2 id="reporting-service">Reporting Service</h2>
+                <p>
+                    The Reporting Service generates reports and analytics.
+                </p>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <div class="service-title">
+                            <h3>Reporting Service</h3>
+                            <span class="service-port">Port: 5105</span>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <h4>Responsibilities</h4>
+                        <ul>
+                            <li>Report generation</li>
+                            <li>Data analytics</li>
+                            <li>Business intelligence</li>
+                            <li>Dashboard metrics</li>
+                            <li>Data visualization</li>
+                        </ul>
+
+                        <h4>Key Components</h4>
+                        <ul>
+                            <li><strong>Report Generator</strong>: Creates various reports</li>
+                            <li><strong>Analytics Engine</strong>: Processes data for insights</li>
+                            <li><strong>Data Aggregator</strong>: Collects data from other services</li>
+                        </ul>
+
+                        <h4>API Endpoints</h4>
+                        <ul>
+                            <li><code>GET /api/reports/daily</code>: Generate daily report</li>
+                            <li><code>GET /api/reports/monthly</code>: Generate monthly report</li>
+                            <li><code>GET /api/reports/revenue</code>: Generate revenue report</li>
+                            <li><code>GET /api/reports/patient-visits</code>: Generate patient visits report</li>
+                            <li><code>GET /api/reports/doctor-workload</code>: Generate doctor workload report</li>
+                        </ul>
+
+                        <h4>Database Collections</h4>
+                        <ul>
+                            <li><strong>reports</strong>: Saved report configurations</li>
+                            <li><strong>analytics</strong>: Aggregated analytics data</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h2 id="notification-service">Notification Service</h2>
+                <p>
+                    The Notification Service manages notifications and alerts.
+                </p>
+
+                <div class="service-card">
+                    <div class="service-header">
+                        <div class="service-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <div class="service-title">
+                            <h3>Notification Service</h3>
+                            <span class="service-port">Port: 5106</span>
+                        </div>
+                    </div>
+                    <div class="service-body">
+                        <h4>Responsibilities</h4>
+                        <ul>
+                            <li>Email notifications</li>
+                            <li>SMS notifications</li>
+                            <li>In-app notifications</li>
+                            <li>Appointment reminders</li>
+                            <li>System alerts</li>
+                        </ul>
+
+                        <h4>Key Components</h4>
+                        <ul>
+                            <li><strong>Notification Model</strong>: Defines notification schema</li>
+                            <li><strong>Email Service</strong>: Handles email delivery</li>
+                            <li><strong>SMS Service</strong>: Handles SMS delivery</li>
+                            <li><strong>Template Engine</strong>: Manages notification templates</li>
+                        </ul>
+
+                        <h4>API Endpoints</h4>
+                        <ul>
+                            <li><code>POST /api/notifications/email</code>: Send email notification</li>
+                            <li><code>POST /api/notifications/sms</code>: Send SMS notification</li>
+                            <li><code>POST /api/notifications/app</code>: Send in-app notification</li>
+                            <li><code>GET /api/notifications/user/:id</code>: Get user's notifications</li>
+                            <li><code>PUT /api/notifications/:id/read</code>: Mark notification as read</li>
+                        </ul>
+
+                        <h4>Database Collections</h4>
+                        <ul>
+                            <li><strong>notifications</strong>: Notification records</li>
+                            <li><strong>templates</strong>: Notification templates</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <h2 id="service-communication">Service Communication</h2>
+                <p>
+                    Microservices in EVMR communicate with each other through well-defined APIs:
+                </p>
+
+                <div class="communication-diagram">
+                    <img src="../../images/service-communication.png" alt="EVMR Service Communication">
+                    <p class="diagram-caption">Figure 3: Service communication patterns showing synchronous and asynchronous communication</p>
+                </div>
+
+                <h3>Communication Patterns</h3>
+                <ul>
+                    <li><strong>Synchronous REST API Calls</strong>: Direct HTTP requests between services</li>
+                    <li><strong>Asynchronous Event-Based Communication</strong>: Using message queues for decoupled communication</li>
+                    <li><strong>Service Discovery</strong>: Services locate each other through environment variables</li>
+                </ul>
+
+                <h3>Example: Appointment Creation Flow</h3>
+                <ol>
+                    <li>Client sends appointment creation request to API Gateway</li>
+                    <li>API Gateway forwards request to Appointment Service</li>
+                    <li>Appointment Service validates patient ID with Patient Service</li>
+                    <li>Appointment Service creates appointment record</li>
+                    <li>Appointment Service triggers notification event</li>
+                    <li>Notification Service sends confirmation email/SMS</li>
+                </ol>
+
+                <h2 id="service-discovery">Service Discovery</h2>
+                <p>
+                    In the EVMR system, service discovery is handled through environment variables and Docker Compose networking:
+                </p>
+
+                <div class="code-block">
+                    <pre><code># Example environment variables for service discovery
+AUTH_SERVICE_URL=http://auth-service:5101
+PATIENT_SERVICE_URL=http://patient-service:5102
+APPOINTMENT_SERVICE_URL=http://appointment-service:5103</code></pre>
+                </div>
+
+                <p>
+                    Services can locate and communicate with each other using these environment variables, which are set during container startup.
+                </p>
+
+                <h2 id="resilience-patterns">Resilience Patterns</h2>
+                <p>
+                    The microservices architecture implements several resilience patterns to ensure system stability:
+                </p>
+
+                <div class="resilience-grid">
+                    <div class="resilience-card">
+                        <h3>Circuit Breaker</h3>
+                        <p>Prevents cascading failures by stopping calls to failing services</p>
+                    </div>
+                    <div class="resilience-card">
+                        <h3>Retry with Backoff</h3>
+                        <p>Automatically retries failed requests with increasing delays</p>
+                    </div>
+                    <div class="resilience-card">
+                        <h3>Timeout Management</h3>
+                        <p>Sets appropriate timeouts for service calls to prevent hanging requests</p>
+                    </div>
+                    <div class="resilience-card">
+                        <h3>Bulkhead Pattern</h3>
+                        <p>Isolates failures to prevent them from affecting the entire system</p>
+                    </div>
+                    <div class="resilience-card">
+                        <h3>Health Checks</h3>
+                        <p>Regular monitoring of service health to detect issues early</p>
+                    </div>
+                    <div class="resilience-card">
+                        <h3>Graceful Degradation</h3>
+                        <p>Provides reduced functionality when dependent services are unavailable</p>
+                    </div>
+                </div>
+
+                <div class="next-section">
+                    <h3>Next Steps</h3>
+                    <p>Now that you understand the microservices architecture, you can explore specific services in more detail:</p>
+                    <ul>
+                        <li><a href="../microservices/auth-service.html">Auth Service Documentation</a></li>
+                        <li><a href="../microservices/patient-service.html">Patient Service Documentation</a></li>
+                        <li><a href="../microservices/appointment-service.html">Appointment Service Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="../privacy.html">Privacy Policy</a> |
+                    <a href="../terms.html">Terms of Service</a> |
+                    <a href="../contact.html">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

@@ -10,13 +10,13 @@ const baseTemplate = require('./baseTemplate');
  * @returns {Object} - Email template with text and HTML versions
  */
 const passwordResetTemplate = (data) => {
-  const title = 'Reset Your VetSphere Password';
-  
+  const title = 'Reset Your PetSphere Password';
+
   // Plain text version
   const text = `
     Dear ${data.fullName},
 
-    We received a request to reset your password for your VetSphere account.
+    We received a request to reset your password for your PetSphere account.
 
     To reset your password, please click on the link below or copy and paste it into your browser:
     ${data.resetUrl}
@@ -26,17 +26,20 @@ const passwordResetTemplate = (data) => {
     If you did not request a password reset, please ignore this email or contact our support team if you have concerns about your account security.
 
     Best regards,
-    The VetSphere Team
+    The PetSphere Team
   `;
 
   // HTML content for the email
   const content = `
     <p>Dear <strong>${data.fullName}</strong>,</p>
 
-    <p>We received a request to reset your password for your VetSphere account.</p>
+    <p>We received a request to reset your password for your PetSphere account.</p>
 
     <div class="highlight-box">
-      <p style="margin: 0;">To reset your password, please click the button below:</p>
+      <p class="highlight-title">Security Notice</p>
+      <p class="highlight-item">To reset your password, please click the button below</p>
+      <p class="highlight-item">This link will expire in ${data.expiryHours} hours</p>
+      <p class="highlight-item">If you didn't request this, please contact support immediately</p>
     </div>
 
     <a href="${data.resetUrl}" class="button">Reset Password</a>
@@ -44,11 +47,13 @@ const passwordResetTemplate = (data) => {
     <p style="margin-top: 20px; font-size: 13px;">Or copy and paste this URL into your browser: <br>
     <span style="font-family: monospace; word-break: break-all;">${data.resetUrl}</span></p>
 
-    <p style="color: #777; font-size: 13px;">This link will expire in ${data.expiryHours} hours.</p>
+    <div class="quote-box">
+      <p class="quote-text">"Beyond Records, Beyond Care"</p>
+    </div>
 
-    <p style="margin-top: 30px;">If you did not request a password reset, please ignore this email or contact our support team if you have concerns about your account security.</p>
+    <p>If you did not request a password reset, please ignore this email or contact our support team if you have concerns about your account security.</p>
 
-    <p>Best regards,<br>The VetSphere Team</p>
+    <p>Best regards,<br>The PetSphere Team</p>
   `;
 
   return {
@@ -61,4 +66,4 @@ const passwordResetTemplate = (data) => {
   };
 };
 
-module.exports = passwordResetTemplate; 
+module.exports = passwordResetTemplate;

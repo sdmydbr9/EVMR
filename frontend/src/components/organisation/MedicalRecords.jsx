@@ -104,21 +104,23 @@ const MedicalRecords = () => {
     setLoading(true);
     try {
       // Check if we're using the demo account
-      const isDemoUser = localStorage.getItem('email') === 'demo@petsphere.com' || 
+      const isDemoUser = localStorage.getItem('email') === 'demo@petsphere.com' ||
                          localStorage.getItem('email') === 'demo@example.com';
-      
+
       let data = [];
-      
+
       if (isDemoUser) {
         // Use demo data
         data = generateDemoRecords();
       } else {
         // Fetch from API
         const response = await api.get('/emr/records');
-        data = response.data;
+        // Ensure data is an array
+        data = Array.isArray(response.data) ? response.data : [];
       }
-      
-      setRecords(data);
+
+      // Ensure we always set an array to the records state
+      setRecords(Array.isArray(data) ? data : []);
     } catch (error) {
       console.error('Error fetching records:', error);
       setRecords(generateDemoRecords());
@@ -133,11 +135,11 @@ const MedicalRecords = () => {
     const patientFirstNames = ['John', 'Mary', 'David', 'Sarah', 'Michael', 'Emily', 'James', 'Jessica'];
     const patientLastNames = ['Smith', 'Johnson', 'Williams', 'Jones', 'Brown', 'Davis', 'Miller', 'Wilson'];
     const diagnoses = [
-      'Allergic Reaction', 
-      'Arthritis', 
-      'Canine Parvovirus', 
-      'Feline Leukemia', 
-      'Hip Dysplasia', 
+      'Allergic Reaction',
+      'Arthritis',
+      'Canine Parvovirus',
+      'Feline Leukemia',
+      'Hip Dysplasia',
       'Upper Respiratory Infection',
       'Skin Infection',
       'Ear Infection',
@@ -151,7 +153,7 @@ const MedicalRecords = () => {
       'Apoquel 16mg - 1 tab SID',
       'Clavamox 62.5mg - 1 tab BID for 14 days'
     ];
-    
+
     return Array.from({ length: 50 }, (_, index) => {
       const recordType = recordTypes[Math.floor(Math.random() * recordTypes.length)];
       const patientFirstName = patientFirstNames[Math.floor(Math.random() * patientFirstNames.length)];
@@ -159,7 +161,7 @@ const MedicalRecords = () => {
       const doctor = doctors[Math.floor(Math.random() * doctors.length)];
       const diagnosis = recordType === 'consultation' ? diagnoses[Math.floor(Math.random() * diagnoses.length)] : '';
       const medication = recordType === 'prescription' ? medications[Math.floor(Math.random() * medications.length)] : '';
-      
+
       return {
         id: `REC${10000 + index}`,
         patientId: `PAT${1000 + Math.floor(Math.random() * 100)}`,
@@ -169,7 +171,7 @@ const MedicalRecords = () => {
         date: new Date(Date.now() - Math.floor(Math.random() * 90) * 86400000).toISOString().split('T')[0],
         doctor,
         diagnosis,
-        notes: recordType === 'consultation' ? 'Patient presented with symptoms of...' : 
+        notes: recordType === 'consultation' ? 'Patient presented with symptoms of...' :
                recordType === 'lab' ? 'Blood work shows normal levels of...' :
                recordType === 'prescription' ? 'Prescription for treatment of...' :
                'Imaging shows no abnormalities in...',
@@ -281,10 +283,10 @@ const MedicalRecords = () => {
       try {
         // In a real app, you would call the API
         // await api.delete(`/emr/records/${record.id}`);
-        
+
         // For demo, just remove from the local state
         setRecords(records.filter(r => r.id !== record.id));
-        
+
         setNotification({
           open: true,
           message: 'Record deleted successfully',
@@ -318,16 +320,16 @@ const MedicalRecords = () => {
       if (dialogMode === 'add') {
         // In a real app, you would call the API
         // const response = await api.post('/emr/records', recordForm);
-        
+
         // For demo, just add to the local state
         const newRecord = {
           id: `REC${10000 + records.length}`,
           ...recordForm,
           status: 'completed'
         };
-        
+
         setRecords([newRecord, ...records]);
-        
+
         setNotification({
           open: true,
           message: 'Record added successfully',
@@ -336,19 +338,19 @@ const MedicalRecords = () => {
       } else if (dialogMode === 'edit') {
         // In a real app, you would call the API
         // await api.put(`/emr/records/${selectedRecord.id}`, recordForm);
-        
+
         // For demo, just update the local state
-        setRecords(records.map(r => 
+        setRecords(records.map(r =>
           r.id === selectedRecord.id ? { ...r, ...recordForm } : r
         ));
-        
+
         setNotification({
           open: true,
           message: 'Record updated successfully',
           severity: 'success'
         });
       }
-      
+
       handleCloseDialog();
     } catch (error) {
       console.error('Error saving record:', error);
@@ -368,7 +370,7 @@ const MedicalRecords = () => {
   };
 
   // Filter and sort records
-  const filteredRecords = records.filter(record => {
+  const filteredRecords = Array.isArray(records) ? records.filter(record => {
     // Filter by tab
     if (activeTab !== 0) {
       const recordTypeMap = {
@@ -381,7 +383,7 @@ const MedicalRecords = () => {
         return false;
       }
     }
-    
+
     // Filter by search term
     if (searchTerm) {
       return (
@@ -392,9 +394,9 @@ const MedicalRecords = () => {
         (record.diagnosis && record.diagnosis.toLowerCase().includes(searchTerm.toLowerCase()))
       );
     }
-    
+
     return true;
-  });
+  }) : [];
 
   // Slice the data for pagination
   const paginatedRecords = filteredRecords.slice(
@@ -457,7 +459,7 @@ const MedicalRecords = () => {
         <Typography variant="h4" component="h1" sx={{ fontWeight: 600, color: 'text.primary', mb: 2 }}>
           Medical Records
         </Typography>
-        
+
         <Tabs
           value={activeTab}
           onChange={handleTabChange}
@@ -469,7 +471,7 @@ const MedicalRecords = () => {
             <Tab key={menu.value} label={menu.label} />
           ))}
         </Tabs>
-        
+
         <Box sx={{ mb: 3, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
           <Box sx={{ display: 'flex', alignItems: 'center' }}>
             <TextField
@@ -483,23 +485,23 @@ const MedicalRecords = () => {
                 startAdornment: <SearchIcon sx={{ color: 'text.secondary', mr: 1 }} />,
               }}
             />
-            <Button 
-              variant="outlined" 
+            <Button
+              variant="outlined"
               startIcon={<FilterListIcon />}
               sx={{ mr: 2 }}
             >
               Filter
             </Button>
           </Box>
-          <Button 
-            variant="contained" 
+          <Button
+            variant="contained"
             startIcon={<AddIcon />}
             onClick={handleAddRecord}
           >
             Add Record
           </Button>
         </Box>
-        
+
         <TableContainer component={Paper}>
           <Table>
             <TableHead>
@@ -563,7 +565,7 @@ const MedicalRecords = () => {
             component="div"
             count={filteredRecords.length}
             rowsPerPage={rowsPerPage}
-            page={page}
+            page={filteredRecords.length > 0 ? Math.min(page, Math.ceil(filteredRecords.length / rowsPerPage) - 1) : 0}
             onPageChange={handleChangePage}
             onRowsPerPageChange={handleChangeRowsPerPage}
           />
@@ -573,7 +575,7 @@ const MedicalRecords = () => {
       {/* Record View/Edit/Add Dialog */}
       <Dialog open={openDialog} onClose={handleCloseDialog} maxWidth="md" fullWidth>
         <DialogTitle>
-          {dialogMode === 'view' ? 'Medical Record Details' : 
+          {dialogMode === 'view' ? 'Medical Record Details' :
            dialogMode === 'add' ? 'Add New Record' : 'Edit Record'}
         </DialogTitle>
         <DialogContent>
@@ -776,9 +778,9 @@ const MedicalRecords = () => {
         </DialogContent>
         <DialogActions>
           {dialogMode === 'view' && (
-            <Button 
-              startIcon={<FileDownloadIcon />} 
-              variant="outlined" 
+            <Button
+              startIcon={<FileDownloadIcon />}
+              variant="outlined"
               color="primary"
               onClick={() => alert('Download functionality would be implemented here')}
             >

@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Database Schema - EVMR Documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="../../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quick Start Guide</a></li>
+                            <li><a href="../installation.html">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="overview.html">System Overview</a></li>
+                            <li><a href="microservices.html">Microservices</a></li>
+                            <li><a href="database.html" class="active">Database Schema</a></li>
+                            <li><a href="frontend.html">Frontend Structure</a></li>
+                            <li><a href="api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="../microservices/auth-service.html">Auth Service</a></li>
+                            <li><a href="../microservices/patient-service.html">Patient Service</a></li>
+                            <li><a href="../microservices/appointment-service.html">Appointment Service</a></li>
+                            <li><a href="../microservices/inventory-service.html">Inventory Service</a></li>
+                            <li><a href="../microservices/reporting-service.html">Reporting Service</a></li>
+                            <li><a href="../microservices/notification-service.html">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="../api/authentication.html">Authentication</a></li>
+                            <li><a href="../api/patients.html">Patients</a></li>
+                            <li><a href="../api/medical-records.html">Medical Records</a></li>
+                            <li><a href="../api/appointments.html">Appointments</a></li>
+                            <li><a href="../api/inventory.html">Inventory</a></li>
+                            <li><a href="../api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="../deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="../deployment/configuration.html">Configuration</a></li>
+                            <li><a href="../deployment/scaling.html">Scaling</a></li>
+                            <li><a href="../deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="../guides/user-management.html">User Management</a></li>
+                            <li><a href="../guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="../guides/appointments.html">Appointments</a></li>
+                            <li><a href="../guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="../contributing.html">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>Database Schema</h1>
+                <p class="lead">
+                    EVMR uses a hybrid database approach with MongoDB for microservices and PostgreSQL for legacy components, providing flexibility and domain-specific data storage.
+                </p>
+
+                <nav class="page-toc">
+                    <h3>On this page</h3>
+                    <ul>
+                        <li><a href="#database-architecture">Database Architecture</a></li>
+                        <li><a href="#mongodb-schema">MongoDB Schema</a></li>
+                        <li><a href="#postgresql-schema">PostgreSQL Schema</a></li>
+                        <li><a href="#data-migration">Data Migration</a></li>
+                        <li><a href="#database-access-patterns">Database Access Patterns</a></li>
+                        <li><a href="#data-consistency">Data Consistency</a></li>
+                        <li><a href="#backup-and-recovery">Backup and Recovery</a></li>
+                    </ul>
+                </nav>
+
+                <h2 id="database-architecture">Database Architecture</h2>
+                <p>
+                    EVMR employs a polyglot persistence approach, using different database technologies for different parts of the system:
+                </p>
+
+                <div class="database-diagram">
+                    <img src="../../images/database-architecture.png" alt="EVMR Database Architecture">
+                    <p class="diagram-caption">Figure 1: Database architecture showing MongoDB collections and PostgreSQL tables</p>
+                </div>
+
+                <p>
+                    The database architecture follows these principles:
+                </p>
+
+                <ul>
+                    <li><strong>Database per Service:</strong> Each microservice has its own database, ensuring loose coupling</li>
+                    <li><strong>Polyglot Persistence:</strong> Using the right database for the right job</li>
+                    <li><strong>Data Ownership:</strong> Each service owns and is responsible for its data</li>
+                    <li><strong>Legacy Integration:</strong> PostgreSQL maintains compatibility with legacy systems</li>
+                </ul>
+
+                <h2 id="mongodb-schema">MongoDB Schema</h2>
+                <p>
+                    MongoDB is used for microservices data, with each service having its own collections. Here are the main collections and their schemas:
+                </p>
+
+                <h3>Auth Service Collections</h3>
+                <div class="schema-card">
+                    <h4>users</h4>
+                    <div class="code-block">
+                        <pre><code>{
+  _id: ObjectId,
+  email: String,
+  password: String,  // Hashed
+  firstName: String,
+  lastName: String,
+  role: String,      // "admin", "doctor", "staff", "patient"
+  isActive: Boolean,
+  lastLogin: Date,
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                    </div>
+
+                    <h4>tokens</h4>
+                    <div class="code-block">
+                        <pre><code>{
+  _id: ObjectId,
+  userId: ObjectId,
+  token: String,
+  type: String,      // "refresh", "reset"
+  expiresAt: Date,
+  createdAt: Date
+}</code></pre>
+                    </div>
+                </div>
+
+                <h3>Patient Service Collections</h3>
+                <div class="schema-card">
+                    <h4>patients</h4>
+                    <div class="code-block">
+                        <pre><code>{
+  _id: ObjectId,
+  name: String,
+  species: String,
+  breed: String,
+  dateOfBirth: Date,
+  gender: String,
+  microchipId: String,
+  ownerId: ObjectId,
+  isActive: Boolean,
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                    </div>
+
+                    <h4>medicalRecords</h4>
+                    <div class="code-block">
+                        <pre><code>{
+  _id: ObjectId,
+  patientId: ObjectId,
+  visitDate: Date,
+  doctorId: ObjectId,
+  subjective: String,
+  objective: String,
+  assessment: String,
+  plan: String,
+  medications: [
+    {
+      name: String,
+      dosage: String,
+      frequency: String,
+      duration: String,
+      notes: String
+    }
+  ],
+  vaccinations: [
+    {
+      name: String,
+      lot: String,
+      expirationDate: Date,
+      site: String,
+      nextDueDate: Date
+    }
+  ],
+  attachments: [
+    {
+      name: String,
+      type: String,
+      url: String,
+      uploadedAt: Date
+    }
+  ],
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                    </div>
+
+                    <h4>allergies</h4>
+                    <div class="code-block">
+                        <pre><code>{
+  _id: ObjectId,
+  patientId: ObjectId,
+  allergen: String,
+  severity: String,
+  reaction: String,
+  notes: String,
+  diagnosedDate: Date,
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                    </div>
+                </div>
+
+                <h3>Appointment Service Collections</h3>
+                <div class="schema-card">
+                    <h4>appointments</h4>
+                    <div class="code-block">
+                        <pre><code>{
+  _id: ObjectId,
+  patientId: ObjectId,
+  doctorId: ObjectId,
+  clinicId: ObjectId,
+  startTime: Date,
+  endTime: Date,
+  status: String,    // "scheduled", "confirmed", "completed", "cancelled"
+  appointmentType: String,
+  reason: String,
+  notes: String,
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                    </div>
+
+                    <h4>availability</h4>
+                    <div class="code-block">
+                        <pre><code>{
+  _id: ObjectId,
+  doctorId: ObjectId,
+  clinicId: ObjectId,
+  dayOfWeek: Number,  // 0-6 (Sunday-Saturday)
+  startTime: String,  // "09:00"
+  endTime: String,    // "17:00"
+  isRecurring: Boolean,
+  exceptions: [
+    {
+      date: Date,
+      available: Boolean,
+      startTime: String,
+      endTime: String
+    }
+  ],
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                    </div>
+                </div>
+
+                <h3>Inventory Service Collections</h3>
+                <div class="schema-card">
+                    <h4>inventory</h4>
+                    <div class="code-block">
+                        <pre><code>{
+  _id: ObjectId,
+  name: String,
+  category: String,
+  sku: String,
+  description: String,
+  quantity: Number,
+  unit: String,
+  minQuantity: Number,
+  location: String,
+  supplier: String,
+  cost: Number,
+  price: Number,
+  expirationDate: Date,
+  lotNumber: String,
+  isActive: Boolean,
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                    </div>
+
+                    <h4>transactions</h4>
+                    <div class="code-block">
+                        <pre><code>{
+  _id: ObjectId,
+  inventoryId: ObjectId,
+  type: String,      // "purchase", "use", "adjustment", "transfer"
+  quantity: Number,
+  previousQuantity: Number,
+  newQuantity: Number,
+  reason: String,
+  performedBy: ObjectId,
+  patientId: ObjectId,  // If used for a patient
+  createdAt: Date
+}</code></pre>
+                    </div>
+                </div>
+
+                <h3>Notification Service Collections</h3>
+                <div class="schema-card">
+                    <h4>notifications</h4>
+                    <div class="code-block">
+                        <pre><code>{
+  _id: ObjectId,
+  userId: ObjectId,
+  type: String,      // "email", "sms", "app"
+  title: String,
+  message: String,
+  status: String,    // "pending", "sent", "delivered", "read", "failed"
+  metadata: Object,
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                    </div>
+
+                    <h4>templates</h4>
+                    <div class="code-block">
+                        <pre><code>{
+  _id: ObjectId,
+  name: String,
+  type: String,      // "email", "sms"
+  subject: String,   // For email
+  content: String,
+  variables: [String],
+  isActive: Boolean,
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                    </div>
+                </div>
+
+                <h2 id="postgresql-schema">PostgreSQL Schema</h2>
+                <p>
+                    PostgreSQL is used for the legacy system components. Here are the main tables and their schemas:
+                </p>
+
+                <h3>Core Tables</h3>
+                <div class="schema-card">
+                    <h4>clinics</h4>
+                    <div class="code-block">
+                        <pre><code>CREATE TABLE clinics (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  address VARCHAR(255),
+  city VARCHAR(100),
+  state VARCHAR(100),
+  zip VARCHAR(20),
+  phone VARCHAR(20),
+  email VARCHAR(255),
+  website VARCHAR(255),
+  tax_id VARCHAR(50),
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+                    </div>
+
+                    <h4>users</h4>
+                    <div class="code-block">
+                        <pre><code>CREATE TABLE users (
+  id SERIAL PRIMARY KEY,
+  email VARCHAR(255) UNIQUE NOT NULL,
+  password VARCHAR(255) NOT NULL,
+  first_name VARCHAR(100),
+  last_name VARCHAR(100),
+  role VARCHAR(50) NOT NULL,
+  clinic_id INTEGER REFERENCES clinics(id),
+  is_active BOOLEAN DEFAULT TRUE,
+  last_login TIMESTAMP,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+                    </div>
+
+                    <h4>owners</h4>
+                    <div class="code-block">
+                        <pre><code>CREATE TABLE owners (
+  id SERIAL PRIMARY KEY,
+  first_name VARCHAR(100) NOT NULL,
+  last_name VARCHAR(100) NOT NULL,
+  email VARCHAR(255),
+  phone VARCHAR(20),
+  address VARCHAR(255),
+  city VARCHAR(100),
+  state VARCHAR(100),
+  zip VARCHAR(20),
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+                    </div>
+                </div>
+
+                <h3>Patient-Related Tables</h3>
+                <div class="schema-card">
+                    <h4>patients</h4>
+                    <div class="code-block">
+                        <pre><code>CREATE TABLE patients (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(100) NOT NULL,
+  species VARCHAR(50),
+  breed VARCHAR(100),
+  date_of_birth DATE,
+  gender VARCHAR(20),
+  color VARCHAR(50),
+  microchip_id VARCHAR(50),
+  owner_id INTEGER REFERENCES owners(id),
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+                    </div>
+
+                    <h4>medical_records</h4>
+                    <div class="code-block">
+                        <pre><code>CREATE TABLE medical_records (
+  id SERIAL PRIMARY KEY,
+  patient_id INTEGER REFERENCES patients(id),
+  visit_date TIMESTAMP NOT NULL,
+  doctor_id INTEGER REFERENCES users(id),
+  subjective TEXT,
+  objective TEXT,
+  assessment TEXT,
+  plan TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+                    </div>
+
+                    <h4>medications</h4>
+                    <div class="code-block">
+                        <pre><code>CREATE TABLE medications (
+  id SERIAL PRIMARY KEY,
+  medical_record_id INTEGER REFERENCES medical_records(id),
+  name VARCHAR(255) NOT NULL,
+  dosage VARCHAR(100),
+  frequency VARCHAR(100),
+  duration VARCHAR(100),
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+                    </div>
+
+                    <h4>vaccinations</h4>
+                    <div class="code-block">
+                        <pre><code>CREATE TABLE vaccinations (
+  id SERIAL PRIMARY KEY,
+  patient_id INTEGER REFERENCES patients(id),
+  medical_record_id INTEGER REFERENCES medical_records(id),
+  name VARCHAR(255) NOT NULL,
+  lot VARCHAR(100),
+  expiration_date DATE,
+  site VARCHAR(50),
+  administered_date TIMESTAMP NOT NULL,
+  next_due_date DATE,
+  administered_by INTEGER REFERENCES users(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+                    </div>
+                </div>
+
+                <h3>Appointment-Related Tables</h3>
+                <div class="schema-card">
+                    <h4>appointments</h4>
+                    <div class="code-block">
+                        <pre><code>CREATE TABLE appointments (
+  id SERIAL PRIMARY KEY,
+  patient_id INTEGER REFERENCES patients(id),
+  doctor_id INTEGER REFERENCES users(id),
+  clinic_id INTEGER REFERENCES clinics(id),
+  start_time TIMESTAMP NOT NULL,
+  end_time TIMESTAMP NOT NULL,
+  status VARCHAR(50) NOT NULL,
+  appointment_type VARCHAR(100),
+  reason TEXT,
+  notes TEXT,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+                    </div>
+                </div>
+
+                <h3>Inventory-Related Tables</h3>
+                <div class="schema-card">
+                    <h4>inventory_items</h4>
+                    <div class="code-block">
+                        <pre><code>CREATE TABLE inventory_items (
+  id SERIAL PRIMARY KEY,
+  name VARCHAR(255) NOT NULL,
+  category VARCHAR(100),
+  sku VARCHAR(50),
+  description TEXT,
+  quantity NUMERIC(10, 2) NOT NULL,
+  unit VARCHAR(50),
+  min_quantity NUMERIC(10, 2),
+  location VARCHAR(100),
+  supplier VARCHAR(255),
+  cost NUMERIC(10, 2),
+  price NUMERIC(10, 2),
+  expiration_date DATE,
+  lot_number VARCHAR(100),
+  clinic_id INTEGER REFERENCES clinics(id),
+  is_active BOOLEAN DEFAULT TRUE,
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+                    </div>
+
+                    <h4>inventory_transactions</h4>
+                    <div class="code-block">
+                        <pre><code>CREATE TABLE inventory_transactions (
+  id SERIAL PRIMARY KEY,
+  inventory_id INTEGER REFERENCES inventory_items(id),
+  type VARCHAR(50) NOT NULL,
+  quantity NUMERIC(10, 2) NOT NULL,
+  previous_quantity NUMERIC(10, 2) NOT NULL,
+  new_quantity NUMERIC(10, 2) NOT NULL,
+  reason TEXT,
+  performed_by INTEGER REFERENCES users(id),
+  patient_id INTEGER REFERENCES patients(id),
+  created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);</code></pre>
+                    </div>
+                </div>
+
+                <h2 id="data-migration">Data Migration</h2>
+                <p>
+                    EVMR includes tools for migrating data between the legacy PostgreSQL database and the new MongoDB databases:
+                </p>
+
+                <h3>Migration Process</h3>
+                <ol>
+                    <li><strong>Extract:</strong> Data is extracted from PostgreSQL tables</li>
+                    <li><strong>Transform:</strong> Data is transformed to match the MongoDB schema</li>
+                    <li><strong>Load:</strong> Transformed data is loaded into MongoDB collections</li>
+                </ol>
+
+                <p>
+                    To run the migration process:
+                </p>
+                <div class="code-block">
+                    <pre><code>npm run migrate</code></pre>
+                </div>
+
+                <div class="info-box">
+                    <h3>Migration Notes</h3>
+                    <p>The migration process is idempotent and can be run multiple times without creating duplicate data. It uses a tracking system to identify which records have already been migrated.</p>
+                </div>
+
+                <h2 id="database-access-patterns">Database Access Patterns</h2>
+                <p>
+                    Each microservice follows specific database access patterns:
+                </p>
+
+                <h3>Repository Pattern</h3>
+                <p>
+                    Services use the repository pattern to abstract database operations:
+                </p>
+                <div class="code-block">
+                    <pre><code>// Example repository implementation
+class PatientRepository {
+  async findById(id) {
+    return await Patient.findById(id);
+  }
+  
+  async findAll(filter = {}) {
+    return await Patient.find(filter);
+  }
+  
+  async create(patientData) {
+    const patient = new Patient(patientData);
+    return await patient.save();
+  }
+  
+  async update(id, patientData) {
+    return await Patient.findByIdAndUpdate(id, patientData, { new: true });
+  }
+  
+  async delete(id) {
+    return await Patient.findByIdAndUpdate(id, { isActive: false }, { new: true });
+  }
+}</code></pre>
+                </div>
+
+                <h3>Data Access Layers</h3>
+                <p>
+                    Services implement data access layers that handle:
+                </p>
+                <ul>
+                    <li>Connection management</li>
+                    <li>Query optimization</li>
+                    <li>Error handling</li>
+                    <li>Transaction management</li>
+                </ul>
+
+                <h2 id="data-consistency">Data Consistency</h2>
+                <p>
+                    In a microservices architecture, maintaining data consistency across services is challenging. EVMR uses several strategies:
+                </p>
+
+                <h3>Eventual Consistency</h3>
+                <p>
+                    Most inter-service data dependencies use eventual consistency, where data is synchronized asynchronously:
+                </p>
+                <ul>
+                    <li><strong>Event-Based Synchronization:</strong> Services publish events when data changes</li>
+                    <li><strong>Data Replication:</strong> Critical data is replicated across services</li>
+                    <li><strong>Reconciliation Jobs:</strong> Background jobs ensure data consistency</li>
+                </ul>
+
+                <h3>Transactional Consistency</h3>
+                <p>
+                    Within a single service, MongoDB transactions are used for operations that require ACID properties:
+                </p>
+                <div class="code-block">
+                    <pre><code>// Example transaction
+const session = await mongoose.startSession();
+session.startTransaction();
+
+try {
+  const patient = await Patient.create([patientData], { session });
+  const medicalRecord = await MedicalRecord.create([recordData], { session });
+  
+  await session.commitTransaction();
+  return { patient, medicalRecord };
+} catch (error) {
+  await session.abortTransaction();
+  throw error;
+} finally {
+  session.endSession();
+}</code></pre>
+                </div>
+
+                <h2 id="backup-and-recovery">Backup and Recovery</h2>
+                <p>
+                    EVMR implements comprehensive backup and recovery strategies:
+                </p>
+
+                <h3>MongoDB Backups</h3>
+                <ul>
+                    <li><strong>Daily Full Backups:</strong> Complete database dumps</li>
+                    <li><strong>Incremental Backups:</strong> Oplog-based incremental backups</li>
+                    <li><strong>Point-in-Time Recovery:</strong> Ability to restore to a specific point in time</li>
+                </ul>
+
+                <h3>PostgreSQL Backups</h3>
+                <ul>
+                    <li><strong>Daily Full Backups:</strong> pg_dump-based backups</li>
+                    <li><strong>WAL Archiving:</strong> Write-ahead log archiving for point-in-time recovery</li>
+                    <li><strong>Automated Backup Testing:</strong> Regular testing of backup restoration</li>
+                </ul>
+
+                <p>
+                    Backup scripts and configurations are available in the <code>scripts/backup</code> directory.
+                </p>
+
+                <div class="next-section">
+                    <h3>Next Steps</h3>
+                    <p>Now that you understand the database schema, you can explore:</p>
+                    <ul>
+                        <li><a href="frontend.html">Frontend Structure</a></li>
+                        <li><a href="api-gateway.html">API Gateway</a></li>
+                        <li><a href="../microservices/patient-service.html">Patient Service</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="../privacy.html">Privacy Policy</a> |
+                    <a href="../terms.html">Terms of Service</a> |
+                    <a href="../contact.html">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

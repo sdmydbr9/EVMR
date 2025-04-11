@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - EVMR Documentation</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="quickstart.html">Quick Start Guide</a></li>
+                            <li><a href="installation.html">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="architecture/overview.html">System Overview</a></li>
+                            <li><a href="architecture/microservices.html">Microservices</a></li>
+                            <li><a href="architecture/database.html">Database Schema</a></li>
+                            <li><a href="architecture/frontend.html">Frontend Structure</a></li>
+                            <li><a href="architecture/api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="microservices/auth-service.html">Auth Service</a></li>
+                            <li><a href="microservices/patient-service.html">Patient Service</a></li>
+                            <li><a href="microservices/appointment-service.html">Appointment Service</a></li>
+                            <li><a href="microservices/inventory-service.html">Inventory Service</a></li>
+                            <li><a href="microservices/reporting-service.html">Reporting Service</a></li>
+                            <li><a href="microservices/notification-service.html">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="api/authentication.html">Authentication</a></li>
+                            <li><a href="api/patients.html">Patients</a></li>
+                            <li><a href="api/medical-records.html">Medical Records</a></li>
+                            <li><a href="api/appointments.html">Appointments</a></li>
+                            <li><a href="api/inventory.html">Inventory</a></li>
+                            <li><a href="api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="deployment/configuration.html">Configuration</a></li>
+                            <li><a href="deployment/scaling.html">Scaling</a></li>
+                            <li><a href="deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="guides/user-management.html">User Management</a></li>
+                            <li><a href="guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="guides/appointments.html">Appointments</a></li>
+                            <li><a href="guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="contributing.html">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>Contact Us</h1>
+                <p class="lead">
+                    We're here to help! If you have any questions, feedback, or need assistance with the EVMR system, please don't hesitate to reach out.
+                </p>
+
+                <div class="contact-grid">
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Email Support</h3>
+                        <p>For general inquiries and support:</p>
+                        <p><a href="mailto:support@evmr.example.com">support@evmr.example.com</a></p>
+                        <p>For technical issues:</p>
+                        <p><a href="mailto:tech@evmr.example.com">tech@evmr.example.com</a></p>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fab fa-github"></i>
+                        </div>
+                        <h3>GitHub</h3>
+                        <p>Report bugs, request features, or contribute to the project:</p>
+                        <p><a href="https://github.com/yourusername/EVMR" target="_blank">github.com/yourusername/EVMR</a></p>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-comments"></i>
+                        </div>
+                        <h3>Community</h3>
+                        <p>Join our community forum:</p>
+                        <p><a href="https://community.evmr.example.com" target="_blank">community.evmr.example.com</a></p>
+                    </div>
+                    <div class="contact-card">
+                        <div class="contact-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3>Live Support</h3>
+                        <p>For urgent issues, join our Discord channel:</p>
+                        <p><a href="https://discord.gg/evmr" target="_blank">discord.gg/evmr</a></p>
+                    </div>
+                </div>
+
+                <div class="contact-form-container">
+                    <h2>Send Us a Message</h2>
+                    <form class="contact-form">
+                        <div class="form-group">
+                            <label for="name">Name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="subject">Subject</label>
+                            <input type="text" id="subject" name="subject" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Message</label>
+                            <textarea id="message" name="message" rows="5" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary">Send Message</button>
+                    </form>
+                </div>
+
+                <div class="contact-info">
+                    <h2>Company Information</h2>
+                    <div class="contact-info-grid">
+                        <div class="contact-info-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <div>
+                                <h3>Address</h3>
+                                <p>123 Main Street<br>Suite 456<br>Anytown, USA 12345</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <i class="fas fa-phone"></i>
+                            <div>
+                                <h3>Phone</h3>
+                                <p>+1 (555) 123-4567</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <i class="fas fa-clock"></i>
+                            <div>
+                                <h3>Business Hours</h3>
+                                <p>Monday - Friday: 9:00 AM - 5:00 PM EST</p>
+                            </div>
+                        </div>
+                        <div class="contact-info-item">
+                            <i class="fas fa-globe"></i>
+                            <div>
+                                <h3>Website</h3>
+                                <p><a href="https://www.evmr.example.com" target="_blank">www.evmr.example.com</a></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="privacy.html">Privacy Policy</a> |
+                    <a href="terms.html">Terms of Service</a> |
+                    <a href="contact.html" class="active">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

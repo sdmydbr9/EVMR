@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reporting Service - EVMR Documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="../../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quick Start Guide</a></li>
+                            <li><a href="../installation.html">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="../architecture/overview.html">System Overview</a></li>
+                            <li><a href="../architecture/microservices.html">Microservices</a></li>
+                            <li><a href="../architecture/database.html">Database Schema</a></li>
+                            <li><a href="../architecture/frontend.html">Frontend Structure</a></li>
+                            <li><a href="../architecture/api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="auth-service.html">Auth Service</a></li>
+                            <li><a href="patient-service.html">Patient Service</a></li>
+                            <li><a href="appointment-service.html">Appointment Service</a></li>
+                            <li><a href="inventory-service.html">Inventory Service</a></li>
+                            <li><a href="reporting-service.html" class="active">Reporting Service</a></li>
+                            <li><a href="notification-service.html">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="../api/authentication.html">Authentication</a></li>
+                            <li><a href="../api/patients.html">Patients</a></li>
+                            <li><a href="../api/medical-records.html">Medical Records</a></li>
+                            <li><a href="../api/appointments.html">Appointments</a></li>
+                            <li><a href="../api/inventory.html">Inventory</a></li>
+                            <li><a href="../api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="../deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="../deployment/configuration.html">Configuration</a></li>
+                            <li><a href="../deployment/scaling.html">Scaling</a></li>
+                            <li><a href="../deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="../guides/user-management.html">User Management</a></li>
+                            <li><a href="../guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="../guides/appointments.html">Appointments</a></li>
+                            <li><a href="../guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="../contributing.html">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>Reporting Service</h1>
+                <p class="lead">
+                    The Reporting Service generates business analytics, reports, and insights from data across the EVMR system.
+                </p>
+
+                <nav class="page-toc">
+                    <h3>On this page</h3>
+                    <ul>
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#key-features">Key Features</a></li>
+                        <li><a href="#api-endpoints">API Endpoints</a></li>
+                        <li><a href="#data-model">Data Model</a></li>
+                        <li><a href="#configuration">Configuration</a></li>
+                        <li><a href="#report-types">Report Types</a></li>
+                        <li><a href="#data-aggregation">Data Aggregation</a></li>
+                        <li><a href="#integration">Integration with Other Services</a></li>
+                        <li><a href="#deployment">Deployment</a></li>
+                    </ul>
+                </nav>
+
+                <h2 id="overview">Overview</h2>
+                <p>
+                    The Reporting Service is responsible for generating business analytics, reports, and insights by aggregating data from across the EVMR system. It provides a comprehensive view of practice performance, patient trends, inventory usage, and financial metrics.
+                </p>
+
+                <div class="info-box">
+                    <h3>Service Details</h3>
+                    <ul>
+                        <li><strong>Port:</strong> 5105</li>
+                        <li><strong>Base URL:</strong> <code>http://reporting-service:5105</code></li>
+                        <li><strong>Technologies:</strong> Node.js, Express, MongoDB</li>
+                        <li><strong>Dependencies:</strong> Auth Service, Patient Service, Appointment Service, Inventory Service</li>
+                    </ul>
+                </div>
+
+                <h2 id="architecture">Architecture</h2>
+                <p>
+                    The Reporting Service follows a layered architecture pattern:
+                </p>
+
+                <div class="architecture-diagram">
+                    <img src="../../images/reporting-service-architecture.png" alt="Reporting Service Architecture">
+                    <p class="diagram-caption">Figure 1: Reporting Service internal architecture</p>
+                </div>
+
+                <h3>Components</h3>
+                <ul>
+                    <li><strong>API Layer:</strong> Express.js routes and controllers</li>
+                    <li><strong>Service Layer:</strong> Business logic for report generation</li>
+                    <li><strong>Analytics Engine:</strong> Data processing and analysis</li>
+                    <li><strong>Data Aggregator:</strong> Collects and combines data from multiple services</li>
+                    <li><strong>Report Generator:</strong> Creates formatted reports in various formats</li>
+                    <li><strong>Data Access Layer:</strong> MongoDB models and repositories</li>
+                    <li><strong>Integration Layer:</strong> Communication with other services</li>
+                </ul>
+
+                <h2 id="key-features">Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3>Business Analytics</h3>
+                        <p>Comprehensive business performance metrics</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>Report Generation</h3>
+                        <p>Create various types of reports</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-database"></i>
+                        </div>
+                        <h3>Data Aggregation</h3>
+                        <p>Combine data from multiple services</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-export"></i>
+                        </div>
+                        <h3>Export Functionality</h3>
+                        <p>Export reports in various formats</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-tachometer-alt"></i>
+                        </div>
+                        <h3>Dashboard Data</h3>
+                        <p>Provide data for dashboard visualizations</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-check"></i>
+                        </div>
+                        <h3>Scheduled Reports</h3>
+                        <p>Automatically generate periodic reports</p>
+                    </div>
+                </div>
+
+                <h2 id="api-endpoints">API Endpoints</h2>
+                <p>
+                    The Reporting Service exposes the following RESTful API endpoints:
+                </p>
+
+                <h3>Report Generation</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/reports/financial</div>
+                        <div class="endpoint-description">Generate financial reports</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/reports/visits</div>
+                        <div class="endpoint-description">Generate patient visit statistics</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/reports/inventory</div>
+                        <div class="endpoint-description">Generate inventory usage reports</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/reports/performance</div>
+                        <div class="endpoint-description">Generate veterinarian performance reports</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/reports/custom</div>
+                        <div class="endpoint-description">Generate custom reports</div>
+                    </div>
+                </div>
+
+                <h3>Dashboard Data</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/dashboard/summary</div>
+                        <div class="endpoint-description">Get dashboard summary data</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/dashboard/appointments</div>
+                        <div class="endpoint-description">Get appointment statistics for dashboard</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/dashboard/revenue</div>
+                        <div class="endpoint-description">Get revenue statistics for dashboard</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/dashboard/patients</div>
+                        <div class="endpoint-description">Get patient statistics for dashboard</div>
+                    </div>
+                </div>
+
+                <h3>Report Management</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/reports</div>
+                        <div class="endpoint-description">List saved reports</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/reports/:id</div>
+                        <div class="endpoint-description">Get saved report by ID</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/reports/save</div>
+                        <div class="endpoint-description">Save a report configuration</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">DELETE</div>
+                        <div class="endpoint-path">/api/reports/:id</div>
+                        <div class="endpoint-description">Delete a saved report</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/reports/export/:id</div>
+                        <div class="endpoint-description">Export report to various formats</div>
+                    </div>
+                </div>
+
+                <h2 id="data-model">Data Model</h2>
+                <p>
+                    The Reporting Service uses MongoDB to store report configurations and aggregated data.
+                </p>
+
+                <h3>Report Schema</h3>
+                <div class="code-block">
+                    <pre><code>{
+  _id: ObjectId,
+  name: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String
+  },
+  type: {
+    type: String,
+    required: true,
+    enum: ['financial', 'visits', 'inventory', 'performance', 'custom']
+  },
+  parameters: {
+    type: Object,
+    required: true
+  },
+  schedule: {
+    enabled: {
+      type: Boolean,
+      default: false
+    },
+    frequency: {
+      type: String,
+      enum: ['daily', 'weekly', 'monthly', 'quarterly']
+    },
+    lastRun: {
+      type: Date
+    },
+    nextRun: {
+      type: Date
+    }
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+}</code></pre>
+                </div>
+
+                <h3>Analytics Data Schema</h3>
+                <div class="code-block">
+                    <pre><code>{
+  _id: ObjectId,
+  type: {
+    type: String,
+    required: true
+  },
+  date: {
+    type: Date,
+    required: true
+  },
+  data: {
+    type: Object,
+    required: true
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  }
+}</code></pre>
+                </div>
+
+                <h2 id="configuration">Configuration</h2>
+                <p>
+                    The Reporting Service is configured using environment variables:
+                </p>
+
+                <div class="code-block">
+                    <pre><code># Server Configuration
+PORT=5105
+NODE_ENV=development
+
+# MongoDB Configuration
+MONGODB_URI=mongodb://mongodb:27017/reporting-service
+
+# Service Dependencies
+AUTH_SERVICE_URL=http://auth-service:5101
+PATIENT_SERVICE_URL=http://patient-service:5102
+APPOINTMENT_SERVICE_URL=http://appointment-service:5103
+INVENTORY_SERVICE_URL=http://inventory-service:5104
+
+# Reporting Configuration
+DEFAULT_REPORT_FORMAT=pdf
+CACHE_EXPIRATION=3600
+SCHEDULED_REPORTS_ENABLED=true
+
+# Logging
+LOG_LEVEL=info</code></pre>
+                </div>
+
+                <h2 id="report-types">Report Types</h2>
+                <p>
+                    The Reporting Service supports several types of reports:
+                </p>
+
+                <h3>Financial Reports</h3>
+                <ul>
+                    <li><strong>Revenue Report:</strong> Shows revenue by service type, time period, and veterinarian</li>
+                    <li><strong>Expense Report:</strong> Tracks expenses by category and time period</li>
+                    <li><strong>Profit & Loss:</strong> Comprehensive P&L statement for the practice</li>
+                </ul>
+
+                <h3>Patient Reports</h3>
+                <ul>
+                    <li><strong>Visit Statistics:</strong> Tracks patient visits by type, species, and time period</li>
+                    <li><strong>New Patients:</strong> Analyzes new patient acquisition</li>
+                    <li><strong>Species Distribution:</strong> Shows the distribution of patient species</li>
+                </ul>
+
+                <h3>Inventory Reports</h3>
+                <ul>
+                    <li><strong>Usage Report:</strong> Tracks inventory usage by category and item</li>
+                    <li><strong>Cost Analysis:</strong> Analyzes inventory costs and trends</li>
+                    <li><strong>Expiration Report:</strong> Lists items approaching expiration</li>
+                </ul>
+
+                <h3>Performance Reports</h3>
+                <ul>
+                    <li><strong>Veterinarian Performance:</strong> Tracks appointments, procedures, and revenue by veterinarian</li>
+                    <li><strong>Appointment Efficiency:</strong> Analyzes appointment scheduling and completion rates</li>
+                    <li><strong>Service Utilization:</strong> Shows the utilization of different service types</li>
+                </ul>
+
+                <h2 id="data-aggregation">Data Aggregation</h2>
+                <p>
+                    The Reporting Service aggregates data from multiple services to generate comprehensive reports:
+                </p>
+
+                <h3>Data Collection</h3>
+                <p>
+                    The service collects data from other microservices through their APIs. It uses a combination of real-time queries and cached data to optimize performance.
+                </p>
+
+                <div class="code-block">
+                    <pre><code>// Example data collection from Appointment Service
+const getAppointmentData = async (startDate, endDate) => {
+  try {
+    const response = await axios.get(`${process.env.APPOINTMENT_SERVICE_URL}/api/appointments`, {
+      params: {
+        startDate,
+        endDate,
+        includeDetails: true
+      },
+      headers: { Authorization: `Bearer ${serviceToken}` }
+    });
+    
+    return response.data;
+  } catch (error) {
+    logger.error('Error fetching appointment data:', error);
+    throw new Error('Failed to fetch appointment data');
+  }
+};</code></pre>
+                </div>
+
+                <h3>Data Processing</h3>
+                <p>
+                    Once data is collected, the service processes and transforms it into the required format for reports. This includes aggregation, filtering, and calculation of metrics.
+                </p>
+
+                <h3>Caching Strategy</h3>
+                <p>
+                    To improve performance, the Reporting Service implements a caching strategy for frequently accessed data and reports. Cache invalidation occurs when underlying data changes.
+                </p>
+
+                <h2 id="integration">Integration with Other Services</h2>
+                <p>
+                    The Reporting Service integrates with other microservices to collect data for reports:
+                </p>
+
+                <h3>Auth Service Integration</h3>
+                <p>
+                    The Reporting Service relies on the Auth Service for authentication and authorization. It validates JWT tokens and retrieves user information.
+                </p>
+
+                <h3>Patient Service Integration</h3>
+                <p>
+                    The Reporting Service retrieves patient data from the Patient Service for patient-related reports and analytics.
+                </p>
+
+                <h3>Appointment Service Integration</h3>
+                <p>
+                    The Reporting Service collects appointment data from the Appointment Service for scheduling and performance reports.
+                </p>
+
+                <h3>Inventory Service Integration</h3>
+                <p>
+                    The Reporting Service gathers inventory data from the Inventory Service for usage and cost analysis reports.
+                </p>
+
+                <h2 id="deployment">Deployment</h2>
+                <p>
+                    The Reporting Service is deployed as a Docker container as part of the EVMR microservices architecture.
+                </p>
+
+                <h3>Docker Configuration</h3>
+                <div class="code-block">
+                    <pre><code># From docker-compose.yml
+reporting-service:
+  build:
+    context: ./services/reporting-service
+    dockerfile: Dockerfile
+  container_name: petsphere-reporting-service
+  restart: unless-stopped
+  ports:
+    - "5105:5105"
+  depends_on:
+    mongodb:
+      condition: service_healthy
+    auth-service:
+      condition: service_healthy
+    patient-service:
+      condition: service_healthy
+    appointment-service:
+      condition: service_healthy
+    inventory-service:
+      condition: service_healthy
+  environment:
+    - NODE_ENV=${NODE_ENV}
+    - PORT=5105
+    - MONGODB_URI=mongodb://mongodb:27017/reporting-service
+    - AUTH_SERVICE_URL=http://auth-service:5101
+    - PATIENT_SERVICE_URL=http://patient-service:5102
+    - APPOINTMENT_SERVICE_URL=http://appointment-service:5103
+    - INVENTORY_SERVICE_URL=http://inventory-service:5104
+    - DEFAULT_REPORT_FORMAT=pdf
+    - CACHE_EXPIRATION=3600
+    - SCHEDULED_REPORTS_ENABLED=true
+    - LOG_LEVEL=info
+  env_file:
+    - .env
+  networks:
+    - petsphere-network
+  healthcheck:
+    test: ["CMD", "wget", "-qO-", "http://localhost:5105/health"]
+    interval: 30s
+    timeout: 5s
+    retries: 3
+    start_period: 30s</code></pre>
+                </div>
+
+                <div class="next-section">
+                    <h3>Next Steps</h3>
+                    <p>Now that you understand the Reporting Service, you can explore:</p>
+                    <ul>
+                        <li><a href="../api/reports.html">Reports API Reference</a></li>
+                        <li><a href="../guides/reporting.html">Reporting Guide</a></li>
+                        <li><a href="notification-service.html">Notification Service Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="../privacy.html">Privacy Policy</a> |
+                    <a href="../terms.html">Terms of Service</a> |
+                    <a href="../contact.html">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

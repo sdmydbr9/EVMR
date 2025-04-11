@@ -4,9 +4,11 @@ const accountApprovedTemplate = require('./accountApproved');
 const appointmentReminderTemplate = require('./appointmentReminder');
 const passwordResetTemplate = require('./passwordReset');
 const baseTemplate = require('./baseTemplate');
+const newBaseTemplate = require('./newBaseTemplate');
 
 /**
- * Email templates with VetSphere branding
+ * Email templates with PetSphere branding
+ * Using the new black and white theme with elegant design
  */
 module.exports = {
   signupVerificationTemplate,
@@ -14,5 +16,5 @@ module.exports = {
   accountApprovedTemplate,
   appointmentReminderTemplate,
   passwordResetTemplate,
-  baseTemplate
-}; 
+  baseTemplate: newBaseTemplate // Replace the old template with the new one
+};

@@ -16,7 +16,8 @@ const baseTemplate = require('./baseTemplate');
  */
 const appointmentReminderTemplate = (data) => {
   const title = 'Upcoming Appointment Reminder';
-  
+  const appUrl = process.env.BASE_URL || 'https://petsphere.com';
+
   // Plain text version
   const text = `
     Dear ${data.ownerName},
@@ -37,7 +38,9 @@ const appointmentReminderTemplate = (data) => {
 
     If you need to reschedule or cancel, please contact us at least 24 hours in advance.
 
-    Thank you for choosing VetSphere for your pet's healthcare needs.
+    To view or manage your appointment, visit: ${appUrl}/appointments/${data.appointmentId}
+
+    Thank you for choosing PetSphere for your pet's healthcare needs.
 
     Best regards,
     The ${data.clinicName} Team
@@ -50,12 +53,12 @@ const appointmentReminderTemplate = (data) => {
     <p>This is a friendly reminder about your upcoming appointment at <strong>${data.clinicName}</strong>.</p>
 
     <div class="highlight-box">
-      <h3 style="margin-top: 0;">Appointment Details</h3>
-      <p><strong>Pet:</strong> ${data.petName}</p>
-      <p><strong>Date:</strong> ${data.appointmentDate}</p>
-      <p><strong>Time:</strong> ${data.appointmentTime}</p>
-      <p><strong>Service:</strong> ${data.serviceType}</p>
-      <p><strong>Appointment ID:</strong> <span style="font-family: monospace;">${data.appointmentId}</span></p>
+      <p class="highlight-title">Appointment Details</p>
+      <p class="highlight-item"><strong>Pet:</strong> ${data.petName}</p>
+      <p class="highlight-item"><strong>Date:</strong> ${data.appointmentDate}</p>
+      <p class="highlight-item"><strong>Time:</strong> ${data.appointmentTime}</p>
+      <p class="highlight-item"><strong>Service:</strong> ${data.serviceType}</p>
+      <p class="highlight-item"><strong>Appointment ID:</strong> <span style="font-family: monospace;">${data.appointmentId}</span></p>
     </div>
 
     <h3>Location</h3>
@@ -67,9 +70,13 @@ const appointmentReminderTemplate = (data) => {
 
     <p>If you need to reschedule or cancel, please contact us at least 24 hours in advance.</p>
 
-    <a href="https://app.vetsphere.com/appointments/${data.appointmentId}" class="button">View Appointment</a>
+    <a href="${appUrl}/appointments/${data.appointmentId}" class="button">View Appointment</a>
 
-    <p style="margin-top: 30px;">Thank you for choosing VetSphere for your pet's healthcare needs.</p>
+    <div class="quote-box">
+      <p class="quote-text">"Beyond Records, Beyond Care"</p>
+    </div>
+
+    <p>Thank you for choosing PetSphere for your pet's healthcare needs.</p>
 
     <p>Best regards,<br>The ${data.clinicName} Team</p>
   `;
@@ -83,4 +90,4 @@ const appointmentReminderTemplate = (data) => {
   };
 };
 
-module.exports = appointmentReminderTemplate; 
+module.exports = appointmentReminderTemplate;

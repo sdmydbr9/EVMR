@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auth Service - EVMR Documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="../../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quick Start Guide</a></li>
+                            <li><a href="../installation.html">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="../architecture/overview.html">System Overview</a></li>
+                            <li><a href="../architecture/microservices.html">Microservices</a></li>
+                            <li><a href="../architecture/database.html">Database Schema</a></li>
+                            <li><a href="../architecture/frontend.html">Frontend Structure</a></li>
+                            <li><a href="../architecture/api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="auth-service.html" class="active">Auth Service</a></li>
+                            <li><a href="patient-service.html">Patient Service</a></li>
+                            <li><a href="appointment-service.html">Appointment Service</a></li>
+                            <li><a href="inventory-service.html">Inventory Service</a></li>
+                            <li><a href="reporting-service.html">Reporting Service</a></li>
+                            <li><a href="notification-service.html">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="../api/authentication.html">Authentication</a></li>
+                            <li><a href="../api/patients.html">Patients</a></li>
+                            <li><a href="../api/medical-records.html">Medical Records</a></li>
+                            <li><a href="../api/appointments.html">Appointments</a></li>
+                            <li><a href="../api/inventory.html">Inventory</a></li>
+                            <li><a href="../api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="../deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="../deployment/configuration.html">Configuration</a></li>
+                            <li><a href="../deployment/scaling.html">Scaling</a></li>
+                            <li><a href="../deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="../guides/user-management.html">User Management</a></li>
+                            <li><a href="../guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="../guides/appointments.html">Appointments</a></li>
+                            <li><a href="../guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="../contributing.html">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>Auth Service</h1>
+                <p class="lead">
+                    The Authentication Service is the security cornerstone of the EVMR system, responsible for user authentication, authorization, and user management.
+                </p>
+
+                <nav class="page-toc">
+                    <h3>On this page</h3>
+                    <ul>
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#key-features">Key Features</a></li>
+                        <li><a href="#api-endpoints">API Endpoints</a></li>
+                        <li><a href="#data-model">Data Model</a></li>
+                        <li><a href="#configuration">Configuration</a></li>
+                        <li><a href="#security-considerations">Security Considerations</a></li>
+                        <li><a href="#integration">Integration with Other Services</a></li>
+                        <li><a href="#deployment">Deployment</a></li>
+                    </ul>
+                </nav>
+
+                <h2 id="overview">Overview</h2>
+                <p>
+                    The Auth Service provides centralized authentication and authorization for all EVMR microservices. It manages user accounts, roles, permissions, and generates JWT tokens for secure API access.
+                </p>
+
+                <div class="info-box">
+                    <h3>Service Details</h3>
+                    <ul>
+                        <li><strong>Port:</strong> 5101</li>
+                        <li><strong>Base URL:</strong> <code>http://auth-service:5101</code></li>
+                        <li><strong>Technologies:</strong> Node.js, Express, MongoDB, Redis</li>
+                        <li><strong>Authentication Method:</strong> JWT (JSON Web Tokens)</li>
+                    </ul>
+                </div>
+
+                <h2 id="architecture">Architecture</h2>
+                <p>
+                    The Auth Service follows a layered architecture pattern:
+                </p>
+
+                <div class="architecture-diagram">
+                    <img src="../../images/auth-service-architecture.png" alt="Auth Service Architecture">
+                    <p class="diagram-caption">Figure 1: Auth Service internal architecture</p>
+                </div>
+
+                <h3>Components</h3>
+                <ul>
+                    <li><strong>API Layer:</strong> Express.js routes and controllers</li>
+                    <li><strong>Service Layer:</strong> Business logic for authentication and user management</li>
+                    <li><strong>Data Access Layer:</strong> MongoDB models and repositories</li>
+                    <li><strong>Redis Integration:</strong> For token blacklisting and session management</li>
+                </ul>
+
+                <h2 id="key-features">Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <h3>User Registration</h3>
+                        <p>Secure registration process with email verification</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </div>
+                        <h3>Authentication</h3>
+                        <p>JWT-based authentication with refresh tokens</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </div>
+                        <h3>Authorization</h3>
+                        <p>Role-based access control for different user types</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-key"></i>
+                        </div>
+                        <h3>Password Management</h3>
+                        <p>Secure password reset and change functionality</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users-cog"></i>
+                        </div>
+                        <h3>User Management</h3>
+                        <p>CRUD operations for user accounts</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-shield-alt"></i>
+                        </div>
+                        <h3>Token Validation</h3>
+                        <p>Middleware for validating JWT tokens</p>
+                    </div>
+                </div>
+
+                <h2 id="api-endpoints">API Endpoints</h2>
+                <p>
+                    The Auth Service exposes the following RESTful API endpoints:
+                </p>
+
+                <h3>Authentication</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/auth/register</div>
+                        <div class="endpoint-description">Register a new user</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/auth/login</div>
+                        <div class="endpoint-description">Authenticate user and get JWT token</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/auth/refresh</div>
+                        <div class="endpoint-description">Refresh access token using refresh token</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/auth/logout</div>
+                        <div class="endpoint-description">Logout user and invalidate tokens</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/auth/verify</div>
+                        <div class="endpoint-description">Verify token validity</div>
+                    </div>
+                </div>
+
+                <h3>Password Management</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/auth/forgot-password</div>
+                        <div class="endpoint-description">Request password reset email</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/auth/reset-password</div>
+                        <div class="endpoint-description">Reset password with token</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">PUT</div>
+                        <div class="endpoint-path">/api/auth/change-password</div>
+                        <div class="endpoint-description">Change password (authenticated)</div>
+                    </div>
+                </div>
+
+                <h3>User Management</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/users</div>
+                        <div class="endpoint-description">Get all users (admin only)</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/users/:id</div>
+                        <div class="endpoint-description">Get user by ID</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">PUT</div>
+                        <div class="endpoint-path">/api/users/:id</div>
+                        <div class="endpoint-description">Update user</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">DELETE</div>
+                        <div class="endpoint-path">/api/users/:id</div>
+                        <div class="endpoint-description">Delete user</div>
+                    </div>
+                </div>
+
+                <h2 id="data-model">Data Model</h2>
+                <p>
+                    The Auth Service uses MongoDB to store user data and authentication information.
+                </p>
+
+                <h3>User Schema</h3>
+                <div class="code-block">
+                    <pre><code>{
+  _id: ObjectId,
+  email: String,
+  password: String (hashed),
+  firstName: String,
+  lastName: String,
+  role: String (enum: ['admin', 'doctor', 'receptionist', 'technician']),
+  isActive: Boolean,
+  lastLogin: Date,
+  createdAt: Date,
+  updatedAt: Date
+}</code></pre>
+                </div>
+
+                <h3>Token Schema</h3>
+                <div class="code-block">
+                    <pre><code>{
+  _id: ObjectId,
+  userId: ObjectId,
+  token: String,
+  type: String (enum: ['refresh', 'reset']),
+  expiresAt: Date,
+  createdAt: Date
+}</code></pre>
+                </div>
+
+                <h2 id="configuration">Configuration</h2>
+                <p>
+                    The Auth Service is configured using environment variables:
+                </p>
+
+                <div class="code-block">
+                    <pre><code># Server Configuration
+PORT=5101
+NODE_ENV=development
+
+# MongoDB Configuration
+MONGODB_URI=mongodb://mongodb:27017/auth-service
+
+# JWT Configuration
+JWT_SECRET=your_jwt_secret_key
+JWT_EXPIRES_IN=24h
+JWT_REFRESH_EXPIRES_IN=7d
+
+# Redis Configuration
+REDIS_HOST=redis
+REDIS_PORT=7529
+
+# Email Configuration (for password reset)
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_USER=noreply@example.com
+EMAIL_PASSWORD=your_email_password
+EMAIL_FROM=EVMR System &lt;noreply@example.com&gt;</code></pre>
+                </div>
+
+                <h2 id="security-considerations">Security Considerations</h2>
+                <p>
+                    The Auth Service implements several security best practices:
+                </p>
+
+                <ul>
+                    <li><strong>Password Hashing:</strong> Passwords are hashed using bcrypt with appropriate salt rounds</li>
+                    <li><strong>JWT Security:</strong> Tokens have appropriate expiration times and are signed with a secure secret</li>
+                    <li><strong>Token Blacklisting:</strong> Invalidated tokens are stored in Redis to prevent reuse</li>
+                    <li><strong>Rate Limiting:</strong> API endpoints are protected against brute force attacks</li>
+                    <li><strong>HTTPS:</strong> All communication should be over HTTPS in production</li>
+                    <li><strong>Input Validation:</strong> All user inputs are validated using Joi schema validation</li>
+                    <li><strong>Error Handling:</strong> Secure error responses that don't leak sensitive information</li>
+                </ul>
+
+                <h2 id="integration">Integration with Other Services</h2>
+                <p>
+                    Other microservices integrate with the Auth Service in the following ways:
+                </p>
+
+                <h3>Token Validation</h3>
+                <p>
+                    Services validate JWT tokens by making a request to the Auth Service's <code>/api/auth/verify</code> endpoint or by implementing token validation logic using the shared JWT secret.
+                </p>
+
+                <div class="code-block">
+                    <pre><code>// Example token validation in other services
+const validateToken = async (token) => {
+  try {
+    // Option 1: Call Auth Service
+    const response = await axios.get('http://auth-service:5101/api/auth/verify', {
+      headers: { Authorization: `Bearer ${token}` }
+    });
+    return response.data.user;
+    
+    // Option 2: Validate locally
+    // const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    // return decoded;
+  } catch (error) {
+    throw new Error('Invalid token');
+  }
+};</code></pre>
+                </div>
+
+                <h3>User Information</h3>
+                <p>
+                    Services can retrieve user information by making requests to the <code>/api/users/:id</code> endpoint with appropriate authentication.
+                </p>
+
+                <h2 id="deployment">Deployment</h2>
+                <p>
+                    The Auth Service is deployed as a Docker container as part of the EVMR microservices architecture.
+                </p>
+
+                <h3>Docker Configuration</h3>
+                <div class="code-block">
+                    <pre><code># From docker-compose.yml
+auth-service:
+  build:
+    context: ./services/auth-service
+    dockerfile: Dockerfile
+  container_name: petsphere-auth-service
+  restart: unless-stopped
+  ports:
+    - "5101:5101"
+  depends_on:
+    mongodb:
+      condition: service_healthy
+    redis:
+      condition: service_healthy
+  environment:
+    - NODE_ENV=${NODE_ENV}
+    - PORT=5101
+    - MONGODB_URI=mongodb://mongodb:27017/auth-service
+    - JWT_SECRET=${JWT_SECRET}
+    - JWT_EXPIRES_IN=24h
+    - REDIS_HOST=redis
+    - REDIS_PORT=7529
+    - LOG_LEVEL=info
+  env_file:
+    - .env
+  networks:
+    - petsphere-network
+  healthcheck:
+    test: ["CMD", "wget", "-qO-", "http://localhost:5101/health"]
+    interval: 30s
+    timeout: 5s
+    retries: 3
+    start_period: 30s</code></pre>
+                </div>
+
+                <div class="next-section">
+                    <h3>Next Steps</h3>
+                    <p>Now that you understand the Auth Service, you can explore:</p>
+                    <ul>
+                        <li><a href="../api/authentication.html">Authentication API Reference</a></li>
+                        <li><a href="../guides/user-management.html">User Management Guide</a></li>
+                        <li><a href="patient-service.html">Patient Service Documentation</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="../privacy.html">Privacy Policy</a> |
+                    <a href="../terms.html">Terms of Service</a> |
+                    <a href="../contact.html">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>

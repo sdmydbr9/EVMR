@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EVMR Documentation - Electronic Veterinary Medical Records System</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../website/images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="index.html" class="active">Introduction</a></li>
+                            <li><a href="pages/quickstart.html">Quick Start Guide</a></li>
+                            <li><a href="pages/installation.html">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="pages/architecture/overview.html">System Overview</a></li>
+                            <li><a href="pages/architecture/microservices.html">Microservices</a></li>
+                            <li><a href="pages/architecture/database.html">Database Schema</a></li>
+                            <li><a href="pages/architecture/frontend.html">Frontend Structure</a></li>
+                            <li><a href="pages/architecture/api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="pages/microservices/auth-service.html">Auth Service</a></li>
+                            <li><a href="pages/microservices/patient-service.html">Patient Service</a></li>
+                            <li><a href="pages/microservices/appointment-service.html">Appointment Service</a></li>
+                            <li><a href="pages/microservices/inventory-service.html">Inventory Service</a></li>
+                            <li><a href="pages/microservices/reporting-service.html">Reporting Service</a></li>
+                            <li><a href="pages/microservices/notification-service.html">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="pages/api/authentication.html">Authentication</a></li>
+                            <li><a href="pages/api/patients.html">Patients</a></li>
+                            <li><a href="pages/api/medical-records.html">Medical Records</a></li>
+                            <li><a href="pages/api/appointments.html">Appointments</a></li>
+                            <li><a href="pages/api/inventory.html">Inventory</a></li>
+                            <li><a href="pages/api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="pages/deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="pages/deployment/configuration.html">Configuration</a></li>
+                            <li><a href="pages/deployment/scaling.html">Scaling</a></li>
+                            <li><a href="pages/deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="pages/guides/user-management.html">User Management</a></li>
+                            <li><a href="pages/guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="pages/guides/appointments.html">Appointments</a></li>
+                            <li><a href="pages/guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="pages/contributing.html">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>EVMR: Electronic Veterinary Medical Records System</h1>
+                <p class="lead">
+                    A comprehensive microservice-based application for managing veterinary practices, medical records, appointments, inventory, and clinic operations.
+                </p>
+
+                <div class="hero-image">
+                    <img src="images/system-architecture.png" alt="EVMR System Architecture">
+                </div>
+
+                <h2>System Overview</h2>
+                <p>
+                    EVMR is designed to streamline veterinary practice management with the following modules:
+                </p>
+
+                <div class="feature-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <h3>Patient Management</h3>
+                        <p>Store and retrieve complete patient records with comprehensive medical history.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-notes-medical"></i>
+                        </div>
+                        <h3>Electronic Medical Records</h3>
+                        <p>SOAP format medical documentation with support for attachments and lab results.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>Appointment Scheduling</h3>
+                        <p>Schedule and manage appointments with automated reminders and confirmations.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-pills"></i>
+                        </div>
+                        <h3>Inventory Management</h3>
+                        <p>Track medications and supplies with automatic reordering and expiration alerts.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-chart-bar"></i>
+                        </div>
+                        <h3>Reporting & Analytics</h3>
+                        <p>Generate insights from practice data with customizable reports and dashboards.</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-building"></i>
+                        </div>
+                        <h3>Multi-Location Management</h3>
+                        <p>Support for multiple clinics and staff roles with centralized administration.</p>
+                    </div>
+                </div>
+
+                <h2>Architecture</h2>
+                <p>
+                    EVMR follows a microservice architecture pattern, with separate services for authentication, patient management, appointments, inventory, and more. This architecture provides scalability, resilience, and flexibility.
+                </p>
+
+                <div class="architecture-diagram">
+                    <img src="images/architecture-diagram.png" alt="EVMR Architecture Diagram">
+                </div>
+
+                <h3>Tech Stack</h3>
+                <ul class="tech-stack">
+                    <li><strong>Frontend:</strong> React.js with Material UI</li>
+                    <li><strong>Backend:</strong> Node.js with Express</li>
+                    <li><strong>Databases:</strong> MongoDB (microservices) and PostgreSQL (legacy system)</li>
+                    <li><strong>Authentication:</strong> JWT-based authentication with Redis caching</li>
+                    <li><strong>Containerization:</strong> Docker and Docker Compose</li>
+                </ul>
+
+                <h2>Getting Started</h2>
+                <p>
+                    To get started with EVMR, follow these steps:
+                </p>
+
+                <div class="code-block">
+                    <pre><code># Clone the repository
+git clone &lt;repository-url&gt;
+cd EVMR
+
+# Set up environment variables
+cp .env.example .env
+
+# Start the application with Docker Compose
+docker-compose up -d</code></pre>
+                </div>
+
+                <p>
+                    For more detailed instructions, see the <a href="pages/quickstart.html">Quick Start Guide</a>.
+                </p>
+
+                <h2>Demo Environment</h2>
+                <p>
+                    The system includes built-in demo users that are dynamically created during system initialization:
+                </p>
+
+                <div class="demo-users">
+                    <div class="demo-user">
+                        <div class="user-icon">
+                            <i class="fas fa-user"></i>
+                        </div>
+                        <div class="user-details">
+                            <h4>Pet Parent</h4>
+                            <p><strong>Email:</strong> petparent_demo@vetsphere.com</p>
+                            <p><strong>Password:</strong> demodemo</p>
+                        </div>
+                    </div>
+                    <div class="demo-user">
+                        <div class="user-icon">
+                            <i class="fas fa-user-md"></i>
+                        </div>
+                        <div class="user-details">
+                            <h4>Veterinarian</h4>
+                            <p><strong>Email:</strong> vet_demo@vetsphere.com</p>
+                            <p><strong>Password:</strong> demodemo</p>
+                        </div>
+                    </div>
+                    <div class="demo-user">
+                        <div class="user-icon">
+                            <i class="fas fa-user-tie"></i>
+                        </div>
+                        <div class="user-details">
+                            <h4>Organization Admin</h4>
+                            <p><strong>Email:</strong> org_demo@vetsphere.com</p>
+                            <p><strong>Password:</strong> demodemo</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="next-steps">
+                    <h2>Next Steps</h2>
+                    <div class="next-steps-grid">
+                        <a href="pages/architecture/overview.html" class="next-step-card">
+                            <h3>Explore the Architecture</h3>
+                            <p>Learn about the system's microservice architecture and how components interact.</p>
+                            <span class="next-link">Read more <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="pages/api/authentication.html" class="next-step-card">
+                            <h3>API Reference</h3>
+                            <p>Explore the API endpoints and learn how to interact with the system.</p>
+                            <span class="next-link">Read more <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="pages/deployment/docker.html" class="next-step-card">
+                            <h3>Deployment Guide</h3>
+                            <p>Learn how to deploy EVMR in production environments.</p>
+                            <span class="next-link">Read more <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="pages/privacy.html">Privacy Policy</a> |
+                    <a href="pages/terms.html">Terms of Service</a> |
+                    <a href="pages/contact.html">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>

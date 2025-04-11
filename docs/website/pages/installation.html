@@ -1,0 +1,599 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation Guide - EVMR Documentation</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="../index.html">Introduction</a></li>
+                            <li><a href="quickstart.html">Quick Start Guide</a></li>
+                            <li><a href="installation.html" class="active">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="architecture/overview.html">System Overview</a></li>
+                            <li><a href="architecture/microservices.html">Microservices</a></li>
+                            <li><a href="architecture/database.html">Database Schema</a></li>
+                            <li><a href="architecture/frontend.html">Frontend Structure</a></li>
+                            <li><a href="architecture/api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="microservices/auth-service.html">Auth Service</a></li>
+                            <li><a href="microservices/patient-service.html">Patient Service</a></li>
+                            <li><a href="microservices/appointment-service.html">Appointment Service</a></li>
+                            <li><a href="microservices/inventory-service.html">Inventory Service</a></li>
+                            <li><a href="microservices/reporting-service.html">Reporting Service</a></li>
+                            <li><a href="microservices/notification-service.html">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="api/authentication.html">Authentication</a></li>
+                            <li><a href="api/patients.html">Patients</a></li>
+                            <li><a href="api/medical-records.html">Medical Records</a></li>
+                            <li><a href="api/appointments.html">Appointments</a></li>
+                            <li><a href="api/inventory.html">Inventory</a></li>
+                            <li><a href="api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="deployment/configuration.html">Configuration</a></li>
+                            <li><a href="deployment/scaling.html">Scaling</a></li>
+                            <li><a href="deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="guides/user-management.html">User Management</a></li>
+                            <li><a href="guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="guides/appointments.html">Appointments</a></li>
+                            <li><a href="guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="contributing.html">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>Installation Guide</h1>
+                <p class="lead">
+                    This guide provides detailed instructions for installing EVMR in various environments, from development to production.
+                </p>
+
+                <nav class="page-toc">
+                    <h3>On this page</h3>
+                    <ul>
+                        <li><a href="#prerequisites">Prerequisites</a></li>
+                        <li><a href="#development-installation">Development Installation</a></li>
+                        <li><a href="#production-installation">Production Installation</a></li>
+                        <li><a href="#manual-installation">Manual Installation (Without Docker)</a></li>
+                        <li><a href="#database-setup">Database Setup</a></li>
+                        <li><a href="#environment-variables">Environment Variables</a></li>
+                        <li><a href="#troubleshooting">Troubleshooting</a></li>
+                    </ul>
+                </nav>
+
+                <h2 id="prerequisites">Prerequisites</h2>
+                <p>
+                    Before installing EVMR, ensure your system meets the following requirements:
+                </p>
+
+                <h3>For Docker-based Installation (Recommended)</h3>
+                <ul>
+                    <li><strong>Docker</strong> (version 20.10.0 or higher)</li>
+                    <li><strong>Docker Compose</strong> (version 2.0.0 or higher)</li>
+                    <li><strong>Git</strong> (version 2.30.0 or higher)</li>
+                    <li>Minimum 8GB RAM</li>
+                    <li>Minimum 10GB free disk space</li>
+                    <li>Linux, macOS, or Windows with WSL2</li>
+                </ul>
+
+                <h3>For Manual Installation</h3>
+                <ul>
+                    <li><strong>Node.js</strong> (version 16.0.0 or higher)</li>
+                    <li><strong>npm</strong> (version 8.0.0 or higher)</li>
+                    <li><strong>MongoDB</strong> (version 5.0 or higher)</li>
+                    <li><strong>PostgreSQL</strong> (version 13.0 or higher)</li>
+                    <li><strong>Redis</strong> (version 6.0 or higher)</li>
+                    <li>Minimum 8GB RAM</li>
+                    <li>Minimum 10GB free disk space</li>
+                </ul>
+
+                <h2 id="development-installation">Development Installation</h2>
+                <p>
+                    For development purposes, we recommend using Docker Compose for easy setup and isolation.
+                </p>
+
+                <h3>1. Clone the Repository</h3>
+                <div class="code-block">
+                    <pre><code>git clone https://github.com/yourusername/EVMR.git
+cd EVMR</code></pre>
+                </div>
+
+                <h3>2. Set Up Environment Variables</h3>
+                <p>
+                    Create a <code>.env</code> file in the root directory:
+                </p>
+                <div class="code-block">
+                    <pre><code>cp .env.example .env</code></pre>
+                </div>
+
+                <p>
+                    For development, the default values in <code>.env.example</code> should work without modification.
+                </p>
+
+                <h3>3. Start the Development Environment</h3>
+                <div class="code-block">
+                    <pre><code>docker-compose -f docker-compose.dev.yml up -d</code></pre>
+                </div>
+
+                <p>
+                    This command starts all services in development mode with hot-reloading enabled.
+                </p>
+
+                <h3>4. Access the Development Environment</h3>
+                <ul>
+                    <li><strong>Frontend:</strong> <a href="http://localhost:3000" target="_blank">http://localhost:3000</a></li>
+                    <li><strong>API Gateway:</strong> <a href="http://localhost:5000" target="_blank">http://localhost:5000</a></li>
+                    <li><strong>API Documentation:</strong> <a href="http://localhost:5000/api-docs" target="_blank">http://localhost:5000/api-docs</a></li>
+                </ul>
+
+                <h3>5. Development Workflow</h3>
+                <p>
+                    The development environment is configured with the following features:
+                </p>
+                <ul>
+                    <li><strong>Hot Reloading:</strong> Changes to frontend code are automatically reflected in the browser</li>
+                    <li><strong>Nodemon:</strong> Backend services restart automatically when code changes</li>
+                    <li><strong>Volume Mounting:</strong> Local code is mounted into containers, so changes are immediately available</li>
+                    <li><strong>Debug Ports:</strong> Node.js debug ports are exposed for attaching debuggers</li>
+                </ul>
+
+                <h2 id="production-installation">Production Installation</h2>
+                <p>
+                    For production deployments, we recommend using Docker Compose with production-specific configurations.
+                </p>
+
+                <h3>1. Clone the Repository</h3>
+                <div class="code-block">
+                    <pre><code>git clone https://github.com/yourusername/EVMR.git
+cd EVMR</code></pre>
+                </div>
+
+                <h3>2. Set Up Environment Variables</h3>
+                <p>
+                    Create a <code>.env</code> file with production settings:
+                </p>
+                <div class="code-block">
+                    <pre><code>cp .env.production.example .env</code></pre>
+                </div>
+
+                <p>
+                    Edit the <code>.env</code> file to configure your production environment:
+                </p>
+                <div class="code-block">
+                    <pre><code># Production Environment Variables
+NODE_ENV=production
+
+# Database Configuration
+MONGODB_URI=mongodb://mongodb:27017/evmr
+POSTGRES_URI=postgresql://postgres:postgres@postgres:5432/evmr_legacy
+
+# JWT Configuration
+JWT_SECRET=your_strong_production_secret_key
+JWT_EXPIRATION=1d
+JWT_REFRESH_EXPIRATION=7d
+
+# API Configuration
+API_PORT=5000
+FRONTEND_URL=https://your-production-domain.com
+
+# Email Configuration
+SMTP_HOST=smtp.your-email-provider.com
+SMTP_PORT=587
+SMTP_USER=your_email@your-domain.com
+SMTP_PASS=your_email_password
+
+# Redis Configuration
+REDIS_URL=redis://redis:6379
+
+# Logging
+LOG_LEVEL=info</code></pre>
+                </div>
+
+                <div class="warning-box">
+                    <h3>Security Warning</h3>
+                    <p>In production, always use strong, unique secrets for JWT_SECRET and database passwords. Never use the default values.</p>
+                </div>
+
+                <h3>3. Build and Start the Production Environment</h3>
+                <div class="code-block">
+                    <pre><code>docker-compose -f docker-compose.prod.yml up -d</code></pre>
+                </div>
+
+                <p>
+                    This command builds optimized production images and starts all services.
+                </p>
+
+                <h3>4. Production Considerations</h3>
+                <ul>
+                    <li><strong>SSL/TLS:</strong> Configure a reverse proxy (like Nginx) with SSL certificates</li>
+                    <li><strong>Database Backups:</strong> Set up regular backups for MongoDB and PostgreSQL</li>
+                    <li><strong>Monitoring:</strong> Implement monitoring and alerting (see <a href="deployment/monitoring.html">Monitoring Guide</a>)</li>
+                    <li><strong>Scaling:</strong> Configure container orchestration for high availability (see <a href="deployment/scaling.html">Scaling Guide</a>)</li>
+                </ul>
+
+                <h2 id="manual-installation">Manual Installation (Without Docker)</h2>
+                <p>
+                    If you prefer not to use Docker, you can install EVMR manually. This approach requires more setup but gives you more control.
+                </p>
+
+                <h3>1. Clone the Repository</h3>
+                <div class="code-block">
+                    <pre><code>git clone https://github.com/yourusername/EVMR.git
+cd EVMR</code></pre>
+                </div>
+
+                <h3>2. Install Dependencies</h3>
+                <p>
+                    Install dependencies for all services:
+                </p>
+                <div class="code-block">
+                    <pre><code># Install root dependencies
+npm install
+
+# Install frontend dependencies
+cd frontend
+npm install
+cd ..
+
+# Install API Gateway dependencies
+cd api-gateway
+npm install
+cd ..
+
+# Install microservice dependencies
+cd services/auth-service
+npm install
+cd ../..
+
+cd services/patient-service
+npm install
+cd ../..
+
+# Repeat for other services</code></pre>
+                </div>
+
+                <h3>3. Set Up Databases</h3>
+                <p>
+                    Install and configure MongoDB, PostgreSQL, and Redis:
+                </p>
+                <ul>
+                    <li>Install MongoDB (version 5.0 or higher)</li>
+                    <li>Install PostgreSQL (version 13.0 or higher)</li>
+                    <li>Install Redis (version 6.0 or higher)</li>
+                </ul>
+
+                <p>
+                    Create the necessary databases:
+                </p>
+                <div class="code-block">
+                    <pre><code># MongoDB
+mongo
+> use evmr
+> exit
+
+# PostgreSQL
+psql -U postgres
+postgres=# CREATE DATABASE evmr_legacy;
+postgres=# \q</code></pre>
+                </div>
+
+                <h3>4. Configure Environment Variables</h3>
+                <p>
+                    Create <code>.env</code> files in each service directory with appropriate configuration.
+                </p>
+
+                <h3>5. Start the Services</h3>
+                <p>
+                    Start each service in a separate terminal:
+                </p>
+                <div class="code-block">
+                    <pre><code># Start the frontend
+cd frontend
+npm start
+
+# Start the API Gateway
+cd api-gateway
+npm start
+
+# Start the Auth Service
+cd services/auth-service
+npm start
+
+# Start the Patient Service
+cd services/patient-service
+npm start
+
+# Repeat for other services</code></pre>
+                </div>
+
+                <h2 id="database-setup">Database Setup</h2>
+                <p>
+                    EVMR uses both MongoDB and PostgreSQL databases:
+                </p>
+
+                <h3>MongoDB Setup</h3>
+                <p>
+                    MongoDB is used for microservices data. The system will automatically create the necessary collections on startup.
+                </p>
+
+                <p>
+                    To initialize MongoDB with sample data:
+                </p>
+                <div class="code-block">
+                    <pre><code>npm run seed:mongodb</code></pre>
+                </div>
+
+                <h3>PostgreSQL Setup</h3>
+                <p>
+                    PostgreSQL is used for legacy system data. You need to run migrations to set up the schema:
+                </p>
+                <div class="code-block">
+                    <pre><code>npm run migrate:postgres</code></pre>
+                </div>
+
+                <p>
+                    To seed PostgreSQL with sample data:
+                </p>
+                <div class="code-block">
+                    <pre><code>npm run seed:postgres</code></pre>
+                </div>
+
+                <h2 id="environment-variables">Environment Variables</h2>
+                <p>
+                    EVMR uses environment variables for configuration. Here's a comprehensive list of available variables:
+                </p>
+
+                <div class="env-vars-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Variable</th>
+                                <th>Description</th>
+                                <th>Default</th>
+                                <th>Required</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>NODE_ENV</td>
+                                <td>Environment (development, production)</td>
+                                <td>development</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>MONGODB_URI</td>
+                                <td>MongoDB connection string</td>
+                                <td>mongodb://mongodb:27017/evmr</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>POSTGRES_URI</td>
+                                <td>PostgreSQL connection string</td>
+                                <td>postgresql://postgres:postgres@postgres:5432/evmr_legacy</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>REDIS_URL</td>
+                                <td>Redis connection string</td>
+                                <td>redis://redis:6379</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>JWT_SECRET</td>
+                                <td>Secret for JWT tokens</td>
+                                <td>development_secret</td>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <td>JWT_EXPIRATION</td>
+                                <td>JWT token expiration time</td>
+                                <td>1d</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>JWT_REFRESH_EXPIRATION</td>
+                                <td>JWT refresh token expiration</td>
+                                <td>7d</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>API_PORT</td>
+                                <td>Port for API Gateway</td>
+                                <td>5000</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>FRONTEND_URL</td>
+                                <td>URL for frontend (CORS)</td>
+                                <td>http://localhost:3000</td>
+                                <td>No</td>
+                            </tr>
+                            <tr>
+                                <td>SMTP_HOST</td>
+                                <td>SMTP server host</td>
+                                <td>smtp.example.com</td>
+                                <td>For email</td>
+                            </tr>
+                            <tr>
+                                <td>SMTP_PORT</td>
+                                <td>SMTP server port</td>
+                                <td>587</td>
+                                <td>For email</td>
+                            </tr>
+                            <tr>
+                                <td>SMTP_USER</td>
+                                <td>SMTP username</td>
+                                <td>-</td>
+                                <td>For email</td>
+                            </tr>
+                            <tr>
+                                <td>SMTP_PASS</td>
+                                <td>SMTP password</td>
+                                <td>-</td>
+                                <td>For email</td>
+                            </tr>
+                            <tr>
+                                <td>LOG_LEVEL</td>
+                                <td>Logging level</td>
+                                <td>info</td>
+                                <td>No</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <h2 id="troubleshooting">Troubleshooting</h2>
+                <p>
+                    Common installation issues and their solutions:
+                </p>
+
+                <div class="accordion">
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">Docker Compose fails to start services</h3>
+                        <div class="accordion-content">
+                            <p>Check if the required ports are already in use:</p>
+                            <div class="code-block">
+                                <pre><code>netstat -tuln | grep '3000\|5000\|27017\|5432\|6379'</code></pre>
+                            </div>
+                            <p>If ports are in use, either stop the conflicting services or change the ports in your <code>docker-compose.yml</code> file.</p>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">MongoDB connection issues</h3>
+                        <div class="accordion-content">
+                            <p>If services can't connect to MongoDB, check:</p>
+                            <ul>
+                                <li>MongoDB container is running: <code>docker-compose ps mongodb</code></li>
+                                <li>MongoDB connection string is correct in <code>.env</code> file</li>
+                                <li>Network connectivity between services</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">JWT authentication errors</h3>
+                        <div class="accordion-content">
+                            <p>If you're seeing JWT validation errors:</p>
+                            <ul>
+                                <li>Ensure JWT_SECRET is the same across all services</li>
+                                <li>Check that system clocks are synchronized</li>
+                                <li>Verify token expiration settings</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <div class="accordion-item">
+                        <h3 class="accordion-header">Frontend can't connect to API</h3>
+                        <div class="accordion-content">
+                            <p>If the frontend can't connect to the API:</p>
+                            <ul>
+                                <li>Check API Gateway is running: <code>docker-compose ps api-gateway</code></li>
+                                <li>Verify CORS settings in API Gateway</li>
+                                <li>Check API URL in frontend configuration</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="next-steps">
+                    <h2>Next Steps</h2>
+                    <div class="next-steps-grid">
+                        <a href="architecture/overview.html" class="next-step-card">
+                            <h3>System Architecture</h3>
+                            <p>Understand the system's architecture and how components interact.</p>
+                            <span class="next-link">Read more <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="deployment/configuration.html" class="next-step-card">
+                            <h3>Configuration Guide</h3>
+                            <p>Learn about advanced configuration options for EVMR.</p>
+                            <span class="next-link">Read more <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                        <a href="deployment/docker.html" class="next-step-card">
+                            <h3>Docker Deployment</h3>
+                            <p>Detailed guide for Docker-based deployments.</p>
+                            <span class="next-link">Read more <i class="fas fa-arrow-right"></i></span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="privacy.html">Privacy Policy</a> |
+                    <a href="terms.html">Terms of Service</a> |
+                    <a href="contact.html">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../js/main.js"></script>
+</body>
+</html>

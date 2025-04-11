@@ -1,0 +1,700 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notification Service - EVMR Documentation</title>
+    <link rel="stylesheet" href="../../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Roboto+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="docs-container">
+        <!-- Sidebar Navigation -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="../../images/logo.svg" alt="EVMR Logo" class="logo">
+                <h1>EVMR Docs</h1>
+            </div>
+            <div class="sidebar-search">
+                <input type="text" id="search-input" placeholder="Search documentation...">
+                <i class="fas fa-search search-icon"></i>
+            </div>
+            <nav class="sidebar-nav">
+                <ul>
+                    <li class="nav-section">
+                        <span class="section-title">Getting Started</span>
+                        <ul>
+                            <li><a href="../../index.html">Introduction</a></li>
+                            <li><a href="../quickstart.html">Quick Start Guide</a></li>
+                            <li><a href="../installation.html">Installation</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Architecture</span>
+                        <ul>
+                            <li><a href="../architecture/overview.html">System Overview</a></li>
+                            <li><a href="../architecture/microservices.html">Microservices</a></li>
+                            <li><a href="../architecture/database.html">Database Schema</a></li>
+                            <li><a href="../architecture/frontend.html">Frontend Structure</a></li>
+                            <li><a href="../architecture/api-gateway.html">API Gateway</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Microservices</span>
+                        <ul>
+                            <li><a href="auth-service.html">Auth Service</a></li>
+                            <li><a href="patient-service.html">Patient Service</a></li>
+                            <li><a href="appointment-service.html">Appointment Service</a></li>
+                            <li><a href="inventory-service.html">Inventory Service</a></li>
+                            <li><a href="reporting-service.html">Reporting Service</a></li>
+                            <li><a href="notification-service.html" class="active">Notification Service</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">API Reference</span>
+                        <ul>
+                            <li><a href="../api/authentication.html">Authentication</a></li>
+                            <li><a href="../api/patients.html">Patients</a></li>
+                            <li><a href="../api/medical-records.html">Medical Records</a></li>
+                            <li><a href="../api/appointments.html">Appointments</a></li>
+                            <li><a href="../api/inventory.html">Inventory</a></li>
+                            <li><a href="../api/reports.html">Reports</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Deployment</span>
+                        <ul>
+                            <li><a href="../deployment/docker.html">Docker Deployment</a></li>
+                            <li><a href="../deployment/configuration.html">Configuration</a></li>
+                            <li><a href="../deployment/scaling.html">Scaling</a></li>
+                            <li><a href="../deployment/monitoring.html">Monitoring</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-section">
+                        <span class="section-title">Guides</span>
+                        <ul>
+                            <li><a href="../guides/user-management.html">User Management</a></li>
+                            <li><a href="../guides/patient-records.html">Patient Records</a></li>
+                            <li><a href="../guides/appointments.html">Appointments</a></li>
+                            <li><a href="../guides/reporting.html">Reporting</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </nav>
+            <div class="sidebar-footer">
+                <a href="https://github.com/yourusername/EVMR" target="_blank">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+                <a href="../contributing.html">
+                    <i class="fas fa-code-branch"></i> Contributing
+                </a>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <button id="sidebar-toggle" class="sidebar-toggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="header-links">
+                    <a href="https://github.com/yourusername/EVMR" target="_blank">
+                        <i class="fab fa-github"></i>
+                    </a>
+                    <a href="#" id="theme-toggle">
+                        <i class="fas fa-moon"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="content-body">
+                <h1>Notification Service</h1>
+                <p class="lead">
+                    The Notification Service manages all communications with users and clients, including email notifications, SMS alerts, and in-app notifications.
+                </p>
+
+                <nav class="page-toc">
+                    <h3>On this page</h3>
+                    <ul>
+                        <li><a href="#overview">Overview</a></li>
+                        <li><a href="#architecture">Architecture</a></li>
+                        <li><a href="#key-features">Key Features</a></li>
+                        <li><a href="#api-endpoints">API Endpoints</a></li>
+                        <li><a href="#data-model">Data Model</a></li>
+                        <li><a href="#configuration">Configuration</a></li>
+                        <li><a href="#notification-types">Notification Types</a></li>
+                        <li><a href="#templates">Email Templates</a></li>
+                        <li><a href="#integration">Integration with Other Services</a></li>
+                        <li><a href="#deployment">Deployment</a></li>
+                    </ul>
+                </nav>
+
+                <h2 id="overview">Overview</h2>
+                <p>
+                    The Notification Service is responsible for sending various types of notifications to users and clients, including email notifications, SMS alerts, and in-app notifications. It provides a centralized system for managing communication templates, delivery preferences, and notification history.
+                </p>
+
+                <div class="info-box">
+                    <h3>Service Details</h3>
+                    <ul>
+                        <li><strong>Port:</strong> 5106</li>
+                        <li><strong>Base URL:</strong> <code>http://notification-service:5106</code></li>
+                        <li><strong>Technologies:</strong> Node.js, Express, MongoDB, Nodemailer, Twilio</li>
+                        <li><strong>Dependencies:</strong> Auth Service</li>
+                    </ul>
+                </div>
+
+                <h2 id="architecture">Architecture</h2>
+                <p>
+                    The Notification Service follows a layered architecture pattern:
+                </p>
+
+                <div class="architecture-diagram">
+                    <img src="../../images/notification-service-architecture.png" alt="Notification Service Architecture">
+                    <p class="diagram-caption">Figure 1: Notification Service internal architecture</p>
+                </div>
+
+                <h3>Components</h3>
+                <ul>
+                    <li><strong>API Layer:</strong> Express.js routes and controllers</li>
+                    <li><strong>Service Layer:</strong> Business logic for notification management</li>
+                    <li><strong>Notification Providers:</strong> Email, SMS, and in-app notification implementations</li>
+                    <li><strong>Template Engine:</strong> Manages notification templates</li>
+                    <li><strong>Queue Manager:</strong> Handles asynchronous notification processing</li>
+                    <li><strong>Data Access Layer:</strong> MongoDB models and repositories</li>
+                </ul>
+
+                <h2 id="key-features">Key Features</h2>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <h3>Email Notifications</h3>
+                        <p>Send professional email notifications</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-sms"></i>
+                        </div>
+                        <h3>SMS Alerts</h3>
+                        <p>Send text message alerts and reminders</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-bell"></i>
+                        </div>
+                        <h3>In-App Notifications</h3>
+                        <p>Deliver notifications within the application</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-file-alt"></i>
+                        </div>
+                        <h3>Template Management</h3>
+                        <p>Create and manage notification templates</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-calendar-alt"></i>
+                        </div>
+                        <h3>Scheduled Notifications</h3>
+                        <p>Schedule notifications for future delivery</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-history"></i>
+                        </div>
+                        <h3>Notification History</h3>
+                        <p>Track notification delivery and status</p>
+                    </div>
+                </div>
+
+                <h2 id="api-endpoints">API Endpoints</h2>
+                <p>
+                    The Notification Service exposes the following RESTful API endpoints:
+                </p>
+
+                <h3>Notification Management</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/notifications/email</div>
+                        <div class="endpoint-description">Send email notification</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/notifications/sms</div>
+                        <div class="endpoint-description">Send SMS notification</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/notifications/app</div>
+                        <div class="endpoint-description">Send in-app notification</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/notifications/multi</div>
+                        <div class="endpoint-description">Send notification via multiple channels</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/notifications/schedule</div>
+                        <div class="endpoint-description">Schedule notification for future delivery</div>
+                    </div>
+                </div>
+
+                <h3>Notification History</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/notifications</div>
+                        <div class="endpoint-description">List all notifications (with filtering)</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/notifications/:id</div>
+                        <div class="endpoint-description">Get notification details by ID</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/notifications/user/:userId</div>
+                        <div class="endpoint-description">Get notifications for a specific user</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">PUT</div>
+                        <div class="endpoint-path">/api/notifications/:id/read</div>
+                        <div class="endpoint-description">Mark notification as read</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">DELETE</div>
+                        <div class="endpoint-path">/api/notifications/:id</div>
+                        <div class="endpoint-description">Delete notification</div>
+                    </div>
+                </div>
+
+                <h3>Template Management</h3>
+                <div class="api-endpoints">
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/templates</div>
+                        <div class="endpoint-description">List all notification templates</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">GET</div>
+                        <div class="endpoint-path">/api/templates/:id</div>
+                        <div class="endpoint-description">Get template details by ID</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">POST</div>
+                        <div class="endpoint-path">/api/templates</div>
+                        <div class="endpoint-description">Create a new template</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">PUT</div>
+                        <div class="endpoint-path">/api/templates/:id</div>
+                        <div class="endpoint-description">Update template</div>
+                    </div>
+                    <div class="endpoint">
+                        <div class="endpoint-method">DELETE</div>
+                        <div class="endpoint-path">/api/templates/:id</div>
+                        <div class="endpoint-description">Delete template</div>
+                    </div>
+                </div>
+
+                <h2 id="data-model">Data Model</h2>
+                <p>
+                    The Notification Service uses MongoDB to store notification data and templates.
+                </p>
+
+                <h3>Notification Schema</h3>
+                <div class="code-block">
+                    <pre><code>{
+  _id: ObjectId,
+  type: {
+    type: String,
+    required: true,
+    enum: ['email', 'sms', 'app']
+  },
+  recipient: {
+    type: String,
+    required: true
+  },
+  recipientId: {
+    type: mongoose.Schema.Types.ObjectId
+  },
+  subject: {
+    type: String
+  },
+  content: {
+    type: String,
+    required: true
+  },
+  templateId: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Template'
+  },
+  status: {
+    type: String,
+    enum: ['pending', 'sent', 'delivered', 'failed', 'read'],
+    default: 'pending'
+  },
+  metadata: {
+    type: Object
+  },
+  scheduledFor: {
+    type: Date
+  },
+  sentAt: {
+    type: Date
+  },
+  readAt: {
+    type: Date
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+}</code></pre>
+                </div>
+
+                <h3>Template Schema</h3>
+                <div class="code-block">
+                    <pre><code>{
+  _id: ObjectId,
+  name: {
+    type: String,
+    required: true
+  },
+  description: {
+    type: String
+  },
+  type: {
+    type: String,
+    required: true,
+    enum: ['email', 'sms', 'app']
+  },
+  subject: {
+    type: String
+  },
+  content: {
+    type: String,
+    required: true
+  },
+  html: {
+    type: String
+  },
+  variables: [{
+    name: String,
+    description: String,
+    required: Boolean
+  }],
+  isActive: {
+    type: Boolean,
+    default: true
+  },
+  createdBy: {
+    type: mongoose.Schema.Types.ObjectId
+  },
+  createdAt: {
+    type: Date,
+    default: Date.now
+  },
+  updatedAt: {
+    type: Date,
+    default: Date.now
+  }
+}</code></pre>
+                </div>
+
+                <h2 id="configuration">Configuration</h2>
+                <p>
+                    The Notification Service is configured using environment variables:
+                </p>
+
+                <div class="code-block">
+                    <pre><code># Server Configuration
+PORT=5106
+NODE_ENV=development
+
+# MongoDB Configuration
+MONGODB_URI=mongodb://mongodb:27017/notification-service
+
+# Email Configuration
+EMAIL_HOST=smtp.example.com
+EMAIL_PORT=587
+EMAIL_USER=notifications@example.com
+EMAIL_PASSWORD=your_email_password
+EMAIL_FROM=EVMR System &lt;notifications@example.com&gt;
+
+# SMS Configuration (Twilio)
+TWILIO_ACCOUNT_SID=your_twilio_account_sid
+TWILIO_AUTH_TOKEN=your_twilio_auth_token
+TWILIO_PHONE_NUMBER=your_twilio_phone_number
+
+# Service Dependencies
+AUTH_SERVICE_URL=http://auth-service:5101
+
+# Queue Configuration
+QUEUE_ENABLED=true
+QUEUE_CONCURRENCY=5
+
+# Logging
+LOG_LEVEL=info</code></pre>
+                </div>
+
+                <h2 id="notification-types">Notification Types</h2>
+                <p>
+                    The Notification Service supports several types of notifications:
+                </p>
+
+                <h3>Email Notifications</h3>
+                <p>
+                    Email notifications are sent using Nodemailer with configurable SMTP settings. They support HTML content with embedded images and attachments.
+                </p>
+
+                <div class="code-block">
+                    <pre><code>// Example email notification
+{
+  type: 'email',
+  recipient: 'client@example.com',
+  subject: 'Appointment Reminder',
+  content: 'Your appointment is scheduled for tomorrow at 2:00 PM.',
+  templateId: '60a1b2c3d4e5f6g7h8i9j0k1',
+  metadata: {
+    appointmentId: '60a1b2c3d4e5f6g7h8i9j0k2',
+    patientId: '60a1b2c3d4e5f6g7h8i9j0k3'
+  }
+}</code></pre>
+                </div>
+
+                <h3>SMS Notifications</h3>
+                <p>
+                    SMS notifications are sent using the Twilio API. They are limited to text content and are typically used for urgent or time-sensitive communications.
+                </p>
+
+                <div class="code-block">
+                    <pre><code>// Example SMS notification
+{
+  type: 'sms',
+  recipient: '+15551234567',
+  content: 'Reminder: Your pet has an appointment tomorrow at 2:00 PM. Reply Y to confirm.',
+  metadata: {
+    appointmentId: '60a1b2c3d4e5f6g7h8i9j0k2'
+  }
+}</code></pre>
+                </div>
+
+                <h3>In-App Notifications</h3>
+                <p>
+                    In-app notifications are displayed within the application interface. They can be marked as read by the user and support various priority levels.
+                </p>
+
+                <div class="code-block">
+                    <pre><code>// Example in-app notification
+{
+  type: 'app',
+  recipientId: '60a1b2c3d4e5f6g7h8i9j0k4',
+  subject: 'Low Inventory Alert',
+  content: 'Vaccine XYZ is running low. Current stock: 5 units.',
+  metadata: {
+    inventoryId: '60a1b2c3d4e5f6g7h8i9j0k5',
+    priority: 'high'
+  }
+}</code></pre>
+                </div>
+
+                <h2 id="templates">Email Templates</h2>
+                <p>
+                    The Notification Service uses a template system for consistent and professional communications. Email templates are designed with a black and white theme with an elegant, professional design incorporating logos, based on React Email components.
+                </p>
+
+                <h3>Template Variables</h3>
+                <p>
+                    Templates support variable substitution using the Handlebars syntax:
+                </p>
+
+                <div class="code-block">
+                    <pre><code>// Example email template with variables
+{
+  name: 'appointment-reminder',
+  description: 'Reminder for upcoming appointments',
+  type: 'email',
+  subject: 'Reminder: Your appointment on {{appointmentDate}}',
+  content: 'Dear {{ownerName}},\n\nThis is a reminder that {{patientName}} has an appointment scheduled for {{appointmentDate}} at {{appointmentTime}} with Dr. {{veterinarianName}}.\n\nPlease arrive 10 minutes early to complete any necessary paperwork.\n\nIf you need to reschedule, please call us at {{clinicPhone}}.\n\nThank you,\n{{clinicName}} Team',
+  html: '&lt;!-- HTML version of the email template --&gt;',
+  variables: [
+    { name: 'ownerName', description: 'Pet owner name', required: true },
+    { name: 'patientName', description: 'Patient name', required: true },
+    { name: 'appointmentDate', description: 'Appointment date', required: true },
+    { name: 'appointmentTime', description: 'Appointment time', required: true },
+    { name: 'veterinarianName', description: 'Veterinarian name', required: true },
+    { name: 'clinicPhone', description: 'Clinic phone number', required: true },
+    { name: 'clinicName', description: 'Clinic name', required: true }
+  ]
+}</code></pre>
+                </div>
+
+                <h3>Template Rendering</h3>
+                <p>
+                    When sending a notification, the service renders the template with the provided variables:
+                </p>
+
+                <div class="code-block">
+                    <pre><code>// Example template rendering
+const renderTemplate = (template, variables) => {
+  const compiled = Handlebars.compile(template.content);
+  const renderedContent = compiled(variables);
+  
+  let renderedHtml = null;
+  if (template.html) {
+    const compiledHtml = Handlebars.compile(template.html);
+    renderedHtml = compiledHtml(variables);
+  }
+  
+  return {
+    subject: Handlebars.compile(template.subject)(variables),
+    content: renderedContent,
+    html: renderedHtml
+  };
+};</code></pre>
+                </div>
+
+                <h2 id="integration">Integration with Other Services</h2>
+                <p>
+                    The Notification Service integrates with other microservices in the following ways:
+                </p>
+
+                <h3>Auth Service Integration</h3>
+                <p>
+                    The Notification Service relies on the Auth Service for authentication and authorization. It validates JWT tokens and retrieves user information.
+                </p>
+
+                <h3>Appointment Service Integration</h3>
+                <p>
+                    The Appointment Service triggers notifications for appointment reminders, confirmations, and status changes.
+                </p>
+
+                <div class="code-block">
+                    <pre><code>// Example integration with Appointment Service
+// In Appointment Service:
+const sendAppointmentReminder = async (appointment) => {
+  try {
+    const patient = await getPatientDetails(appointment.patientId);
+    const veterinarian = await getVeterinarianDetails(appointment.veterinarianId);
+    
+    await axios.post(`${process.env.NOTIFICATION_SERVICE_URL}/api/notifications/email`, {
+      templateId: 'appointment-reminder',
+      recipient: patient.owner.email,
+      variables: {
+        ownerName: patient.owner.name,
+        patientName: patient.name,
+        appointmentDate: format(appointment.dateTime, 'MMMM d, yyyy'),
+        appointmentTime: format(appointment.dateTime, 'h:mm a'),
+        veterinarianName: `${veterinarian.firstName} ${veterinarian.lastName}`,
+        clinicPhone: process.env.CLINIC_PHONE,
+        clinicName: process.env.CLINIC_NAME
+      },
+      metadata: {
+        appointmentId: appointment._id,
+        patientId: patient._id
+      }
+    }, {
+      headers: { Authorization: `Bearer ${serviceToken}` }
+    });
+  } catch (error) {
+    logger.error('Error sending appointment reminder:', error);
+  }
+};</code></pre>
+                </div>
+
+                <h3>Inventory Service Integration</h3>
+                <p>
+                    The Inventory Service triggers notifications for low stock alerts and expiring items.
+                </p>
+
+                <h3>Patient Service Integration</h3>
+                <p>
+                    The Patient Service triggers notifications for vaccination reminders and follow-up appointments.
+                </p>
+
+                <h2 id="deployment">Deployment</h2>
+                <p>
+                    The Notification Service is deployed as a Docker container as part of the EVMR microservices architecture.
+                </p>
+
+                <h3>Docker Configuration</h3>
+                <div class="code-block">
+                    <pre><code># From docker-compose.yml
+notification-service:
+  build:
+    context: ./services/notification-service
+    dockerfile: Dockerfile
+  container_name: petsphere-notification-service
+  restart: unless-stopped
+  ports:
+    - "5106:5106"
+  depends_on:
+    mongodb:
+      condition: service_healthy
+    auth-service:
+      condition: service_healthy
+  environment:
+    - NODE_ENV=${NODE_ENV}
+    - PORT=5106
+    - MONGODB_URI=mongodb://mongodb:27017/notification-service
+    - EMAIL_HOST=${EMAIL_HOST}
+    - EMAIL_PORT=${EMAIL_PORT}
+    - EMAIL_USER=${EMAIL_USER}
+    - EMAIL_PASSWORD=${EMAIL_PASSWORD}
+    - EMAIL_FROM=${EMAIL_FROM}
+    - TWILIO_ACCOUNT_SID=${TWILIO_ACCOUNT_SID}
+    - TWILIO_AUTH_TOKEN=${TWILIO_AUTH_TOKEN}
+    - TWILIO_PHONE_NUMBER=${TWILIO_PHONE_NUMBER}
+    - AUTH_SERVICE_URL=http://auth-service:5101
+    - QUEUE_ENABLED=true
+    - QUEUE_CONCURRENCY=5
+    - LOG_LEVEL=info
+  env_file:
+    - .env
+  networks:
+    - petsphere-network
+  healthcheck:
+    test: ["CMD", "wget", "-qO-", "http://localhost:5106/health"]
+    interval: 30s
+    timeout: 5s
+    retries: 3
+    start_period: 30s</code></pre>
+                </div>
+
+                <div class="next-section">
+                    <h3>Next Steps</h3>
+                    <p>Now that you understand the Notification Service, you can explore:</p>
+                    <ul>
+                        <li><a href="../architecture/api-gateway.html">API Gateway Documentation</a></li>
+                        <li><a href="../deployment/docker.html">Docker Deployment Guide</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <footer class="content-footer">
+                <p>&copy; 2023 EVMR Documentation. All rights reserved.</p>
+                <p>
+                    <a href="../privacy.html">Privacy Policy</a> |
+                    <a href="../terms.html">Terms of Service</a> |
+                    <a href="../contact.html">Contact</a>
+                </p>
+            </footer>
+        </main>
+    </div>
+
+    <script src="../../js/main.js"></script>
+</body>
+</html>
